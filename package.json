@@ -1,0 +1,26 @@
+{
+  "name": "mesh-ecology-bytes",
+  "version": "1.0.0",
+  "description": "Byte-level publication, reference, and materialization primitives built on Hypercore with Hyperswarm transport.",
+  "main": "src/index.js",
+  "scripts": {
+    "example": "node examples/publish-fetch.js",
+    "test": "node test/smoke.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zacharygriffee/mesh-ecology-bytes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/zacharygriffee/mesh-ecology-bytes/issues"
+  },
+  "homepage": "https://github.com/zacharygriffee/mesh-ecology-bytes#readme",
+  "dependencies": {
+    "hypercore": "^11.28.1",
+    "hyperswarm": "^4.17.0"
+  }
+}
