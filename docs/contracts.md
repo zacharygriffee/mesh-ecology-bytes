@@ -125,6 +125,18 @@ Examples of request fields:
 - hints do not force behavior
 - requests do not mutate the underlying object
 
+### Mode Semantics
+
+- `stream`: expose the immutable object as a consumer-facing readable byte stream
+- `cache`: materialize the immutable object to a consumer-provided cache destination
+- `mirror`: materialize the immutable object to a consumer-provided mirror destination
+
+Rules:
+
+- bytes does not choose the destination path for `cache` or `mirror`
+- destination is runtime input supplied by the consumer outside the `MaterializationRequest`
+- if no request mode is supplied, the current helper defaults to `stream`
+
 ## Completion And Readiness Semantics
 
 V1 uses a minimal immutable-object lifecycle vocabulary:
@@ -139,6 +151,8 @@ Rules:
 - readiness is consumer-facing
 - readiness does not imply deployment, activation, usage, or execution
 - bytes may expose these states, but bytes does not define runtime behavior beyond them
+- handing out a stream does not by itself imply `materialized` or `ready`
+- local buffer or file materialization may reach `ready` once validation succeeds
 
 ## Transport Contract
 
@@ -192,6 +206,14 @@ The current transport implementation is intentionally minimal:
 - a consumer may fetch one immutable Hypercore object over Hyperswarm into local Hypercore storage
 - fetched bytes still resolve through the same `ByteReference`
 - transport does not introduce mutable-head or version semantics
+
+## Phase 4 Support Surface
+
+The current materialization implementation is intentionally minimal:
+
+- `stream` materialization returns a readable stream and preserves object lifecycle state
+- `cache` and `mirror` materialization write to an explicit consumer-provided destination
+- `filenameHint` and `filenameOverride` affect effective materialization plan metadata, not path selection
 
 ## Future Reference Families
 

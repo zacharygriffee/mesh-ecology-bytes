@@ -68,6 +68,7 @@ Clarify:
 - stream, cache, and mirror modes
 - placement classes as hints only
 - consumer-owned placement resolution
+- minimal helper semantics for stream and explicit-destination file materialization
 
 Guardrail:
 

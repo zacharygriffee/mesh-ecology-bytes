@@ -1,3 +1,6 @@
+const { mkdir, stat, writeFile } = require('fs/promises')
+const path = require('path')
+
 const { validateByteReference } = require('../reference')
 const {
   assertEnum,
@@ -88,12 +91,123 @@ function validateReadinessState(state) {
   return state
 }
 
+function resolveMaterializationPlan(options = {}) {
+  const descriptor = options.descriptor
+  const request = options.request
+  const { validateByteDescriptor } = require('../descriptor')
+
+  validateByteDescriptor(descriptor)
+
+  if (request !== undefined) {
+    validateMaterializationRequest(request)
+  }
+
+  const hints = descriptor.materializationHints || {}
+  const mode = (request && request.mode) || hints.preferredMode || 'stream'
+
+  assertEnum(mode, 'MaterializationPlan.mode', MATERIALIZATION_MODES)
+
+  return stripUndefined({
+    mode,
+    placementClass: hints.placementClass,
+    targetClass: request && request.targetClass,
+    visibility: hints.visibility,
+    filename: (request && request.filenameOverride) || hints.filenameHint
+  })
+}
+
+async function materializeImmutableObject(options = {}) {
+  const reference = options.reference
+
+  validateByteReference(reference)
+
+  const request = createMaterializationRequest({
+    reference,
+    ...(options.request || {})
+  })
+
+  const requestedMode = request.mode || 'stream'
+  const effectiveRequest = createMaterializationRequest({
+    ...request,
+    reference,
+    mode: requestedMode
+  })
+
+  if (requestedMode === 'stream') {
+    const loaded = await loadImmutableObject({
+      storage: options.storage,
+      reference,
+      transport: options.transport,
+      as: 'stream'
+    })
+
+    return {
+      reference: loaded.reference,
+      descriptor: loaded.descriptor,
+      stream: loaded.stream,
+      lifecycle: loaded.lifecycle,
+      plan: resolveMaterializationPlan({
+        descriptor: loaded.descriptor,
+        request: effectiveRequest
+      })
+    }
+  }
+
+  if (requestedMode === 'cache' || requestedMode === 'mirror') {
+    assertNonEmptyString(options.destination, 'materialization destination')
+
+    const loaded = await loadImmutableObject({
+      storage: options.storage,
+      reference,
+      transport: options.transport,
+      as: 'buffer'
+    })
+
+    const destination = path.resolve(options.destination)
+
+    await mkdir(path.dirname(destination), { recursive: true })
+    await writeFile(destination, loaded.bytes)
+
+    const written = await stat(destination)
+
+    if (written.size !== loaded.bytes.length) {
+      throw new Error('Materialized file size does not match fetched byte length')
+    }
+
+    return {
+      reference: loaded.reference,
+      descriptor: loaded.descriptor,
+      destination,
+      bytesWritten: loaded.bytes.length,
+      lifecycle: loaded.lifecycle,
+      plan: resolveMaterializationPlan({
+        descriptor: loaded.descriptor,
+        request: effectiveRequest
+      })
+    }
+  }
+
+  throw new TypeError(`Unsupported materialization mode: ${requestedMode}`)
+}
+
+async function loadImmutableObject(options) {
+  if (options.transport) {
+    const { fetchImmutableObject } = require('../transport')
+    return fetchImmutableObject(options)
+  }
+
+  const { readImmutableObject } = require('../object/read')
+  return readImmutableObject(options)
+}
+
 module.exports = {
   MATERIALIZATION_MODES,
   READINESS_STATES,
   VISIBILITY_LEVELS,
   createMaterializationHints,
   createMaterializationRequest,
+  materializeImmutableObject,
+  resolveMaterializationPlan,
   validateMaterializationHints,
   validateMaterializationRequest,
   validateReadinessState
