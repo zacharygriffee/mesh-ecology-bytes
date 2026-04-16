@@ -1,6 +1,8 @@
 const { mkdir, stat, writeFile } = require('fs/promises')
 const path = require('path')
 
+const { createMeshBytesError } = require('../errors')
+const { createOperationScope } = require('../operation')
 const { validateByteReference } = require('../reference')
 const {
   assertAllowedKeys,
@@ -153,6 +155,7 @@ function resolveMaterializationPlan(options = {}) {
 
 async function materializeImmutableObject(options = {}) {
   const reference = options.reference
+  const scope = createOperationScope(options)
 
   validateByteReference(reference)
 
@@ -173,7 +176,9 @@ async function materializeImmutableObject(options = {}) {
       storage: options.storage,
       reference,
       transport: options.transport,
-      as: 'stream'
+      as: 'stream',
+      timeoutMs: options.timeoutMs,
+      signal: options.signal
     })
 
     return {
@@ -195,15 +200,39 @@ async function materializeImmutableObject(options = {}) {
       storage: options.storage,
       reference,
       transport: options.transport,
-      as: 'buffer'
+      as: 'buffer',
+      timeoutMs: options.timeoutMs,
+      signal: options.signal
     })
 
     const destination = path.resolve(options.destination)
 
-    await mkdir(path.dirname(destination), { recursive: true })
-    await writeFile(destination, loaded.bytes)
+    await scope.waitFor(
+      mkdir(path.dirname(destination), { recursive: true }),
+      'Materialization destination preparation'
+    )
 
-    const written = await stat(destination)
+    try {
+      await scope.waitFor(
+        writeFile(destination, loaded.bytes),
+        'Materialization write'
+      )
+    } catch (error) {
+      if (error.code === 'ERR_OPERATION_ABORTED' || error.code === 'ERR_OPERATION_TIMEOUT') {
+        throw error
+      }
+
+      throw createMeshBytesError(
+        'ERR_MATERIALIZATION_WRITE_FAILED',
+        'Materialization write failed',
+        { cause: error }
+      )
+    }
+
+    const written = await scope.waitFor(
+      stat(destination),
+      'Materialization verification stat'
+    )
 
     if (written.size !== loaded.bytes.length) {
       throw new Error('Materialized file size does not match fetched byte length')

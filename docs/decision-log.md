@@ -85,6 +85,14 @@ Status: locked
 - pack consumers may attach artifact meaning outside this repo, but bytes does not define that meaning
 - seam helpers validate only byte-layer envelopes and reject unsupported platform or pack fields
 
+### Operational Hardening Posture
+
+Status: locked
+
+- timeout and abort are operational inputs and do not change object identity
+- descriptor, integrity, and materialization failures are reported as byte-layer operational errors
+- `ready` must not be reported when operational validation fails
+
 ### Future Keyed Or Mutable Stores
 
 Status: acknowledged and deferred

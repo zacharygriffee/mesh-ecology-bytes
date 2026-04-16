@@ -7,6 +7,12 @@ const {
   validateByteDescriptor
 } = require('./descriptor')
 const {
+  ERROR_CODES,
+  MeshBytesError,
+  createMeshBytesError,
+  isMeshBytesError
+} = require('./errors')
+const {
   MATERIALIZATION_MODES,
   READINESS_STATES,
   VISIBILITY_LEVELS,
@@ -72,10 +78,13 @@ module.exports = {
   RETENTION_TERMS,
   SUPPORTED_REFERENCE_FAMILIES,
   VISIBILITY_LEVELS,
+  ERROR_CODES,
   HyperswarmTransport,
+  MeshBytesError,
   assessObjectLifecycle,
   assessRetentionPosture,
   createByteDescriptor,
+  createMeshBytesError,
   createDescriptorHash,
   createByteReference,
   createHyperswarmTransport,
@@ -97,6 +106,7 @@ module.exports = {
   publishImmutableObject,
   readImmutableObject,
   resolveMaterializationPlan,
+  isMeshBytesError,
   selectReadinessState,
   serializeByteDescriptor,
   serveImmutableObject,

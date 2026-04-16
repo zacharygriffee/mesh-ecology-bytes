@@ -292,6 +292,40 @@ The current seam implementation is intentionally minimal:
 - `createPackByteBinding()` validates and normalizes the pack-facing byte binding envelope
 - seam validators reject unsupported fields rather than teaching the byte layer platform or pack semantics
 
+## Operational Hardening Contract
+
+Operational controls remain byte-layer only:
+
+- fetch, read, and materialization may accept `timeoutMs`
+- fetch, read, and materialization may accept an abort `signal`
+- timeout and abort do not redefine object identity or consumer ownership
+
+Byte-layer operational failures use explicit byte-layer error codes:
+
+- `ERR_OPERATION_ABORTED`
+- `ERR_OPERATION_TIMEOUT`
+- `ERR_DESCRIPTOR_MISSING`
+- `ERR_DESCRIPTOR_UNAVAILABLE`
+- `ERR_INVALID_DESCRIPTOR`
+- `ERR_DESCRIPTOR_HASH_MISMATCH`
+- `ERR_INTEGRITY_MISMATCH`
+- `ERR_MATERIALIZATION_WRITE_FAILED`
+
+Rules:
+
+- partial fetch still means incomplete immutable replication or materialization only
+- `ready` must not be reported after timeout, abort, descriptor failure, or integrity failure
+- write failures remain byte-layer materialization failures and do not imply platform policy
+
+## Phase 8 Support Surface
+
+The current operational hardening implementation is intentionally minimal:
+
+- local object reads honor optional timeout and abort controls
+- Hyperswarm-backed fetch honors optional timeout and abort controls across discovery, update, and read
+- explicit byte-layer error codes are exposed for common operational failures
+- file materialization wraps destination write failures as byte-layer materialization errors
+
 ## Future Reference Families
 
 Future keyed, path-based, or mutable backing stores may exist later.

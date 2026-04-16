@@ -1,6 +1,7 @@
 const Hyperswarm = require('hyperswarm')
 const Hypercore = require('hypercore')
 
+const { createOperationScope } = require('../../operation')
 const { createByteReference } = require('../../reference')
 const { readImmutableObject } = require('../../object/read')
 
@@ -161,6 +162,7 @@ async function serveImmutableObject(options = {}) {
 async function fetchImmutableObject(options = {}) {
   const { storage, as = 'buffer', transport, waitForConnections = true } = options
   const reference = createByteReference(options.reference)
+  const scope = createOperationScope(options)
 
   if (!storage) {
     throw new TypeError('fetchImmutableObject requires a storage path')
@@ -173,48 +175,58 @@ async function fetchImmutableObject(options = {}) {
     writable: false
   })
 
-  await core.ready()
+  await scope.waitFor(core.ready(), 'Transport fetch core open')
 
   const doneFindingPeers = core.findingPeers()
 
   try {
-    await resolvedTransport.attachCore(core, {
+    await scope.waitFor(resolvedTransport.attachCore(core, {
       server: false,
       client: true,
       waitForAnnouncement: false
-    })
+    }), 'Transport attach')
 
     if (waitForConnections) {
-      await resolvedTransport.flush()
+      await scope.waitFor(resolvedTransport.flush(), 'Transport peer discovery flush')
     }
   } finally {
     doneFindingPeers()
   }
 
-  await core.update({ wait: true })
+  try {
+    await scope.waitFor(core.update({ wait: true }), 'Transport replication update')
 
-  const result = await readImmutableObject({
-    reference,
-    core,
-    as,
-    wait: true,
-    closeCore: as !== 'stream'
-  })
+    const result = await readImmutableObject({
+      reference,
+      core,
+      as,
+      wait: true,
+      closeCore: as !== 'stream',
+      timeoutMs: options.timeoutMs,
+      signal: options.signal
+    })
 
-  if (ownsTransport && as !== 'stream') {
-    await resolvedTransport.close()
-  }
-
-  if (as === 'stream' && ownsTransport) {
-    const closeTransport = () => {
-      resolvedTransport.close().catch(() => {})
+    if (ownsTransport && as !== 'stream') {
+      await resolvedTransport.close()
     }
 
-    result.stream.once('close', closeTransport)
-    result.stream.once('error', closeTransport)
-  }
+    if (as === 'stream' && ownsTransport) {
+      const closeTransport = () => {
+        resolvedTransport.close().catch(() => {})
+      }
 
-  return result
+      result.stream.once('close', closeTransport)
+      result.stream.once('error', closeTransport)
+    }
+
+    return result
+  } catch (error) {
+    await Promise.allSettled([
+      core.close(),
+      ownsTransport ? resolvedTransport.close() : Promise.resolve()
+    ])
+    throw error
+  }
 }
 
 module.exports = {

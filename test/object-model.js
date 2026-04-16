@@ -10,6 +10,7 @@ const {
   chunkPayload,
   createByteReference,
   getPayloadBlockCount,
+  isMeshBytesError,
   publishImmutableObject,
   readImmutableObject,
   serializeByteDescriptor
@@ -140,10 +141,13 @@ async function testMissingDescriptorRejectedDuringRead() {
 
     await core.close()
 
-    await assert.rejects(() => readImmutableObject({
-      storage,
-      reference
-    }))
+    await assert.rejects(
+      () => readImmutableObject({
+        storage,
+        reference
+      }),
+      (error) => isMeshBytesError(error, 'ERR_DESCRIPTOR_MISSING')
+    )
   } finally {
     await rm(storage, { recursive: true, force: true })
   }
@@ -167,10 +171,13 @@ async function testInvalidDescriptorRejectedDuringRead() {
 
     await core.close()
 
-    await assert.rejects(() => readImmutableObject({
-      storage,
-      reference
-    }))
+    await assert.rejects(
+      () => readImmutableObject({
+        storage,
+        reference
+      }),
+      (error) => isMeshBytesError(error, 'ERR_INVALID_DESCRIPTOR')
+    )
   } finally {
     await rm(storage, { recursive: true, force: true })
   }

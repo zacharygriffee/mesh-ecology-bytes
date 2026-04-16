@@ -80,6 +80,12 @@ If richer manifest or catalog behavior is needed later, it belongs in a higher o
 - pack consumers may bind higher-level artifact meaning to byte references, but that meaning remains outside this repo
 - seam helpers may normalize byte-layer result envelopes, but they must not absorb platform or pack semantics
 
+## Operational Posture
+
+- timeout and abort controls are operational inputs only
+- operational errors remain byte-layer errors, not platform policy
+- integrity and descriptor failures must prevent `ready` from being claimed
+
 ## Partial Fetch Posture
 
 In v1, partial fetch has a narrow meaning:

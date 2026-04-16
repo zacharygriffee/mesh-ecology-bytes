@@ -140,6 +140,12 @@ Add:
 - integrity and readiness checks
 - replication and materialization tests
 
+Current implementation note:
+
+- fetch, read, and materialization now accept optional timeout and abort controls
+- byte-layer operational failures use explicit byte-layer error codes
+- degraded-path tests now cover timeout, abort, integrity mismatch, and materialization write failure
+
 ## Phase 9: Optional Richer Indexing
 
 Phase 9 is optional and deferred unless real need appears.

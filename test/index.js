@@ -2,6 +2,7 @@ const { runContractTests } = require('./contracts')
 const { runIntegrationSeamTests } = require('./integration-seams')
 const { runMaterializationRuntimeTests } = require('./materialization-runtime')
 const { runObjectModelTests } = require('./object-model')
+const { runOperationalHardeningTests } = require('./operational-hardening')
 const { runRetentionTests } = require('./retention')
 const { runHyperswarmTransportTests } = require('./transport-hyperswarm')
 
@@ -10,6 +11,7 @@ async function main() {
   runIntegrationSeamTests()
   await runObjectModelTests()
   await runMaterializationRuntimeTests()
+  await runOperationalHardeningTests()
   await runRetentionTests()
   await runHyperswarmTransportTests()
 }
