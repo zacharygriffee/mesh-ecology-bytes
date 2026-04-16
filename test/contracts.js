@@ -2,6 +2,8 @@ const assert = require('assert/strict')
 
 const {
   READINESS_STATES,
+  RETENTION_TERMS,
+  assessRetentionPosture,
   createByteDescriptor,
   createByteReference,
   createMaterializationHints,
@@ -10,7 +12,9 @@ const {
   validateByteReference,
   validateMaterializationHints,
   validateMaterializationRequest,
-  validateReadinessState
+  validateLifecycleSnapshot,
+  validateReadinessState,
+  validateRetentionTerm
 } = require('../src')
 
 function main() {
@@ -18,6 +22,7 @@ function main() {
   testReferenceValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
+  testRetentionTerms()
 }
 
 function testDescriptorValidation() {
@@ -125,6 +130,46 @@ function testReadinessStates() {
   }
 
   assert.throws(() => validateReadinessState('executed'))
+}
+
+function testRetentionTerms() {
+  assert.deepEqual(RETENTION_TERMS, ['pinned', 'ephemeral', 'stale', 'prunable'])
+
+  for (const term of RETENTION_TERMS) {
+    assert.equal(validateRetentionTerm(term), term)
+  }
+
+  const lifecycle = {
+    fetched: true,
+    complete: true,
+    materialized: true,
+    ready: true,
+    state: 'ready'
+  }
+
+  validateLifecycleSnapshot(lifecycle)
+
+  assert.deepEqual(assessRetentionPosture({
+    lifecycle,
+    pinned: true
+  }), {
+    pinned: true,
+    ephemeral: false,
+    stale: false,
+    prunable: false
+  })
+
+  assert.deepEqual(assessRetentionPosture({
+    lifecycle,
+    stale: true
+  }), {
+    pinned: false,
+    ephemeral: true,
+    stale: true,
+    prunable: true
+  })
+
+  assert.throws(() => validateRetentionTerm('garbage-collected'))
 }
 
 module.exports = {

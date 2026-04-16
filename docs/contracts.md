@@ -154,6 +154,23 @@ Rules:
 - handing out a stream does not by itself imply `materialized` or `ready`
 - local buffer or file materialization may reach `ready` once validation succeeds
 
+## Retention And Lifecycle Posture
+
+V1 uses a narrow local retention vocabulary for immutable objects:
+
+- `pinned`: the consumer intends to retain the local copy
+- `ephemeral`: the local copy is not pinned for retention
+- `stale`: the consumer considers this immutable object superseded by another immutable object in local context
+- `prunable`: the local copy is present and not pinned, so it is eligible for removal from the byte layer's perspective
+
+Rules:
+
+- these terms are local posture terms, not publication semantics
+- `stale` does not invalidate the original `ByteReference`
+- `pinned` and `ephemeral` do not change object identity
+- `prunable` is an eligibility signal, not a pruning policy
+- bytes may report retention posture, but bytes does not schedule pruning or define ownership rules
+
 ## Transport Contract
 
 Default v1 transport posture:
@@ -214,6 +231,14 @@ The current materialization implementation is intentionally minimal:
 - `stream` materialization returns a readable stream and preserves object lifecycle state
 - `cache` and `mirror` materialization write to an explicit consumer-provided destination
 - `filenameHint` and `filenameOverride` affect effective materialization plan metadata, not path selection
+
+## Phase 6 Support Surface
+
+The current retention implementation is intentionally minimal:
+
+- retention posture is inspected locally from immutable-object lifecycle plus consumer-supplied `pinned` or `stale` facts
+- `ephemeral` and `prunable` are derived posture fields
+- the byte layer reports retention posture but does not prune, schedule, or arbitrate policy
 
 ## Future Reference Families
 

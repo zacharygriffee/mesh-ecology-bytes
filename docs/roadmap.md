@@ -101,6 +101,12 @@ Guardrail:
 
 - do not backdoor policy or authority into retention vocabulary
 
+Current implementation note:
+
+- local retention inspection is implemented for immutable objects
+- retention posture is derived from local lifecycle plus consumer-supplied `pinned` and `stale` facts
+- deletion, pruning schedules, and ownership rules remain outside the byte layer
+
 ## Phase 7: Consumer Integration Seams
 
 Phase 7 is doctrinal and seam-defining.

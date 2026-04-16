@@ -29,7 +29,9 @@ const {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   DESCRIPTOR_BLOCK_INDEX,
   PAYLOAD_START_BLOCK_INDEX,
+  RETENTION_TERMS,
   assessObjectLifecycle,
+  assessRetentionPosture,
   chunkPayload,
   createDescriptorHash,
   deserializeByteDescriptor,
@@ -40,7 +42,9 @@ const {
   readImmutableObject,
   selectReadinessState,
   serializeByteDescriptor,
-  validateMaterializedBytes
+  validateLifecycleSnapshot,
+  validateMaterializedBytes,
+  validateRetentionTerm
 } = require('./object')
 const {
   HyperswarmTransport,
@@ -57,10 +61,12 @@ module.exports = {
   MATERIALIZATION_MODES,
   PAYLOAD_START_BLOCK_INDEX,
   READINESS_STATES,
+  RETENTION_TERMS,
   SUPPORTED_REFERENCE_FAMILIES,
   VISIBILITY_LEVELS,
   HyperswarmTransport,
   assessObjectLifecycle,
+  assessRetentionPosture,
   createByteDescriptor,
   createDescriptorHash,
   createByteReference,
@@ -84,10 +90,12 @@ module.exports = {
   selectReadinessState,
   serializeByteDescriptor,
   serveImmutableObject,
+  validateLifecycleSnapshot,
   validateReadinessState,
   validateByteDescriptor,
   validateByteReference,
   validateMaterializationHints,
   validateMaterializationRequest,
-  validateMaterializedBytes
+  validateMaterializedBytes,
+  validateRetentionTerm
 }

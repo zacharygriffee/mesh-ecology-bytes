@@ -65,6 +65,14 @@ If richer manifest or catalog behavior is needed later, it belongs in a higher o
 - `MaterializationRequest` is consumer-local and may override hints locally.
 - Final placement and readiness interpretation remain consumer-owned.
 
+## Retention Posture
+
+- retention posture is consumer-local and does not change publication semantics
+- `pinned` and `ephemeral` describe local retention intent only
+- `stale` means a consumer considers the object superseded in local context, not invalid
+- `prunable` is a local eligibility signal and not a pruning policy
+- bytes may report retention posture, but consumers still own deletion, scheduling, and policy decisions
+
 ## Partial Fetch Posture
 
 In v1, partial fetch has a narrow meaning:

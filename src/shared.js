@@ -12,6 +12,12 @@ function assertNonEmptyString(value, label) {
   }
 }
 
+function assertBoolean(value, label) {
+  if (typeof value !== 'boolean') {
+    throw new TypeError(`${label} must be a boolean`)
+  }
+}
+
 function assertOptionalString(value, label) {
   if (value === undefined) return
   assertNonEmptyString(value, label)
@@ -76,6 +82,7 @@ function stripUndefined(input) {
 }
 
 module.exports = {
+  assertBoolean,
   assertEnum,
   assertHex,
   assertInteger,

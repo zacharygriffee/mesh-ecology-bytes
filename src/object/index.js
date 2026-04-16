@@ -10,6 +10,7 @@ const {
   getTotalBlockCount,
   serializeByteDescriptor
 } = require('./layout')
+const { RETENTION_TERMS, assessRetentionPosture, validateLifecycleSnapshot, validateRetentionTerm } = require('./retention')
 const { publishImmutableObject } = require('./publish')
 const { readImmutableObject } = require('./read')
 
@@ -17,7 +18,9 @@ module.exports = {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   DESCRIPTOR_BLOCK_INDEX,
   PAYLOAD_START_BLOCK_INDEX,
+  RETENTION_TERMS,
   assessObjectLifecycle,
+  assessRetentionPosture,
   chunkPayload,
   createDescriptorHash,
   deserializeByteDescriptor,
@@ -28,5 +31,7 @@ module.exports = {
   readImmutableObject,
   selectReadinessState,
   serializeByteDescriptor,
-  validateMaterializedBytes
+  validateLifecycleSnapshot,
+  validateMaterializedBytes,
+  validateRetentionTerm
 }

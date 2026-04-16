@@ -66,6 +66,16 @@ Status: locked
 - bytes validates shape but does not arbitrate conflicts
 - lifecycle vocabulary is `fetched`, `complete`, `materialized`, `ready`
 
+### Retention And Lifecycle Posture
+
+Status: locked
+
+- retention posture is local to the consumer and does not change object identity
+- `pinned` means the local immutable copy should be retained
+- `ephemeral` means the local immutable copy is not pinned
+- `stale` means the local consumer considers the immutable object superseded, but the reference remains valid
+- `prunable` is a local eligibility signal for unpinned copies, not a pruning policy
+
 ### Future Keyed Or Mutable Stores
 
 Status: acknowledged and deferred
