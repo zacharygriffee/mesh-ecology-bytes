@@ -29,6 +29,11 @@ It is not responsible for:
 - Local placement is consumer-owned.
 - Descriptor metadata must remain safe to share and must not contain secrets.
 
+Current implementation posture:
+
+- immutable objects can be published and read locally through Hypercore
+- immutable objects can be replicated over Hyperswarm without changing their reference meaning
+
 ## Immutable Object Model
 
 V1 byte objects are immutable.

@@ -1,3 +1,4 @@
+const assert = require('assert/strict')
 const { createHash } = require('crypto')
 const { mkdtemp, rm } = require('fs/promises')
 const { tmpdir } = require('os')
@@ -9,10 +10,11 @@ const {
   createHyperswarmTransport,
   fetchImmutableObject,
   publishImmutableObject,
+  readImmutableObject,
   serveImmutableObject
 } = require('../src')
 
-async function main() {
+async function runHyperswarmTransportTests() {
   const publisherStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-publisher-'))
   const consumerStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-consumer-'))
   const testnet = await createTestnet(3)
@@ -22,27 +24,26 @@ async function main() {
   const consumerTransport = createHyperswarmTransport({
     swarmOptions: { dht: testnet.createNode() }
   })
-  const bytes = Buffer.from('mesh byte payload')
+  const payload = Buffer.from('hyperswarm-replicated-object')
 
   try {
     const published = await publishImmutableObject({
       storage: publisherStorage,
-      bytes,
+      bytes: payload,
       descriptor: {
         contentType: 'application/octet-stream',
-        size: bytes.length,
+        size: payload.length,
         encoding: 'binary',
         materializationHints: {
           preferredMode: 'stream',
           visibility: 'internal',
           placementClass: 'runtime_input',
-          filenameHint: 'payload.bin'
+          filenameHint: 'replicated.bin'
         },
         integrityHint: {
           algorithm: 'sha256',
-          value: createHash('sha256').update(bytes).digest('hex')
-        },
-        role: 'runtime_blob'
+          value: createHash('sha256').update(payload).digest('hex')
+        }
       }
     })
 
@@ -52,9 +53,6 @@ async function main() {
       transport: publisherTransport
     })
 
-    console.log('Reference:', published.reference)
-    console.log('Publish lifecycle:', published.object.lifecycle)
-
     const fetched = await fetchImmutableObject({
       storage: consumerStorage,
       reference: published.reference,
@@ -62,8 +60,25 @@ async function main() {
       as: 'buffer'
     })
 
-    console.log('Fetch lifecycle:', fetched.lifecycle)
-    console.log('Fetched bytes:', fetched.bytes.toString())
+    assert.deepEqual(fetched.reference, published.reference)
+    assert.deepEqual(fetched.descriptor, published.descriptor)
+    assert.deepEqual(fetched.bytes, payload)
+    assert.deepEqual(fetched.lifecycle, {
+      fetched: true,
+      complete: true,
+      materialized: true,
+      ready: true,
+      state: 'ready'
+    })
+
+    const localRead = await readImmutableObject({
+      storage: consumerStorage,
+      reference: published.reference,
+      as: 'buffer'
+    })
+
+    assert.deepEqual(localRead.bytes, payload)
+    assert.equal(localRead.lifecycle.ready, true)
 
     await served.close()
   } finally {
@@ -77,7 +92,13 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exitCode = 1
-})
+module.exports = {
+  runHyperswarmTransportTests
+}
+
+if (require.main === module) {
+  runHyperswarmTransportTests().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+  })
+}

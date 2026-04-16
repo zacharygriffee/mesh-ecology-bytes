@@ -40,6 +40,12 @@ const {
   serializeByteDescriptor,
   validateMaterializedBytes
 } = require('./object')
+const {
+  HyperswarmTransport,
+  createHyperswarmTransport,
+  fetchImmutableObject,
+  serveImmutableObject
+} = require('./transport')
 
 module.exports = {
   BYTE_DESCRIPTOR_SCHEMA,
@@ -51,16 +57,19 @@ module.exports = {
   READINESS_STATES,
   SUPPORTED_REFERENCE_FAMILIES,
   VISIBILITY_LEVELS,
+  HyperswarmTransport,
   assessObjectLifecycle,
   createByteDescriptor,
   createDescriptorHash,
   createByteReference,
+  createHyperswarmTransport,
   createMaterializationHints,
   createMaterializationRequest,
   chunkPayload,
   deserializeByteDescriptor,
   decodeByteDescriptor,
   encodeByteDescriptor,
+  fetchImmutableObject,
   getPayloadBlockCount,
   getTotalBlockCount,
   hasAllBlocks,
@@ -70,6 +79,7 @@ module.exports = {
   readImmutableObject,
   selectReadinessState,
   serializeByteDescriptor,
+  serveImmutableObject,
   validateReadinessState,
   validateByteDescriptor,
   validateByteReference,

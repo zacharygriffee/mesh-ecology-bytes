@@ -1,4 +1,8 @@
 const Hyperswarm = require('hyperswarm')
+const Hypercore = require('hypercore')
+
+const { createByteReference } = require('../../reference')
+const { readImmutableObject } = require('../../object/read')
 
 class HyperswarmTransport {
   constructor(options = {}) {
@@ -115,7 +119,107 @@ function createHyperswarmTransport(options) {
   return new HyperswarmTransport(options)
 }
 
+async function serveImmutableObject(options = {}) {
+  const { storage, transport, waitForAnnouncement = true } = options
+  const reference = createByteReference(options.reference)
+
+  if (!storage) {
+    throw new TypeError('serveImmutableObject requires a storage path')
+  }
+
+  const resolvedTransport = transport || createHyperswarmTransport(options.transportOptions)
+  const ownsTransport = !transport
+  const core = new Hypercore(storage, Buffer.from(reference.key, 'hex'), {
+    createIfMissing: false,
+    valueEncoding: 'binary',
+    writable: false
+  })
+
+  await core.ready()
+
+  const attachment = await resolvedTransport.attachCore(core, {
+    server: true,
+    client: false,
+    waitForAnnouncement
+  })
+
+  return {
+    reference,
+    topic: attachment.topic,
+    discovery: attachment.discovery,
+    async close() {
+      await resolvedTransport.detachCore(core)
+      await core.close()
+
+      if (ownsTransport) {
+        await resolvedTransport.close()
+      }
+    }
+  }
+}
+
+async function fetchImmutableObject(options = {}) {
+  const { storage, as = 'buffer', transport, waitForConnections = true } = options
+  const reference = createByteReference(options.reference)
+
+  if (!storage) {
+    throw new TypeError('fetchImmutableObject requires a storage path')
+  }
+
+  const resolvedTransport = transport || createHyperswarmTransport(options.transportOptions)
+  const ownsTransport = !transport
+  const core = new Hypercore(storage, Buffer.from(reference.key, 'hex'), {
+    valueEncoding: 'binary',
+    writable: false
+  })
+
+  await core.ready()
+
+  const doneFindingPeers = core.findingPeers()
+
+  try {
+    await resolvedTransport.attachCore(core, {
+      server: false,
+      client: true,
+      waitForAnnouncement: false
+    })
+
+    if (waitForConnections) {
+      await resolvedTransport.flush()
+    }
+  } finally {
+    doneFindingPeers()
+  }
+
+  await core.update({ wait: true })
+
+  const result = await readImmutableObject({
+    reference,
+    core,
+    as,
+    wait: true,
+    closeCore: as !== 'stream'
+  })
+
+  if (ownsTransport && as !== 'stream') {
+    await resolvedTransport.close()
+  }
+
+  if (as === 'stream' && ownsTransport) {
+    const closeTransport = () => {
+      resolvedTransport.close().catch(() => {})
+    }
+
+    result.stream.once('close', closeTransport)
+    result.stream.once('error', closeTransport)
+  }
+
+  return result
+}
+
 module.exports = {
   HyperswarmTransport,
-  createHyperswarmTransport
+  createHyperswarmTransport,
+  fetchImmutableObject,
+  serveImmutableObject
 }

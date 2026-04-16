@@ -22,5 +22,8 @@
   "dependencies": {
     "hypercore": "^11.28.1",
     "hyperswarm": "^4.17.0"
+  },
+  "devDependencies": {
+    "hyperdht": "^6.30.0"
   }
 }

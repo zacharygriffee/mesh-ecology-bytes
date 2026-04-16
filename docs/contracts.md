@@ -155,10 +155,11 @@ The transport layer is adapter-shaped:
 - future adapters may exist later
 - byte semantics must not be hardcoded to Hyperswarm specifics
 
-Phase 2 implementation note:
+Current implementation note:
 
-- the current implementation supports local Hypercore object publication and local readback
-- network transport and discovery remain deferred to Phase 3
+- the object model supports local Hypercore object publication and local readback
+- minimal Hyperswarm-backed replication is implemented for the immutable Hypercore family
+- transport remains separate from object identity, layout, and reference semantics
 
 ## Partial Fetch Contract
 
@@ -182,6 +183,15 @@ The current object-model implementation is intentionally minimal:
 - payload is chunked into blocks `1..n`
 - local reads support `buffer` or `stream` output
 - completeness and readiness are evaluated at the immutable object level
+
+## Phase 3 Support Surface
+
+The current transport implementation is intentionally minimal:
+
+- a publisher may announce and serve one immutable Hypercore object over Hyperswarm
+- a consumer may fetch one immutable Hypercore object over Hyperswarm into local Hypercore storage
+- fetched bytes still resolve through the same `ByteReference`
+- transport does not introduce mutable-head or version semantics
 
 ## Future Reference Families
 

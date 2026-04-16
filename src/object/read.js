@@ -12,41 +12,41 @@ const {
 } = require('./layout')
 
 async function readImmutableObject(options = {}) {
-  const { storage, as = 'buffer' } = options
+  const { storage, as = 'buffer', core: providedCore, wait = false, closeCore = true } = options
   const reference = createByteReference(options.reference)
 
-  if (!storage) {
-    throw new TypeError('readImmutableObject requires a storage path')
+  if (!storage && !providedCore) {
+    throw new TypeError('readImmutableObject requires either a storage path or an opened core')
   }
 
   if (as !== 'buffer' && as !== 'stream') {
     throw new TypeError('readImmutableObject only supports "buffer" or "stream" output')
   }
 
-  const core = new Hypercore(storage, Buffer.from(reference.key, 'hex'), {
+  const core = providedCore || new Hypercore(storage, Buffer.from(reference.key, 'hex'), {
     createIfMissing: false,
     valueEncoding: 'binary',
     writable: false
   })
 
-  await core.ready()
+  if (!providedCore) await core.ready()
 
   if (core.length < 1) {
-    await core.close()
+    if (closeCore) await core.close()
     throw new Error('Immutable object is missing descriptor block 0')
   }
 
-  const descriptorBlock = await core.get(DESCRIPTOR_BLOCK_INDEX, { wait: false })
+  const descriptorBlock = await core.get(DESCRIPTOR_BLOCK_INDEX, { wait })
 
   if (!descriptorBlock) {
-    await core.close()
+    if (closeCore) await core.close()
     throw new Error('Immutable object descriptor block 0 is not available locally')
   }
 
   const descriptor = deserializeByteDescriptor(descriptorBlock)
 
   if (reference.descriptorHash && reference.descriptorHash !== createDescriptorHash(descriptorBlock)) {
-    await core.close()
+    if (closeCore) await core.close()
     throw new Error('ByteReference.descriptorHash does not match the stored descriptor')
   }
 
@@ -55,7 +55,7 @@ async function readImmutableObject(options = {}) {
   })
 
   if (as === 'stream') {
-    const stream = createPayloadStream(core)
+    const stream = createPayloadStream(core, { wait, closeCore })
 
     return {
       reference,
@@ -65,14 +65,14 @@ async function readImmutableObject(options = {}) {
     }
   }
 
-  const bytes = await collectPayload(core)
+  const bytes = await collectPayload(core, { wait })
   const lifecycle = await assessObjectLifecycle(core, descriptor, {
     fetched: true,
     materialized: true,
     materializedBytes: bytes
   })
 
-  await core.close()
+  if (closeCore) await core.close()
 
   return {
     reference,
@@ -82,12 +82,12 @@ async function readImmutableObject(options = {}) {
   }
 }
 
-function createPayloadStream(core) {
+function createPayloadStream(core, { wait, closeCore }) {
   const output = new PassThrough()
   const source = core.createReadStream({
     start: PAYLOAD_START_BLOCK_INDEX,
     end: core.length,
-    wait: false,
+    wait,
     snapshot: true
   })
 
@@ -101,20 +101,20 @@ function createPayloadStream(core) {
     } catch (error) {
       output.destroy(error)
     } finally {
-      core.close().catch(() => {})
+      if (closeCore) core.close().catch(() => {})
     }
   })()
 
   return output
 }
 
-async function collectPayload(core) {
+async function collectPayload(core, { wait }) {
   const chunks = []
 
   for await (const block of core.createReadStream({
     start: PAYLOAD_START_BLOCK_INDEX,
     end: core.length,
-    wait: false,
+    wait,
     snapshot: true
   })) {
     chunks.push(Buffer.from(block))

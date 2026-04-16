@@ -53,6 +53,7 @@ Add:
 - Hyperswarm as the default transport and discovery layer
 - minimal replication connection flow
 - publish and fetch over Hyperswarm
+- preserve the same immutable object layout and reference semantics as the local model
 
 Guardrail:
 
