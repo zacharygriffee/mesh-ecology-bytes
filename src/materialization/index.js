@@ -9,6 +9,8 @@ const {
 
 const MATERIALIZATION_MODES = new Set(['stream', 'cache', 'mirror'])
 const VISIBILITY_LEVELS = new Set(['operator', 'public', 'internal'])
+const READINESS_STATES = ['fetched', 'complete', 'materialized', 'ready']
+const READINESS_STATE_SET = new Set(READINESS_STATES)
 
 function createMaterializationHints(input = {}) {
   validateMaterializationHints(input)
@@ -16,7 +18,8 @@ function createMaterializationHints(input = {}) {
   return stripUndefined({
     preferredMode: input.preferredMode,
     visibility: input.visibility,
-    placementClass: input.placementClass
+    placementClass: input.placementClass,
+    filenameHint: input.filenameHint
   })
 }
 
@@ -35,6 +38,14 @@ function validateMaterializationHints(input) {
     assertNonEmptyString(input.placementClass, 'MaterializationHints.placementClass')
   }
 
+  if (input.filenameHint !== undefined) {
+    assertOptionalString(input.filenameHint, 'MaterializationHints.filenameHint')
+
+    if (input.filenameHint.includes('/') || input.filenameHint.includes('\\')) {
+      throw new TypeError('MaterializationHints.filenameHint must be a filename hint, not a path')
+    }
+  }
+
   return input
 }
 
@@ -45,7 +56,7 @@ function createMaterializationRequest(input = {}) {
     reference: input.reference,
     targetClass: input.targetClass,
     mode: input.mode,
-    filenameHint: input.filenameHint
+    filenameOverride: input.filenameOverride
   })
 }
 
@@ -61,22 +72,29 @@ function validateMaterializationRequest(input) {
     assertEnum(input.mode, 'MaterializationRequest.mode', MATERIALIZATION_MODES)
   }
 
-  if (input.filenameHint !== undefined) {
-    assertOptionalString(input.filenameHint, 'MaterializationRequest.filenameHint')
+  if (input.filenameOverride !== undefined) {
+    assertOptionalString(input.filenameOverride, 'MaterializationRequest.filenameOverride')
 
-    if (input.filenameHint.includes('/') || input.filenameHint.includes('\\')) {
-      throw new TypeError('MaterializationRequest.filenameHint must be a filename hint, not a path')
+    if (input.filenameOverride.includes('/') || input.filenameOverride.includes('\\')) {
+      throw new TypeError('MaterializationRequest.filenameOverride must be a filename override, not a path')
     }
   }
 
   return input
 }
 
+function validateReadinessState(state) {
+  assertEnum(state, 'ReadinessState', READINESS_STATE_SET)
+  return state
+}
+
 module.exports = {
   MATERIALIZATION_MODES,
+  READINESS_STATES,
   VISIBILITY_LEVELS,
   createMaterializationHints,
   createMaterializationRequest,
   validateMaterializationHints,
-  validateMaterializationRequest
+  validateMaterializationRequest,
+  validateReadinessState
 }

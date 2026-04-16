@@ -1,21 +1,20 @@
 const {
   assertHex,
-  assertInteger,
   assertNonEmptyString,
   assertObject,
+  normalizeIntegrityHint,
   stripUndefined
 } = require('../shared')
 
 const BYTE_REFERENCE_SCHEMA = 'mesh-ecology-bytes/byte-reference@1'
-const SUPPORTED_TRANSPORTS = new Set(['hypercore'])
+const SUPPORTED_REFERENCE_FAMILIES = new Set(['hypercore_immutable'])
 
 function createByteReference(input = {}) {
   const reference = stripUndefined({
-    schema: BYTE_REFERENCE_SCHEMA,
-    transport: input.transport || 'hypercore',
+    family: input.family || 'hypercore_immutable',
     key: input.key,
-    version: input.version,
-    descriptor: input.descriptor || { index: 0 }
+    descriptorHash: input.descriptorHash,
+    integrityHint: normalizeIntegrityHint(input.integrityHint)
   })
 
   return normalizeByteReference(reference)
@@ -29,7 +28,7 @@ function validateByteReference(input) {
 function normalizeByteReference(input) {
   assertObject(input, 'ByteReference')
 
-  const allowedKeys = new Set(['schema', 'transport', 'key', 'version', 'descriptor'])
+  const allowedKeys = new Set(['family', 'key', 'descriptorHash', 'integrityHint'])
 
   for (const key of Object.keys(input)) {
     if (!allowedKeys.has(key)) {
@@ -37,45 +36,29 @@ function normalizeByteReference(input) {
     }
   }
 
-  if (input.schema !== undefined && input.schema !== BYTE_REFERENCE_SCHEMA) {
-    throw new TypeError(`ByteReference.schema must be ${BYTE_REFERENCE_SCHEMA}`)
-  }
+  assertNonEmptyString(input.family, 'ByteReference.family')
 
-  assertNonEmptyString(input.transport, 'ByteReference.transport')
-
-  if (!SUPPORTED_TRANSPORTS.has(input.transport)) {
-    throw new TypeError(`Unsupported ByteReference transport: ${input.transport}`)
+  if (!SUPPORTED_REFERENCE_FAMILIES.has(input.family)) {
+    throw new TypeError(`Unsupported ByteReference family: ${input.family}`)
   }
 
   assertHex(input.key, 'ByteReference.key', 64)
 
-  if (input.version !== undefined) {
-    assertInteger(input.version, 'ByteReference.version', { min: 1 })
-  }
-
-  if (input.descriptor !== undefined) {
-    assertObject(input.descriptor, 'ByteReference.descriptor')
-    const descriptorKeys = Object.keys(input.descriptor)
-
-    if (descriptorKeys.length !== 1 || descriptorKeys[0] !== 'index') {
-      throw new TypeError('ByteReference.descriptor only supports an { index } pointer')
-    }
-
-    assertInteger(input.descriptor.index, 'ByteReference.descriptor.index', { min: 0 })
+  if (input.descriptorHash !== undefined) {
+    assertHex(input.descriptorHash, 'ByteReference.descriptorHash')
   }
 
   return {
-    schema: BYTE_REFERENCE_SCHEMA,
-    transport: input.transport,
+    family: input.family,
     key: input.key.toLowerCase(),
-    version: input.version,
-    descriptor: input.descriptor ? { index: input.descriptor.index } : undefined
+    descriptorHash: input.descriptorHash ? input.descriptorHash.toLowerCase() : undefined,
+    integrityHint: normalizeIntegrityHint(input.integrityHint)
   }
 }
 
 module.exports = {
   BYTE_REFERENCE_SCHEMA,
-  SUPPORTED_TRANSPORTS,
+  SUPPORTED_REFERENCE_FAMILIES,
   createByteReference,
   normalizeByteReference,
   validateByteReference

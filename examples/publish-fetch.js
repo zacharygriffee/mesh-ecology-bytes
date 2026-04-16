@@ -1,40 +1,51 @@
+const { createHash } = require('crypto')
 const { mkdtemp, rm } = require('fs/promises')
 const { tmpdir } = require('os')
 const path = require('path')
 
-const { createHypercoreByteStore } = require('../src')
+const { publishImmutableObject, readImmutableObject } = require('../src')
 
 async function main() {
-  const publisherDir = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-publisher-'))
-  const consumerDir = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-consumer-'))
-
-  const publisher = createHypercoreByteStore({ storage: publisherDir })
-  const consumer = createHypercoreByteStore({ storage: consumerDir })
+  const storage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-local-object-'))
+  const bytes = Buffer.from('mesh byte payload')
 
   try {
-    const published = await publisher.publish(Buffer.from('mesh byte payload'), {
-      descriptor: {
-        contentType: 'application/octet-stream',
-        role: 'runtime_blob',
-        materializationHints: {
-          preferredMode: 'stream',
-          visibility: 'internal',
-          placementClass: 'runtime_input'
-        }
-      }
+    const descriptor = {
+      contentType: 'application/octet-stream',
+      size: bytes.length,
+      encoding: 'binary',
+      materializationHints: {
+        preferredMode: 'stream',
+        visibility: 'internal',
+        placementClass: 'runtime_input',
+        filenameHint: 'payload.bin'
+      },
+      integrityHint: {
+        algorithm: 'sha256',
+        value: createHash('sha256').update(bytes).digest('hex')
+      },
+      role: 'runtime_blob'
+    }
+
+    const published = await publishImmutableObject({
+      storage,
+      bytes,
+      descriptor
     })
 
     console.log('Reference:', published.reference)
-    console.log('Descriptor:', published.descriptor)
+    console.log('Publish lifecycle:', published.object.lifecycle)
 
-    const fetched = await consumer.fetch(published.reference, { as: 'buffer' })
-    console.log('Fetched bytes:', fetched.bytes.toString())
+    const readBack = await readImmutableObject({
+      storage,
+      reference: published.reference,
+      as: 'buffer'
+    })
+
+    console.log('Read lifecycle:', readBack.lifecycle)
+    console.log('Fetched bytes:', readBack.bytes.toString())
   } finally {
-    await Promise.allSettled([publisher.close(), consumer.close()])
-    await Promise.allSettled([
-      rm(publisherDir, { recursive: true, force: true }),
-      rm(consumerDir, { recursive: true, force: true })
-    ])
+    await rm(storage, { recursive: true, force: true })
   }
 }
 

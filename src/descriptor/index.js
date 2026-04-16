@@ -3,35 +3,18 @@ const {
   validateMaterializationHints
 } = require('../materialization')
 const {
-  assertEnum,
   assertInteger,
   assertNonEmptyString,
   assertObject,
   assertOptionalString,
-  normalizeHash,
+  normalizeIntegrityHint,
   stripUndefined
 } = require('../shared')
 
 const BYTE_DESCRIPTOR_SCHEMA = 'mesh-ecology-bytes/byte-descriptor@1'
-const MUTABILITY_VALUES = new Set(['immutable', 'replaceable'])
 
 function createByteDescriptor(input = {}) {
-  const descriptor = stripUndefined({
-    schema: BYTE_DESCRIPTOR_SCHEMA,
-    id: input.id,
-    hash: normalizeHash(input.hash),
-    size: input.size,
-    contentType: input.contentType,
-    encoding: input.encoding,
-    framing: input.framing,
-    mutability: input.mutability || 'immutable',
-    role: input.role,
-    materializationHints: input.materializationHints
-      ? createMaterializationHints(input.materializationHints)
-      : undefined
-  })
-
-  return normalizeByteDescriptor(descriptor)
+  return normalizeByteDescriptor(input)
 }
 
 function validateByteDescriptor(input) {
@@ -43,16 +26,14 @@ function normalizeByteDescriptor(input) {
   assertObject(input, 'ByteDescriptor')
 
   const allowedKeys = new Set([
-    'schema',
-    'id',
-    'hash',
-    'size',
     'contentType',
+    'size',
     'encoding',
     'framing',
-    'mutability',
+    'materializationHints',
+    'integrityHint',
     'role',
-    'materializationHints'
+    'logicalId'
   ])
 
   for (const key of Object.keys(input)) {
@@ -61,31 +42,8 @@ function normalizeByteDescriptor(input) {
     }
   }
 
-  if (input.schema !== undefined && input.schema !== BYTE_DESCRIPTOR_SCHEMA) {
-    throw new TypeError(`ByteDescriptor.schema must be ${BYTE_DESCRIPTOR_SCHEMA}`)
-  }
-
-  const hash = normalizeHash(input.hash)
-
-  if (input.id === undefined && hash === undefined) {
-    throw new TypeError('ByteDescriptor requires either id or hash')
-  }
-
-  if (input.id !== undefined) {
-    assertNonEmptyString(input.id, 'ByteDescriptor.id')
-  }
-
-  if (hash !== undefined) {
-    assertOptionalString(hash.algorithm, 'ByteDescriptor.hash.algorithm')
-  }
-
-  if (input.size !== undefined) {
-    assertInteger(input.size, 'ByteDescriptor.size', { min: 0 })
-  }
-
-  if (input.contentType !== undefined) {
-    assertNonEmptyString(input.contentType, 'ByteDescriptor.contentType')
-  }
+  assertNonEmptyString(input.contentType, 'ByteDescriptor.contentType')
+  assertInteger(input.size, 'ByteDescriptor.size', { min: 0 })
 
   if (input.encoding !== undefined) {
     assertNonEmptyString(input.encoding, 'ByteDescriptor.encoding')
@@ -95,31 +53,33 @@ function normalizeByteDescriptor(input) {
     assertNonEmptyString(input.framing, 'ByteDescriptor.framing')
   }
 
-  if (input.mutability !== undefined) {
-    assertEnum(input.mutability, 'ByteDescriptor.mutability', MUTABILITY_VALUES)
+  if (input.encoding === undefined && input.framing === undefined) {
+    throw new TypeError('ByteDescriptor requires either encoding or framing')
   }
+
+  if (input.materializationHints === undefined) {
+    throw new TypeError('ByteDescriptor.materializationHints is required and may be empty')
+  }
+
+  validateMaterializationHints(input.materializationHints)
 
   if (input.role !== undefined) {
     assertNonEmptyString(input.role, 'ByteDescriptor.role')
   }
 
-  if (input.materializationHints !== undefined) {
-    validateMaterializationHints(input.materializationHints)
+  if (input.logicalId !== undefined) {
+    assertOptionalString(input.logicalId, 'ByteDescriptor.logicalId')
   }
 
   return stripUndefined({
-    schema: BYTE_DESCRIPTOR_SCHEMA,
-    id: input.id,
-    hash,
-    size: input.size,
     contentType: input.contentType,
+    size: input.size,
     encoding: input.encoding,
     framing: input.framing,
-    mutability: input.mutability || 'immutable',
+    materializationHints: createMaterializationHints(input.materializationHints),
+    integrityHint: normalizeIntegrityHint(input.integrityHint),
     role: input.role,
-    materializationHints: input.materializationHints
-      ? createMaterializationHints(input.materializationHints)
-      : undefined
+    logicalId: input.logicalId
   })
 }
 
@@ -139,7 +99,6 @@ function decodeByteDescriptor(buffer) {
 
 module.exports = {
   BYTE_DESCRIPTOR_SCHEMA,
-  MUTABILITY_VALUES,
   createByteDescriptor,
   decodeByteDescriptor,
   encodeByteDescriptor,

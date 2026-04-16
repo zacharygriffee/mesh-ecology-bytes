@@ -41,24 +41,28 @@ function assertHex(value, label, expectedLength) {
   }
 }
 
-function normalizeHash(hash) {
-  if (hash === undefined) return undefined
+function normalizeIntegrityHint(hint, label = 'integrityHint') {
+  if (hint === undefined) return undefined
 
-  if (typeof hash === 'string') {
+  if (typeof hint === 'string') {
     return {
       algorithm: 'sha256',
-      value: hash.toLowerCase()
+      value: hint.toLowerCase()
     }
   }
 
-  assertObject(hash, 'hash')
-  assertNonEmptyString(hash.algorithm, 'hash.algorithm')
-  assertHex(hash.value, 'hash.value')
+  assertObject(hint, label)
+  assertNonEmptyString(hint.algorithm, `${label}.algorithm`)
+  assertHex(hint.value, `${label}.value`)
 
   return {
-    algorithm: hash.algorithm,
-    value: hash.value.toLowerCase()
+    algorithm: hint.algorithm,
+    value: hint.value.toLowerCase()
   }
+}
+
+function normalizeHash(hash) {
+  return normalizeIntegrityHint(hash, 'hash')
 }
 
 function stripUndefined(input) {
@@ -78,6 +82,7 @@ module.exports = {
   assertNonEmptyString,
   assertObject,
   assertOptionalString,
+  normalizeIntegrityHint,
   normalizeHash,
   stripUndefined
 }

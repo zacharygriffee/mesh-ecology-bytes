@@ -1,6 +1,5 @@
 const {
   BYTE_DESCRIPTOR_SCHEMA,
-  MUTABILITY_VALUES,
   createByteDescriptor,
   decodeByteDescriptor,
   encodeByteDescriptor,
@@ -9,49 +8,72 @@ const {
 } = require('./descriptor')
 const {
   MATERIALIZATION_MODES,
+  READINESS_STATES,
   VISIBILITY_LEVELS,
   createMaterializationHints,
   createMaterializationRequest,
+  validateReadinessState,
   validateMaterializationHints,
   validateMaterializationRequest
 } = require('./materialization')
 const {
   BYTE_REFERENCE_SCHEMA,
-  SUPPORTED_TRANSPORTS,
+  SUPPORTED_REFERENCE_FAMILIES,
   createByteReference,
   normalizeByteReference,
   validateByteReference
 } = require('./reference')
 const {
-  DEFAULT_CHUNK_SIZE,
-  HypercoreByteStore,
-  HyperswarmTransport,
-  createHypercoreByteStore,
-  createHyperswarmTransport
-} = require('./transport')
+  DEFAULT_PAYLOAD_CHUNK_SIZE,
+  DESCRIPTOR_BLOCK_INDEX,
+  PAYLOAD_START_BLOCK_INDEX,
+  assessObjectLifecycle,
+  chunkPayload,
+  createDescriptorHash,
+  deserializeByteDescriptor,
+  getPayloadBlockCount,
+  getTotalBlockCount,
+  hasAllBlocks,
+  publishImmutableObject,
+  readImmutableObject,
+  selectReadinessState,
+  serializeByteDescriptor,
+  validateMaterializedBytes
+} = require('./object')
 
 module.exports = {
   BYTE_DESCRIPTOR_SCHEMA,
   BYTE_REFERENCE_SCHEMA,
-  DEFAULT_CHUNK_SIZE,
+  DEFAULT_PAYLOAD_CHUNK_SIZE,
+  DESCRIPTOR_BLOCK_INDEX,
   MATERIALIZATION_MODES,
-  MUTABILITY_VALUES,
-  SUPPORTED_TRANSPORTS,
+  PAYLOAD_START_BLOCK_INDEX,
+  READINESS_STATES,
+  SUPPORTED_REFERENCE_FAMILIES,
   VISIBILITY_LEVELS,
-  HypercoreByteStore,
-  HyperswarmTransport,
+  assessObjectLifecycle,
   createByteDescriptor,
+  createDescriptorHash,
   createByteReference,
-  createHypercoreByteStore,
-  createHyperswarmTransport,
   createMaterializationHints,
   createMaterializationRequest,
+  chunkPayload,
+  deserializeByteDescriptor,
   decodeByteDescriptor,
   encodeByteDescriptor,
+  getPayloadBlockCount,
+  getTotalBlockCount,
+  hasAllBlocks,
   normalizeByteDescriptor,
   normalizeByteReference,
+  publishImmutableObject,
+  readImmutableObject,
+  selectReadinessState,
+  serializeByteDescriptor,
+  validateReadinessState,
   validateByteDescriptor,
   validateByteReference,
   validateMaterializationHints,
-  validateMaterializationRequest
+  validateMaterializationRequest,
+  validateMaterializedBytes
 }
