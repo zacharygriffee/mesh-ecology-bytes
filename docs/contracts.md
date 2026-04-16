@@ -240,6 +240,58 @@ The current retention implementation is intentionally minimal:
 - `ephemeral` and `prunable` are derived posture fields
 - the byte layer reports retention posture but does not prune, schedule, or arbitrate policy
 
+## Consumer Integration Seams
+
+Phase 7 defines narrow consumer-facing seams without broadening byte semantics.
+
+### Platform-Facing Materialization Seam
+
+The byte layer may expose the following platform-facing seam fields:
+
+- `reference`
+- `descriptor`
+- `lifecycle`
+- `retention`
+- `plan`
+- `destination`
+- `bytesWritten`
+
+Field posture:
+
+- `destination` is only echoed when the consumer already supplied it
+- `plan` contains byte-level materialization intent only
+- `lifecycle` and `retention` report byte-layer state only
+
+The byte layer does not define or accept as part of this seam:
+
+- deployment state
+- activation state
+- overwrite policy
+- filesystem ownership policy
+- cleanup scheduling
+- concern semantics
+
+### Pack-Facing Artifact-Byte Seam
+
+The byte layer may expose the following pack-facing seam fields:
+
+- `reference`
+- `descriptor` when already resolved
+
+Field posture:
+
+- packs may associate artifact meaning outside this repo
+- the byte layer does not define artifact taxonomy, package lifecycle, or release semantics
+- pack-level meaning must not be embedded into the byte-layer seam contract
+
+## Phase 7 Support Surface
+
+The current seam implementation is intentionally minimal:
+
+- `createPlatformMaterializationSeam()` validates and normalizes the platform-facing byte result envelope
+- `createPackByteBinding()` validates and normalizes the pack-facing byte binding envelope
+- seam validators reject unsupported fields rather than teaching the byte layer platform or pack semantics
+
 ## Future Reference Families
 
 Future keyed, path-based, or mutable backing stores may exist later.

@@ -1,5 +1,5 @@
 const { validateReadinessState } = require('../materialization')
-const { assertBoolean, assertObject } = require('../shared')
+const { assertAllowedKeys, assertBoolean, assertObject } = require('../shared')
 
 const RETENTION_TERMS = ['pinned', 'ephemeral', 'stale', 'prunable']
 
@@ -25,7 +25,7 @@ function assessRetentionPosture(options = {}) {
 }
 
 function validateLifecycleSnapshot(lifecycle) {
-  assertObject(lifecycle, 'RetentionInspection.lifecycle')
+  assertAllowedKeys(lifecycle, 'RetentionInspection.lifecycle', ['fetched', 'complete', 'materialized', 'ready', 'state'])
   validateBooleanOption(lifecycle.fetched, 'RetentionInspection.lifecycle.fetched')
   validateBooleanOption(lifecycle.complete, 'RetentionInspection.lifecycle.complete')
   validateBooleanOption(lifecycle.materialized, 'RetentionInspection.lifecycle.materialized')
@@ -36,6 +36,15 @@ function validateLifecycleSnapshot(lifecycle) {
   }
 
   return lifecycle
+}
+
+function validateRetentionPosture(posture) {
+  assertAllowedKeys(posture, 'RetentionPosture', ['pinned', 'ephemeral', 'stale', 'prunable'])
+  validateBooleanOption(posture.pinned, 'RetentionPosture.pinned')
+  validateBooleanOption(posture.ephemeral, 'RetentionPosture.ephemeral')
+  validateBooleanOption(posture.stale, 'RetentionPosture.stale')
+  validateBooleanOption(posture.prunable, 'RetentionPosture.prunable')
+  return posture
 }
 
 function validateRetentionTerm(term) {
@@ -55,5 +64,6 @@ module.exports = {
   RETENTION_TERMS,
   assessRetentionPosture,
   validateLifecycleSnapshot,
+  validateRetentionPosture,
   validateRetentionTerm
 }

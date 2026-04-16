@@ -76,6 +76,15 @@ Status: locked
 - `stale` means the local consumer considers the immutable object superseded, but the reference remains valid
 - `prunable` is a local eligibility signal for unpinned copies, not a pruning policy
 
+### Consumer Integration Seams
+
+Status: locked
+
+- bytes owns byte-level publication, retrieval, materialization forms, lifecycle, and retention posture
+- platform consumers own placement, overwrite policy, cleanup policy, and activation meaning
+- pack consumers may attach artifact meaning outside this repo, but bytes does not define that meaning
+- seam helpers validate only byte-layer envelopes and reject unsupported platform or pack fields
+
 ### Future Keyed Or Mutable Stores
 
 Status: acknowledged and deferred

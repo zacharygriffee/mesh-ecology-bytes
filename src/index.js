@@ -16,6 +16,7 @@ const {
   resolveMaterializationPlan,
   validateReadinessState,
   validateMaterializationHints,
+  validateMaterializationPlan,
   validateMaterializationRequest
 } = require('./materialization')
 const {
@@ -25,6 +26,12 @@ const {
   normalizeByteReference,
   validateByteReference
 } = require('./reference')
+const {
+  createPackByteBinding,
+  createPlatformMaterializationSeam,
+  validatePackByteBinding,
+  validatePlatformMaterializationSeam
+} = require('./integration')
 const {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   DESCRIPTOR_BLOCK_INDEX,
@@ -44,6 +51,7 @@ const {
   serializeByteDescriptor,
   validateLifecycleSnapshot,
   validateMaterializedBytes,
+  validateRetentionPosture,
   validateRetentionTerm
 } = require('./object')
 const {
@@ -73,6 +81,8 @@ module.exports = {
   createHyperswarmTransport,
   createMaterializationHints,
   createMaterializationRequest,
+  createPackByteBinding,
+  createPlatformMaterializationSeam,
   materializeImmutableObject,
   chunkPayload,
   deserializeByteDescriptor,
@@ -95,7 +105,11 @@ module.exports = {
   validateByteDescriptor,
   validateByteReference,
   validateMaterializationHints,
+  validateMaterializationPlan,
   validateMaterializationRequest,
   validateMaterializedBytes,
+  validatePackByteBinding,
+  validatePlatformMaterializationSeam,
+  validateRetentionPosture,
   validateRetentionTerm
 }

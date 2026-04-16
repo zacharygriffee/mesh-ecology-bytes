@@ -6,6 +6,18 @@ function assertObject(value, label) {
   }
 }
 
+function assertAllowedKeys(value, label, allowedKeys) {
+  assertObject(value, label)
+
+  const allowed = new Set(allowedKeys)
+
+  for (const key of Object.keys(value)) {
+    if (!allowed.has(key)) {
+      throw new TypeError(`${label} must not include unsupported field: ${key}`)
+    }
+  }
+}
+
 function assertNonEmptyString(value, label) {
   if (typeof value !== 'string' || value.trim() === '') {
     throw new TypeError(`${label} must be a non-empty string`)
@@ -82,6 +94,7 @@ function stripUndefined(input) {
 }
 
 module.exports = {
+  assertAllowedKeys,
   assertBoolean,
   assertEnum,
   assertHex,

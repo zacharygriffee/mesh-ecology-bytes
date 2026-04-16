@@ -10,7 +10,13 @@ const {
   getTotalBlockCount,
   serializeByteDescriptor
 } = require('./layout')
-const { RETENTION_TERMS, assessRetentionPosture, validateLifecycleSnapshot, validateRetentionTerm } = require('./retention')
+const {
+  RETENTION_TERMS,
+  assessRetentionPosture,
+  validateLifecycleSnapshot,
+  validateRetentionPosture,
+  validateRetentionTerm
+} = require('./retention')
 const { publishImmutableObject } = require('./publish')
 const { readImmutableObject } = require('./read')
 
@@ -33,5 +39,6 @@ module.exports = {
   serializeByteDescriptor,
   validateLifecycleSnapshot,
   validateMaterializedBytes,
+  validateRetentionPosture,
   validateRetentionTerm
 }

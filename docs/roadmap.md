@@ -122,6 +122,12 @@ Guardrail:
 
 - bytes stays byte-level and does not absorb platform behavior
 
+Current implementation note:
+
+- consumer seam contracts are now documented explicitly
+- minimal helpers validate platform-facing materialization envelopes and pack-facing byte bindings
+- seam helpers reject unsupported policy, deployment, or artifact-specific fields
+
 ## Phase 8: Operational Hardening
 
 Phase 8 is implementation-heavy.

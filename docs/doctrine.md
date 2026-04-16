@@ -73,6 +73,13 @@ If richer manifest or catalog behavior is needed later, it belongs in a higher o
 - `prunable` is a local eligibility signal and not a pruning policy
 - bytes may report retention posture, but consumers still own deletion, scheduling, and policy decisions
 
+## Consumer Integration Seams
+
+- bytes owns byte publication, immutable reference resolution, retrieval, materialization forms, lifecycle reporting, and retention posture reporting
+- platform consumers own placement resolution, overwrite rules, activation meaning, cleanup policy, and runtime interpretation
+- pack consumers may bind higher-level artifact meaning to byte references, but that meaning remains outside this repo
+- seam helpers may normalize byte-layer result envelopes, but they must not absorb platform or pack semantics
+
 ## Partial Fetch Posture
 
 In v1, partial fetch has a narrow meaning:

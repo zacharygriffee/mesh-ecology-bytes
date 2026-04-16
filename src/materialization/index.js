@@ -3,6 +3,7 @@ const path = require('path')
 
 const { validateByteReference } = require('../reference')
 const {
+  assertAllowedKeys,
   assertEnum,
   assertNonEmptyString,
   assertObject,
@@ -91,6 +92,36 @@ function validateReadinessState(state) {
   return state
 }
 
+function validateMaterializationPlan(input) {
+  assertAllowedKeys(input, 'MaterializationPlan', ['mode', 'placementClass', 'targetClass', 'visibility', 'filename'])
+
+  if (input.mode !== undefined) {
+    assertEnum(input.mode, 'MaterializationPlan.mode', MATERIALIZATION_MODES)
+  }
+
+  if (input.placementClass !== undefined) {
+    assertNonEmptyString(input.placementClass, 'MaterializationPlan.placementClass')
+  }
+
+  if (input.targetClass !== undefined) {
+    assertNonEmptyString(input.targetClass, 'MaterializationPlan.targetClass')
+  }
+
+  if (input.visibility !== undefined) {
+    assertEnum(input.visibility, 'MaterializationPlan.visibility', VISIBILITY_LEVELS)
+  }
+
+  if (input.filename !== undefined) {
+    assertOptionalString(input.filename, 'MaterializationPlan.filename')
+
+    if (input.filename.includes('/') || input.filename.includes('\\')) {
+      throw new TypeError('MaterializationPlan.filename must be a filename hint, not a path')
+    }
+  }
+
+  return input
+}
+
 function resolveMaterializationPlan(options = {}) {
   const descriptor = options.descriptor
   const request = options.request
@@ -107,13 +138,17 @@ function resolveMaterializationPlan(options = {}) {
 
   assertEnum(mode, 'MaterializationPlan.mode', MATERIALIZATION_MODES)
 
-  return stripUndefined({
+  const plan = stripUndefined({
     mode,
     placementClass: hints.placementClass,
     targetClass: request && request.targetClass,
     visibility: hints.visibility,
     filename: (request && request.filenameOverride) || hints.filenameHint
   })
+
+  validateMaterializationPlan(plan)
+
+  return plan
 }
 
 async function materializeImmutableObject(options = {}) {
@@ -208,6 +243,7 @@ module.exports = {
   createMaterializationRequest,
   materializeImmutableObject,
   resolveMaterializationPlan,
+  validateMaterializationPlan,
   validateMaterializationHints,
   validateMaterializationRequest,
   validateReadinessState
