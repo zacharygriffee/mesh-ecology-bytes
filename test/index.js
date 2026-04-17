@@ -1,10 +1,10 @@
-const { runContractTests } = require('./contracts')
-const { runIntegrationSeamTests } = require('./integration-seams')
-const { runMaterializationRuntimeTests } = require('./materialization-runtime')
-const { runObjectModelTests } = require('./object-model')
-const { runOperationalHardeningTests } = require('./operational-hardening')
-const { runRetentionTests } = require('./retention')
-const { runHyperswarmTransportTests } = require('./transport-hyperswarm')
+import { runContractTests } from './contracts.js'
+import { runIntegrationSeamTests } from './integration-seams.js'
+import { runMaterializationRuntimeTests } from './materialization-runtime.js'
+import { runObjectModelTests } from './object-model.js'
+import { runOperationalHardeningTests } from './operational-hardening.js'
+import { runRetentionTests } from './retention.js'
+import { runHyperswarmTransportTests } from './transport-hyperswarm.js'
 
 async function main() {
   runContractTests()

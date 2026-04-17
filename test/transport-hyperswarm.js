@@ -1,20 +1,21 @@
-const assert = require('assert/strict')
-const { createHash } = require('crypto')
-const { mkdtemp, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const createTestnet = require('hyperdht/testnet')
+import createTestnet from 'hyperdht/testnet.js'
 
-const {
+import {
   createHyperswarmTransport,
   fetchImmutableObject,
   publishImmutableObject,
   readImmutableObject,
   serveImmutableObject
-} = require('../src')
+} from '../src/index.js'
 
-async function runHyperswarmTransportTests() {
+export async function runHyperswarmTransportTests() {
   const publisherStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-publisher-'))
   const consumerStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-consumer-'))
   const testnet = await createTestnet(3)
@@ -92,11 +93,7 @@ async function runHyperswarmTransportTests() {
   }
 }
 
-module.exports = {
-  runHyperswarmTransportTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runHyperswarmTransportTests().catch((error) => {
     console.error(error)
     process.exitCode = 1

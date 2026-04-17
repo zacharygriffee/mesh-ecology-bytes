@@ -1,15 +1,16 @@
-const assert = require('assert/strict')
+import assert from 'node:assert/strict'
+import { pathToFileURL } from 'node:url'
 
-const {
+import {
   assessRetentionPosture,
   createPackByteBinding,
   createPlatformMaterializationSeam,
   resolveMaterializationPlan,
   validatePackByteBinding,
   validatePlatformMaterializationSeam
-} = require('../src')
+} from '../src/index.js'
 
-function runIntegrationSeamTests() {
+export function runIntegrationSeamTests() {
   testPlatformMaterializationSeam()
   testPackByteBinding()
   testSeamValidatorsRejectUnsupportedFields()
@@ -121,10 +122,6 @@ function testSeamValidatorsRejectUnsupportedFields() {
   }))
 }
 
-module.exports = {
-  runIntegrationSeamTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runIntegrationSeamTests()
 }

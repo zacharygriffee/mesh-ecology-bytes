@@ -1,16 +1,17 @@
-const assert = require('assert/strict')
-const { createHash } = require('crypto')
-const { mkdtemp, readFile, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const {
+import {
   materializeImmutableObject,
   publishImmutableObject,
   resolveMaterializationPlan
-} = require('../src')
+} from '../src/index.js'
 
-async function runMaterializationRuntimeTests() {
+export async function runMaterializationRuntimeTests() {
   await testResolveMaterializationPlan()
   await testStreamMaterialization()
   await testCacheMaterialization()
@@ -206,11 +207,7 @@ async function collectStream(stream) {
   return Buffer.concat(chunks)
 }
 
-module.exports = {
-  runMaterializationRuntimeTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runMaterializationRuntimeTests().catch((error) => {
     console.error(error)
     process.exitCode = 1

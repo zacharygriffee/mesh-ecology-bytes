@@ -1,12 +1,13 @@
-const assert = require('assert/strict')
-const { createHash } = require('crypto')
-const { mkdtemp, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const Hypercore = require('hypercore')
+import Hypercore from 'hypercore'
 
-const {
+import {
   chunkPayload,
   createByteReference,
   getPayloadBlockCount,
@@ -14,9 +15,9 @@ const {
   publishImmutableObject,
   readImmutableObject,
   serializeByteDescriptor
-} = require('../src')
+} from '../src/index.js'
 
-async function runObjectModelTests() {
+export async function runObjectModelTests() {
   await testPublishAndReadImmutableObject()
   await testInvalidDescriptorRejectedDuringPublish()
   await testMissingDescriptorRejectedDuringRead()
@@ -183,11 +184,7 @@ async function testInvalidDescriptorRejectedDuringRead() {
   }
 }
 
-module.exports = {
-  runObjectModelTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runObjectModelTests().catch((error) => {
     console.error(error)
     process.exitCode = 1

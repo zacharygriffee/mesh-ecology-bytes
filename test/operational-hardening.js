@@ -1,12 +1,13 @@
-const assert = require('assert/strict')
-const { mkdtemp, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import assert from 'node:assert/strict'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const Hypercore = require('hypercore')
-const createTestnet = require('hyperdht/testnet')
+import Hypercore from 'hypercore'
+import createTestnet from 'hyperdht/testnet.js'
 
-const {
+import {
   createByteReference,
   createHyperswarmTransport,
   fetchImmutableObject,
@@ -15,9 +16,9 @@ const {
   publishImmutableObject,
   readImmutableObject,
   serializeByteDescriptor
-} = require('../src')
+} from '../src/index.js'
 
-async function runOperationalHardeningTests() {
+export async function runOperationalHardeningTests() {
   await testReadRejectsIntegrityMismatch()
   await testFetchTimeoutWithoutPeers()
   await testReadRespectsAbortSignal()
@@ -159,11 +160,7 @@ async function testMaterializationWriteFailureIsWrapped() {
   }
 }
 
-module.exports = {
-  runOperationalHardeningTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runOperationalHardeningTests().catch((error) => {
     console.error(error)
     process.exitCode = 1

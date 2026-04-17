@@ -1,7 +1,7 @@
-const { createMeshBytesError } = require('./errors')
-const { assertInteger } = require('./shared')
+import { createMeshBytesError } from './errors.js'
+import { assertInteger } from './shared.js'
 
-function createOperationScope(options = {}) {
+export function createOperationScope(options = {}) {
   const signal = options.signal
   const timeoutMs = normalizeTimeoutMs(options.timeoutMs)
   const deadline = timeoutMs === undefined ? null : Date.now() + timeoutMs
@@ -162,8 +162,4 @@ function normalizeTimeoutMs(timeoutMs) {
 
   assertInteger(timeoutMs, 'timeoutMs', { min: 1 })
   return timeoutMs
-}
-
-module.exports = {
-  createOperationScope
 }

@@ -1,13 +1,6 @@
-const {
+export {
   HyperswarmTransport,
   createHyperswarmTransport,
   fetchImmutableObject,
   serveImmutableObject
-} = require('./hyperswarm')
-
-module.exports = {
-  HyperswarmTransport,
-  createHyperswarmTransport,
-  fetchImmutableObject,
-  serveImmutableObject
-}
+} from './hyperswarm/index.js'

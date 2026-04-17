@@ -1,8 +1,8 @@
-const { createHash } = require('crypto')
+import { createHash } from 'node:crypto'
 
-const { READINESS_STATES } = require('../materialization')
+import { READINESS_STATES } from '../materialization/index.js'
 
-async function assessObjectLifecycle(core, descriptor, options = {}) {
+export async function assessObjectLifecycle(core, descriptor, options = {}) {
   const fetched = Boolean(options.fetched)
   const complete = fetched && await hasAllBlocks(core)
   const materialized = Boolean(options.materialized)
@@ -20,7 +20,7 @@ async function assessObjectLifecycle(core, descriptor, options = {}) {
   }
 }
 
-async function hasAllBlocks(core) {
+export async function hasAllBlocks(core) {
   if (!core || typeof core.length !== 'number' || core.length < 1) {
     return false
   }
@@ -28,7 +28,7 @@ async function hasAllBlocks(core) {
   return core.has(0, core.length)
 }
 
-function validateMaterializedBytes(descriptor, bytes) {
+export function validateMaterializedBytes(descriptor, bytes) {
   if (!Buffer.isBuffer(bytes)) {
     throw new TypeError('materialized bytes must be a Buffer')
   }
@@ -45,17 +45,10 @@ function validateMaterializedBytes(descriptor, bytes) {
   return digest === descriptor.integrityHint.value
 }
 
-function selectReadinessState(status) {
+export function selectReadinessState(status) {
   if (status.ready) return READINESS_STATES[3]
   if (status.materialized) return READINESS_STATES[2]
   if (status.complete) return READINESS_STATES[1]
   if (status.fetched) return READINESS_STATES[0]
   return null
-}
-
-module.exports = {
-  assessObjectLifecycle,
-  hasAllBlocks,
-  selectReadinessState,
-  validateMaterializedBytes
 }

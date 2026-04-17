@@ -1,28 +1,28 @@
-const {
+import {
   createMaterializationHints,
   validateMaterializationHints
-} = require('../materialization')
-const {
+} from '../materialization/index.js'
+import {
   assertInteger,
   assertNonEmptyString,
   assertObject,
   assertOptionalString,
   normalizeIntegrityHint,
   stripUndefined
-} = require('../shared')
+} from '../shared.js'
 
-const BYTE_DESCRIPTOR_SCHEMA = 'mesh-ecology-bytes/byte-descriptor@1'
+export const BYTE_DESCRIPTOR_SCHEMA = 'mesh-ecology-bytes/byte-descriptor@1'
 
-function createByteDescriptor(input = {}) {
+export function createByteDescriptor(input = {}) {
   return normalizeByteDescriptor(input)
 }
 
-function validateByteDescriptor(input) {
+export function validateByteDescriptor(input) {
   normalizeByteDescriptor(input)
   return input
 }
 
-function normalizeByteDescriptor(input) {
+export function normalizeByteDescriptor(input) {
   assertObject(input, 'ByteDescriptor')
 
   const allowedKeys = new Set([
@@ -83,25 +83,16 @@ function normalizeByteDescriptor(input) {
   })
 }
 
-function encodeByteDescriptor(input) {
+export function encodeByteDescriptor(input) {
   const descriptor = normalizeByteDescriptor(input)
   return Buffer.from(JSON.stringify(descriptor), 'utf8')
 }
 
-function decodeByteDescriptor(buffer) {
+export function decodeByteDescriptor(buffer) {
   if (!Buffer.isBuffer(buffer) && !(buffer instanceof Uint8Array)) {
     throw new TypeError('ByteDescriptor block must be a Buffer or Uint8Array')
   }
 
   const parsed = JSON.parse(Buffer.from(buffer).toString('utf8'))
   return normalizeByteDescriptor(parsed)
-}
-
-module.exports = {
-  BYTE_DESCRIPTOR_SCHEMA,
-  createByteDescriptor,
-  decodeByteDescriptor,
-  encodeByteDescriptor,
-  normalizeByteDescriptor,
-  validateByteDescriptor
 }

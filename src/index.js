@@ -1,18 +1,18 @@
-const {
+export {
   BYTE_DESCRIPTOR_SCHEMA,
   createByteDescriptor,
   decodeByteDescriptor,
   encodeByteDescriptor,
   normalizeByteDescriptor,
   validateByteDescriptor
-} = require('./descriptor')
-const {
+} from './descriptor/index.js'
+export {
   ERROR_CODES,
   MeshBytesError,
   createMeshBytesError,
   isMeshBytesError
-} = require('./errors')
-const {
+} from './errors.js'
+export {
   MATERIALIZATION_MODES,
   READINESS_STATES,
   VISIBILITY_LEVELS,
@@ -24,21 +24,21 @@ const {
   validateMaterializationHints,
   validateMaterializationPlan,
   validateMaterializationRequest
-} = require('./materialization')
-const {
+} from './materialization/index.js'
+export {
   BYTE_REFERENCE_SCHEMA,
   SUPPORTED_REFERENCE_FAMILIES,
   createByteReference,
   normalizeByteReference,
   validateByteReference
-} = require('./reference')
-const {
+} from './reference/index.js'
+export {
   createPackByteBinding,
   createPlatformMaterializationSeam,
   validatePackByteBinding,
   validatePlatformMaterializationSeam
-} = require('./integration')
-const {
+} from './integration/index.js'
+export {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   DESCRIPTOR_BLOCK_INDEX,
   PAYLOAD_START_BLOCK_INDEX,
@@ -59,67 +59,10 @@ const {
   validateMaterializedBytes,
   validateRetentionPosture,
   validateRetentionTerm
-} = require('./object')
-const {
+} from './object/index.js'
+export {
   HyperswarmTransport,
   createHyperswarmTransport,
   fetchImmutableObject,
   serveImmutableObject
-} = require('./transport')
-
-module.exports = {
-  BYTE_DESCRIPTOR_SCHEMA,
-  BYTE_REFERENCE_SCHEMA,
-  DEFAULT_PAYLOAD_CHUNK_SIZE,
-  DESCRIPTOR_BLOCK_INDEX,
-  MATERIALIZATION_MODES,
-  PAYLOAD_START_BLOCK_INDEX,
-  READINESS_STATES,
-  RETENTION_TERMS,
-  SUPPORTED_REFERENCE_FAMILIES,
-  VISIBILITY_LEVELS,
-  ERROR_CODES,
-  HyperswarmTransport,
-  MeshBytesError,
-  assessObjectLifecycle,
-  assessRetentionPosture,
-  createByteDescriptor,
-  createMeshBytesError,
-  createDescriptorHash,
-  createByteReference,
-  createHyperswarmTransport,
-  createMaterializationHints,
-  createMaterializationRequest,
-  createPackByteBinding,
-  createPlatformMaterializationSeam,
-  materializeImmutableObject,
-  chunkPayload,
-  deserializeByteDescriptor,
-  decodeByteDescriptor,
-  encodeByteDescriptor,
-  fetchImmutableObject,
-  getPayloadBlockCount,
-  getTotalBlockCount,
-  hasAllBlocks,
-  normalizeByteDescriptor,
-  normalizeByteReference,
-  publishImmutableObject,
-  readImmutableObject,
-  resolveMaterializationPlan,
-  isMeshBytesError,
-  selectReadinessState,
-  serializeByteDescriptor,
-  serveImmutableObject,
-  validateLifecycleSnapshot,
-  validateReadinessState,
-  validateByteDescriptor,
-  validateByteReference,
-  validateMaterializationHints,
-  validateMaterializationPlan,
-  validateMaterializationRequest,
-  validateMaterializedBytes,
-  validatePackByteBinding,
-  validatePlatformMaterializationSeam,
-  validateRetentionPosture,
-  validateRetentionTerm
-}
+} from './transport/index.js'

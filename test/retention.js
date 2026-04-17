@@ -1,15 +1,16 @@
-const assert = require('assert/strict')
-const { mkdtemp, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import assert from 'node:assert/strict'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
-const {
+import {
   assessRetentionPosture,
   publishImmutableObject,
   readImmutableObject
-} = require('../src')
+} from '../src/index.js'
 
-async function runRetentionTests() {
+export async function runRetentionTests() {
   await testPublishedObjectDefaultsToEphemeralPrunable()
   await testPinnedReadyObjectIsNotPrunable()
 }
@@ -80,11 +81,7 @@ async function testPinnedReadyObjectIsNotPrunable() {
   }
 }
 
-module.exports = {
-  runRetentionTests
-}
-
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   runRetentionTests().catch((error) => {
     console.error(error)
     process.exitCode = 1

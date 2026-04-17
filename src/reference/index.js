@@ -1,15 +1,15 @@
-const {
+import {
   assertHex,
   assertNonEmptyString,
   assertObject,
   normalizeIntegrityHint,
   stripUndefined
-} = require('../shared')
+} from '../shared.js'
 
-const BYTE_REFERENCE_SCHEMA = 'mesh-ecology-bytes/byte-reference@1'
-const SUPPORTED_REFERENCE_FAMILIES = new Set(['hypercore_immutable'])
+export const BYTE_REFERENCE_SCHEMA = 'mesh-ecology-bytes/byte-reference@1'
+export const SUPPORTED_REFERENCE_FAMILIES = new Set(['hypercore_immutable'])
 
-function createByteReference(input = {}) {
+export function createByteReference(input = {}) {
   const reference = stripUndefined({
     family: input.family || 'hypercore_immutable',
     key: input.key,
@@ -20,12 +20,12 @@ function createByteReference(input = {}) {
   return normalizeByteReference(reference)
 }
 
-function validateByteReference(input) {
+export function validateByteReference(input) {
   normalizeByteReference(input)
   return input
 }
 
-function normalizeByteReference(input) {
+export function normalizeByteReference(input) {
   assertObject(input, 'ByteReference')
 
   const allowedKeys = new Set(['family', 'key', 'descriptorHash', 'integrityHint'])
@@ -54,12 +54,4 @@ function normalizeByteReference(input) {
     descriptorHash: input.descriptorHash ? input.descriptorHash.toLowerCase() : undefined,
     integrityHint: normalizeIntegrityHint(input.integrityHint)
   }
-}
-
-module.exports = {
-  BYTE_REFERENCE_SCHEMA,
-  SUPPORTED_REFERENCE_FAMILIES,
-  createByteReference,
-  normalizeByteReference,
-  validateByteReference
 }

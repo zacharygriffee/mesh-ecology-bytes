@@ -1,11 +1,11 @@
-const Hyperswarm = require('hyperswarm')
-const Hypercore = require('hypercore')
+import Hyperswarm from 'hyperswarm'
+import Hypercore from 'hypercore'
 
-const { createOperationScope } = require('../../operation')
-const { createByteReference } = require('../../reference')
-const { readImmutableObject } = require('../../object/read')
+import { createOperationScope } from '../../operation.js'
+import { createByteReference } from '../../reference/index.js'
+import { readImmutableObject } from '../../object/read.js'
 
-class HyperswarmTransport {
+export class HyperswarmTransport {
   constructor(options = {}) {
     this.swarm = options.swarm || new Hyperswarm(options.swarmOptions)
     this._ownsSwarm = !options.swarm
@@ -116,11 +116,11 @@ class HyperswarmTransport {
   }
 }
 
-function createHyperswarmTransport(options) {
+export function createHyperswarmTransport(options) {
   return new HyperswarmTransport(options)
 }
 
-async function serveImmutableObject(options = {}) {
+export async function serveImmutableObject(options = {}) {
   const { storage, transport, waitForAnnouncement = true } = options
   const reference = createByteReference(options.reference)
 
@@ -159,7 +159,7 @@ async function serveImmutableObject(options = {}) {
   }
 }
 
-async function fetchImmutableObject(options = {}) {
+export async function fetchImmutableObject(options = {}) {
   const { storage, as = 'buffer', transport, waitForConnections = true } = options
   const reference = createByteReference(options.reference)
   const scope = createOperationScope(options)
@@ -227,11 +227,4 @@ async function fetchImmutableObject(options = {}) {
     ])
     throw error
   }
-}
-
-module.exports = {
-  HyperswarmTransport,
-  createHyperswarmTransport,
-  fetchImmutableObject,
-  serveImmutableObject
 }

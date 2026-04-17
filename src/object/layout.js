@@ -1,25 +1,25 @@
-const { createHash } = require('crypto')
+import { createHash } from 'node:crypto'
 
-const { decodeByteDescriptor, normalizeByteDescriptor } = require('../descriptor')
+import { decodeByteDescriptor, normalizeByteDescriptor } from '../descriptor/index.js'
 
-const DESCRIPTOR_BLOCK_INDEX = 0
-const PAYLOAD_START_BLOCK_INDEX = 1
-const DEFAULT_PAYLOAD_CHUNK_SIZE = 64 * 1024
+export const DESCRIPTOR_BLOCK_INDEX = 0
+export const PAYLOAD_START_BLOCK_INDEX = 1
+export const DEFAULT_PAYLOAD_CHUNK_SIZE = 64 * 1024
 
-function serializeByteDescriptor(descriptor) {
+export function serializeByteDescriptor(descriptor) {
   const normalizedDescriptor = normalizeByteDescriptor(descriptor)
   return Buffer.from(stableStringify(normalizedDescriptor), 'utf8')
 }
 
-function deserializeByteDescriptor(buffer) {
+export function deserializeByteDescriptor(buffer) {
   return decodeByteDescriptor(buffer)
 }
 
-function createDescriptorHash(descriptorBuffer) {
+export function createDescriptorHash(descriptorBuffer) {
   return createHash('sha256').update(descriptorBuffer).digest('hex')
 }
 
-function chunkPayload(buffer, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
+export function chunkPayload(buffer, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
   if (!Number.isInteger(chunkSize) || chunkSize < 1) {
     throw new TypeError('chunkSize must be an integer >= 1')
   }
@@ -33,7 +33,7 @@ function chunkPayload(buffer, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
   return chunks
 }
 
-function getPayloadBlockCount(bufferOrSize, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
+export function getPayloadBlockCount(bufferOrSize, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
   const size = typeof bufferOrSize === 'number' ? bufferOrSize : bufferOrSize.byteLength
 
   if (!Number.isInteger(size) || size < 0) {
@@ -44,7 +44,7 @@ function getPayloadBlockCount(bufferOrSize, chunkSize = DEFAULT_PAYLOAD_CHUNK_SI
   return Math.ceil(size / chunkSize)
 }
 
-function getTotalBlockCount(bufferOrSize, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
+export function getTotalBlockCount(bufferOrSize, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE) {
   return PAYLOAD_START_BLOCK_INDEX + getPayloadBlockCount(bufferOrSize, chunkSize)
 }
 
@@ -59,16 +59,4 @@ function stableStringify(value) {
   }
 
   return JSON.stringify(value)
-}
-
-module.exports = {
-  DEFAULT_PAYLOAD_CHUNK_SIZE,
-  DESCRIPTOR_BLOCK_INDEX,
-  PAYLOAD_START_BLOCK_INDEX,
-  chunkPayload,
-  createDescriptorHash,
-  deserializeByteDescriptor,
-  getPayloadBlockCount,
-  getTotalBlockCount,
-  serializeByteDescriptor
 }

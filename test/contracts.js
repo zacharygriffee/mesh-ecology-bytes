@@ -1,6 +1,7 @@
-const assert = require('assert/strict')
+import assert from 'node:assert/strict'
+import { pathToFileURL } from 'node:url'
 
-const {
+import {
   READINESS_STATES,
   RETENTION_TERMS,
   assessRetentionPosture,
@@ -15,9 +16,9 @@ const {
   validateLifecycleSnapshot,
   validateReadinessState,
   validateRetentionTerm
-} = require('../src')
+} from '../src/index.js'
 
-function main() {
+export function runContractTests() {
   testDescriptorValidation()
   testReferenceValidation()
   testHintsAndRequestSeparation()
@@ -172,10 +173,6 @@ function testRetentionTerms() {
   assert.throws(() => validateRetentionTerm('garbage-collected'))
 }
 
-module.exports = {
-  runContractTests: main
-}
-
-if (require.main === module) {
-  main()
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  runContractTests()
 }

@@ -1,19 +1,19 @@
-const { createHash } = require('crypto')
+import { createHash } from 'node:crypto'
 
-const Hypercore = require('hypercore')
+import Hypercore from 'hypercore'
 
-const { createByteDescriptor } = require('../descriptor')
-const { createByteReference } = require('../reference')
-const { assessObjectLifecycle, validateMaterializedBytes } = require('./completeness')
-const {
+import { createByteDescriptor } from '../descriptor/index.js'
+import { createByteReference } from '../reference/index.js'
+import { assessObjectLifecycle, validateMaterializedBytes } from './completeness.js'
+import {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   chunkPayload,
   createDescriptorHash,
   getPayloadBlockCount,
   serializeByteDescriptor
-} = require('./layout')
+} from './layout.js'
 
-async function publishImmutableObject(options = {}) {
+export async function publishImmutableObject(options = {}) {
   const { storage, descriptor, chunkSize = DEFAULT_PAYLOAD_CHUNK_SIZE } = options
   const bytes = toBuffer(options.bytes)
   const normalizedDescriptor = createByteDescriptor(descriptor)
@@ -81,8 +81,4 @@ function toBuffer(value) {
   if (Buffer.isBuffer(value)) return value
   if (value instanceof Uint8Array) return Buffer.from(value)
   throw new TypeError('publishImmutableObject currently supports Buffer and Uint8Array input only')
-}
-
-module.exports = {
-  publishImmutableObject
 }

@@ -1,24 +1,25 @@
-const { mkdir, stat, writeFile } = require('fs/promises')
-const path = require('path')
+import { mkdir, stat, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 
-const { createMeshBytesError } = require('../errors')
-const { createOperationScope } = require('../operation')
-const { validateByteReference } = require('../reference')
-const {
+import { validateByteDescriptor } from '../descriptor/index.js'
+import { createMeshBytesError } from '../errors.js'
+import { createOperationScope } from '../operation.js'
+import { validateByteReference } from '../reference/index.js'
+import {
   assertAllowedKeys,
   assertEnum,
   assertNonEmptyString,
   assertObject,
   assertOptionalString,
   stripUndefined
-} = require('../shared')
+} from '../shared.js'
 
-const MATERIALIZATION_MODES = new Set(['stream', 'cache', 'mirror'])
-const VISIBILITY_LEVELS = new Set(['operator', 'public', 'internal'])
-const READINESS_STATES = ['fetched', 'complete', 'materialized', 'ready']
+export const MATERIALIZATION_MODES = new Set(['stream', 'cache', 'mirror'])
+export const VISIBILITY_LEVELS = new Set(['operator', 'public', 'internal'])
+export const READINESS_STATES = ['fetched', 'complete', 'materialized', 'ready']
 const READINESS_STATE_SET = new Set(READINESS_STATES)
 
-function createMaterializationHints(input = {}) {
+export function createMaterializationHints(input = {}) {
   validateMaterializationHints(input)
 
   return stripUndefined({
@@ -29,7 +30,7 @@ function createMaterializationHints(input = {}) {
   })
 }
 
-function validateMaterializationHints(input) {
+export function validateMaterializationHints(input) {
   assertObject(input, 'MaterializationHints')
 
   if (input.preferredMode !== undefined) {
@@ -55,7 +56,7 @@ function validateMaterializationHints(input) {
   return input
 }
 
-function createMaterializationRequest(input = {}) {
+export function createMaterializationRequest(input = {}) {
   validateMaterializationRequest(input)
 
   return stripUndefined({
@@ -66,7 +67,7 @@ function createMaterializationRequest(input = {}) {
   })
 }
 
-function validateMaterializationRequest(input) {
+export function validateMaterializationRequest(input) {
   assertObject(input, 'MaterializationRequest')
   validateByteReference(input.reference)
 
@@ -89,12 +90,12 @@ function validateMaterializationRequest(input) {
   return input
 }
 
-function validateReadinessState(state) {
+export function validateReadinessState(state) {
   assertEnum(state, 'ReadinessState', READINESS_STATE_SET)
   return state
 }
 
-function validateMaterializationPlan(input) {
+export function validateMaterializationPlan(input) {
   assertAllowedKeys(input, 'MaterializationPlan', ['mode', 'placementClass', 'targetClass', 'visibility', 'filename'])
 
   if (input.mode !== undefined) {
@@ -124,10 +125,9 @@ function validateMaterializationPlan(input) {
   return input
 }
 
-function resolveMaterializationPlan(options = {}) {
+export function resolveMaterializationPlan(options = {}) {
   const descriptor = options.descriptor
   const request = options.request
-  const { validateByteDescriptor } = require('../descriptor')
 
   validateByteDescriptor(descriptor)
 
@@ -153,7 +153,7 @@ function resolveMaterializationPlan(options = {}) {
   return plan
 }
 
-async function materializeImmutableObject(options = {}) {
+export async function materializeImmutableObject(options = {}) {
   const reference = options.reference
   const scope = createOperationScope(options)
 
@@ -256,24 +256,10 @@ async function materializeImmutableObject(options = {}) {
 
 async function loadImmutableObject(options) {
   if (options.transport) {
-    const { fetchImmutableObject } = require('../transport')
+    const { fetchImmutableObject } = await import('../transport/index.js')
     return fetchImmutableObject(options)
   }
 
-  const { readImmutableObject } = require('../object/read')
+  const { readImmutableObject } = await import('../object/read.js')
   return readImmutableObject(options)
-}
-
-module.exports = {
-  MATERIALIZATION_MODES,
-  READINESS_STATES,
-  VISIBILITY_LEVELS,
-  createMaterializationHints,
-  createMaterializationRequest,
-  materializeImmutableObject,
-  resolveMaterializationPlan,
-  validateMaterializationPlan,
-  validateMaterializationHints,
-  validateMaterializationRequest,
-  validateReadinessState
 }

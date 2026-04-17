@@ -1,9 +1,9 @@
-const { validateReadinessState } = require('../materialization')
-const { assertAllowedKeys, assertBoolean, assertObject } = require('../shared')
+import { validateReadinessState } from '../materialization/index.js'
+import { assertAllowedKeys, assertBoolean, assertObject } from '../shared.js'
 
-const RETENTION_TERMS = ['pinned', 'ephemeral', 'stale', 'prunable']
+export const RETENTION_TERMS = ['pinned', 'ephemeral', 'stale', 'prunable']
 
-function assessRetentionPosture(options = {}) {
+export function assessRetentionPosture(options = {}) {
   assertObject(options, 'RetentionInspection')
 
   if (options.lifecycle !== undefined) {
@@ -24,7 +24,7 @@ function assessRetentionPosture(options = {}) {
   }
 }
 
-function validateLifecycleSnapshot(lifecycle) {
+export function validateLifecycleSnapshot(lifecycle) {
   assertAllowedKeys(lifecycle, 'RetentionInspection.lifecycle', ['fetched', 'complete', 'materialized', 'ready', 'state'])
   validateBooleanOption(lifecycle.fetched, 'RetentionInspection.lifecycle.fetched')
   validateBooleanOption(lifecycle.complete, 'RetentionInspection.lifecycle.complete')
@@ -38,7 +38,7 @@ function validateLifecycleSnapshot(lifecycle) {
   return lifecycle
 }
 
-function validateRetentionPosture(posture) {
+export function validateRetentionPosture(posture) {
   assertAllowedKeys(posture, 'RetentionPosture', ['pinned', 'ephemeral', 'stale', 'prunable'])
   validateBooleanOption(posture.pinned, 'RetentionPosture.pinned')
   validateBooleanOption(posture.ephemeral, 'RetentionPosture.ephemeral')
@@ -47,7 +47,7 @@ function validateRetentionPosture(posture) {
   return posture
 }
 
-function validateRetentionTerm(term) {
+export function validateRetentionTerm(term) {
   if (!RETENTION_TERMS.includes(term)) {
     throw new TypeError(`RetentionTerm must be one of: ${RETENTION_TERMS.join(', ')}`)
   }
@@ -58,12 +58,4 @@ function validateRetentionTerm(term) {
 function validateBooleanOption(value, label) {
   assertBoolean(value, label)
   return value
-}
-
-module.exports = {
-  RETENTION_TERMS,
-  assessRetentionPosture,
-  validateLifecycleSnapshot,
-  validateRetentionPosture,
-  validateRetentionTerm
 }

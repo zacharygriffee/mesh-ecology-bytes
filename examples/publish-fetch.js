@@ -1,16 +1,16 @@
-const { createHash } = require('crypto')
-const { mkdtemp, rm } = require('fs/promises')
-const { tmpdir } = require('os')
-const path = require('path')
+import { createHash } from 'node:crypto'
+import { mkdtemp, rm } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 
-const createTestnet = require('hyperdht/testnet')
+import createTestnet from 'hyperdht/testnet.js'
 
-const {
+import {
   createHyperswarmTransport,
   fetchImmutableObject,
   publishImmutableObject,
   serveImmutableObject
-} = require('../src')
+} from '../src/index.js'
 
 async function main() {
   const publisherStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-publisher-'))

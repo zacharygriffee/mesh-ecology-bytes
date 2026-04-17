@@ -1,19 +1,19 @@
-const { PassThrough } = require('stream')
+import { PassThrough } from 'node:stream'
 
-const Hypercore = require('hypercore')
+import Hypercore from 'hypercore'
 
-const { createMeshBytesError, isMeshBytesError } = require('../errors')
-const { createOperationScope } = require('../operation')
-const { createByteReference } = require('../reference')
-const { assessObjectLifecycle, validateMaterializedBytes } = require('./completeness')
-const {
+import { createMeshBytesError, isMeshBytesError } from '../errors.js'
+import { createOperationScope } from '../operation.js'
+import { createByteReference } from '../reference/index.js'
+import { assessObjectLifecycle, validateMaterializedBytes } from './completeness.js'
+import {
   DESCRIPTOR_BLOCK_INDEX,
   PAYLOAD_START_BLOCK_INDEX,
   createDescriptorHash,
   deserializeByteDescriptor
-} = require('./layout')
+} from './layout.js'
 
-async function readImmutableObject(options = {}) {
+export async function readImmutableObject(options = {}) {
   const { storage, as = 'buffer', core: providedCore, wait = false, closeCore = true } = options
   const reference = createByteReference(options.reference)
   const scope = createOperationScope(options)
@@ -179,7 +179,4 @@ async function collectPayload(core, { wait, scope }) {
     onAbort: () => source.destroy(),
     onTimeout: () => source.destroy()
   })
-}
-module.exports = {
-  readImmutableObject
 }

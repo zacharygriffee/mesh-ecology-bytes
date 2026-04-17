@@ -1,5 +1,10 @@
-const { assessObjectLifecycle, hasAllBlocks, selectReadinessState, validateMaterializedBytes } = require('./completeness')
-const {
+export {
+  assessObjectLifecycle,
+  hasAllBlocks,
+  selectReadinessState,
+  validateMaterializedBytes
+} from './completeness.js'
+export {
   DEFAULT_PAYLOAD_CHUNK_SIZE,
   DESCRIPTOR_BLOCK_INDEX,
   PAYLOAD_START_BLOCK_INDEX,
@@ -9,36 +14,13 @@ const {
   getPayloadBlockCount,
   getTotalBlockCount,
   serializeByteDescriptor
-} = require('./layout')
-const {
+} from './layout.js'
+export {
   RETENTION_TERMS,
   assessRetentionPosture,
   validateLifecycleSnapshot,
   validateRetentionPosture,
   validateRetentionTerm
-} = require('./retention')
-const { publishImmutableObject } = require('./publish')
-const { readImmutableObject } = require('./read')
-
-module.exports = {
-  DEFAULT_PAYLOAD_CHUNK_SIZE,
-  DESCRIPTOR_BLOCK_INDEX,
-  PAYLOAD_START_BLOCK_INDEX,
-  RETENTION_TERMS,
-  assessObjectLifecycle,
-  assessRetentionPosture,
-  chunkPayload,
-  createDescriptorHash,
-  deserializeByteDescriptor,
-  getPayloadBlockCount,
-  getTotalBlockCount,
-  hasAllBlocks,
-  publishImmutableObject,
-  readImmutableObject,
-  selectReadinessState,
-  serializeByteDescriptor,
-  validateLifecycleSnapshot,
-  validateMaterializedBytes,
-  validateRetentionPosture,
-  validateRetentionTerm
-}
+} from './retention.js'
+export { publishImmutableObject } from './publish.js'
+export { readImmutableObject } from './read.js'

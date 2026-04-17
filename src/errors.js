@@ -1,4 +1,4 @@
-class MeshBytesError extends Error {
+export class MeshBytesError extends Error {
   constructor(code, message, options = {}) {
     super(message, options.cause ? { cause: options.cause } : undefined)
     this.name = 'MeshBytesError'
@@ -6,7 +6,7 @@ class MeshBytesError extends Error {
   }
 }
 
-const ERROR_CODES = [
+export const ERROR_CODES = [
   'ERR_OPERATION_ABORTED',
   'ERR_OPERATION_TIMEOUT',
   'ERR_DESCRIPTOR_MISSING',
@@ -17,11 +17,11 @@ const ERROR_CODES = [
   'ERR_MATERIALIZATION_WRITE_FAILED'
 ]
 
-function createMeshBytesError(code, message, options) {
+export function createMeshBytesError(code, message, options) {
   return new MeshBytesError(code, message, options)
 }
 
-function isMeshBytesError(error, code) {
+export function isMeshBytesError(error, code) {
   if (!(error instanceof MeshBytesError)) {
     return false
   }
@@ -31,11 +31,4 @@ function isMeshBytesError(error, code) {
   }
 
   return error.code === code
-}
-
-module.exports = {
-  ERROR_CODES,
-  MeshBytesError,
-  createMeshBytesError,
-  isMeshBytesError
 }
