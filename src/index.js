@@ -33,6 +33,20 @@ export {
   validateByteReference
 } from './reference/index.js'
 export {
+  BYTES_ADJACENT_REVIEW_CHECK_STATUSES,
+  BYTES_ADJACENT_REVIEW_EVIDENCE_KIND,
+  BYTES_ADJACENT_REVIEW_EVIDENCE_PHASE,
+  BYTES_ADJACENT_REVIEW_EVIDENCE_SCHEMA,
+  BYTES_ADJACENT_REVIEW_SAFE_FLAGS,
+  BYTES_ADJACENT_REVIEW_STATUSES,
+  BYTES_EDGE_IMPORT_CLASSIFICATION,
+  EDGE_PHASE_120_BYTES_FIXTURE_INPUT_KIND,
+  assertNoForbiddenEvidenceWording,
+  createAdjacentReviewEvidenceFromFixture,
+  createAdjacentReviewEvidenceFromJson,
+  validateAdjacentReviewEvidence
+} from './review/index.js'
+export {
   createPackByteBinding,
   createPlatformMaterializationSeam,
   validatePackByteBinding,

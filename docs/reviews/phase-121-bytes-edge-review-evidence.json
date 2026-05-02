@@ -1,0 +1,168 @@
+{
+  "schema": "mesh-ecology-bytes/adjacent-review-evidence@1",
+  "artifactKind": "bytes_owned_adjacent_review_evidence",
+  "phase": 121,
+  "input": {
+    "kind": "edge_phase_120_bytes_adjacent_review_packet_fixture",
+    "fixturePath": "test/fixtures/edge/phase-120-bytes-adjacent-review-packet-fixture.json",
+    "sourceRepo": "mesh-ecology-edge",
+    "sourcePhase": 120,
+    "sourceArtifactPath": "docs/reviews/phase-120-bytes-adjacent-review-packet-fixture.json",
+    "staticFixtureOnly": true,
+    "edgeRuntimeAccess": false
+  },
+  "correlation": {
+    "sourceRepo": "mesh-ecology-edge",
+    "sourcePhase": 120,
+    "sourceFixturePath": "docs/reviews/phase-120-bytes-adjacent-review-packet-fixture.json",
+    "fixtureId": "edge-ecosystem-bytes-packet-fixture-review:2026-05-02T10:00:00.000Z",
+    "packetRef": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+    "packetSetRef": "edge-ecosystem-adjacent-packets:2026-05-02T10:00:00.000Z",
+    "packetId": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+    "createdAt": "2026-05-02T10:00:00.000Z",
+    "sourceGeneratedAt": "2026-05-02T10:00:00.000Z",
+    "sourceContractRef": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+    "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+    "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+    "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+    "sourceEvidenceRefs": [
+      "bytes-receipt:phase-120-review"
+    ],
+    "sourceWorkPacketRefs": [
+      "edge-ecosystem-work-packet:edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceNextActionRefs": [
+      "edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceLedgerEventRefs": [
+      "edge-ecosystem-ledger-event:001:readiness_state_observed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:002:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:003:next_action_selected:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:004:work_packet_recorded:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceLedgerDeltaRefs": [
+      "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "checklistIds": [
+      "target_repo_is_bytes",
+      "seam_is_bytes",
+      "target_surface_is_byte_interop",
+      "packet_is_edge_draft_only",
+      "packet_is_review_only",
+      "packet_is_adjacent_unaccepted",
+      "required_packet_fields_present",
+      "contract_metadata_complete",
+      "request_and_receipt_fields_preserved",
+      "source_refs_available",
+      "byte_correlation_refs_available",
+      "wording_does_not_imply_byte_publication",
+      "wording_does_not_imply_byte_storage",
+      "wording_does_not_imply_byte_pinning_replication_or_fetch",
+      "wording_does_not_imply_content_availability",
+      "wording_does_not_imply_content_address_truth",
+      "wording_does_not_imply_materialization_proof",
+      "wording_does_not_imply_production_or_mesh_truth",
+      "malformed_packets_remain_review_only",
+      "no_edge_mutation_callback_live_fetch_runner_scheduler_or_mesh_publish"
+    ],
+    "guardrailSetId": "bytes_fixture_review_wording_guardrails",
+    "expectedResponseShape": {
+      "edgeExpectedArtifactKind": "bytes_edge_packet_review_evidence",
+      "edgeExpectedSchemaVersion": "bytes_edge_packet_review_evidence.v1",
+      "expectedEvidenceId": "bytes-review-evidence:phase-120"
+    },
+    "stopGoResult": "go_for_bytes_repo_review"
+  },
+  "edgeImportClassification": {
+    "seamId": "bytes",
+    "evidenceKind": "bytes_edge_packet_review_evidence",
+    "edgeExpectedArtifactKind": "bytes_edge_packet_review_evidence",
+    "classificationOnly": true,
+    "edgeOwnsSchema": false
+  },
+  "reviewOnly": true,
+  "evidenceOnly": true,
+  "edgePacketAcceptedAsSchema": false,
+  "edgePacketAcceptedAsCommand": false,
+  "bytePublicationClaimed": false,
+  "byteStorageClaimed": false,
+  "bytePinningClaimed": false,
+  "byteReplicationClaimed": false,
+  "byteFetchClaimed": false,
+  "byteAvailabilityClaimed": false,
+  "contentTruthClaimed": false,
+  "materializationProofClaimed": false,
+  "productionProofClaimed": false,
+  "meshTruthClaimed": false,
+  "edgeAuthorityGranted": false,
+  "adjacentAcceptanceFromPacketPresence": false,
+  "status": "review_only_pass",
+  "checks": [
+    {
+      "checkId": "fixture_json_object",
+      "status": "present"
+    },
+    {
+      "checkId": "edge_phase_120_source_context_present",
+      "status": "present"
+    },
+    {
+      "checkId": "bytes_target_identity_present",
+      "status": "present"
+    },
+    {
+      "checkId": "review_checklist_present",
+      "status": "present"
+    },
+    {
+      "checkId": "bytes_wording_guardrails_present",
+      "status": "present"
+    },
+    {
+      "checkId": "expected_bytes_owned_response_shape_present",
+      "status": "present"
+    },
+    {
+      "checkId": "stop_go_result_present",
+      "status": "present"
+    },
+    {
+      "checkId": "checklist_stable_markers_present",
+      "status": "present"
+    },
+    {
+      "checkId": "guardrail_stable_markers_present",
+      "status": "present"
+    },
+    {
+      "checkId": "stop_go_result_go_for_bytes_repo_review",
+      "status": "present"
+    },
+    {
+      "checkId": "runtime_instruction_fields_absent",
+      "status": "reviewed"
+    },
+    {
+      "checkId": "runtime_and_truth_claims_absent",
+      "status": "reviewed"
+    },
+    {
+      "checkId": "packet_presence_does_not_create_acceptance",
+      "status": "reviewed"
+    }
+  ],
+  "guardrails": [
+    {
+      "guardrailId": "bytes_fixture_review_wording_guardrails",
+      "status": "reviewed",
+      "useWordingLabelCount": 7,
+      "avoidWordingLabelCount": 13,
+      "forbiddenWordingCopied": false
+    }
+  ],
+  "reasonCodes": [
+    "static_fixture_review_passed"
+  ],
+  "findings": []
+}
