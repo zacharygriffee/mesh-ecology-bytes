@@ -3,12 +3,14 @@ import { runIntegrationSeamTests } from './integration-seams.js'
 import { runMaterializationRuntimeTests } from './materialization-runtime.js'
 import { runObjectModelTests } from './object-model.js'
 import { runOperationalHardeningTests } from './operational-hardening.js'
+import { runPhase121AdjacentReviewEvidenceTests } from './phase-121-adjacent-review-evidence.js'
 import { runRetentionTests } from './retention.js'
 import { runHyperswarmTransportTests } from './transport-hyperswarm.js'
 
 async function main() {
   runContractTests()
   runIntegrationSeamTests()
+  runPhase121AdjacentReviewEvidenceTests()
   await runObjectModelTests()
   await runMaterializationRuntimeTests()
   await runOperationalHardeningTests()

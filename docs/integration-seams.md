@@ -59,3 +59,23 @@ It must not contain:
 - artifact taxonomy
 - package policy
 - release workflow data
+
+## Phase 121 Adjacent Review Fixture
+
+Bytes may consume the Edge Phase 120 Bytes adjacent review packet as a copied static fixture at:
+
+- `test/fixtures/edge/phase-120-bytes-adjacent-review-packet-fixture.json`
+
+This fixture is review input only. It is not a bytes schema, command, TODO, runtime request, or acceptance signal.
+
+Bytes emits review evidence with:
+
+- `schema: "mesh-ecology-bytes/adjacent-review-evidence@1"`
+- `artifactKind: "bytes_owned_adjacent_review_evidence"`
+- `phase: 121`
+
+The Phase 121 evidence preserves Edge packet refs, checklist IDs, guardrail IDs, expected response shape refs, and the stop/go result as inert correlation refs.
+
+The Phase 121 helper must not call Edge, fetch the fixture at runtime, publish bytes, store bytes, pin bytes, replicate bytes, fetch bytes, run discovery, schedule work, or publish to the mesh.
+
+Packet presence alone must not create adjacent acceptance.

@@ -1,0 +1,847 @@
+{
+  "artifactKind": "edge_ecosystem_bytes_packet_fixture_review",
+  "schemaVersion": "edge_ecosystem_bytes_packet_fixture_review.v1",
+  "fixtureId": "edge-ecosystem-bytes-packet-fixture-review:2026-05-02T10:00:00.000Z",
+  "createdAt": "2026-05-02T10:00:00.000Z",
+  "fixtureScope": "edge_side_bytes_packet_review_only",
+  "targetRepo": "mesh-ecology-bytes",
+  "targetSurface": "byte_interop",
+  "seamId": "bytes",
+  "ecosystemSeamId": "bytes",
+  "packetSetRef": "edge-ecosystem-adjacent-packets:2026-05-02T10:00:00.000Z",
+  "packetRef": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+  "packetSet": {
+    "artifactKind": "edge_ecosystem_adjacent_implementation_packet_set",
+    "schemaVersion": "edge_ecosystem_adjacent_implementation_packet_set.v1",
+    "packetSetId": "edge-ecosystem-adjacent-packets:2026-05-02T10:00:00.000Z",
+    "createdAt": "2026-05-02T10:00:00.000Z",
+    "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+    "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+    "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+    "packetRefs": [
+      "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "packets": [
+      {
+        "artifactKind": "edge_ecosystem_adjacent_implementation_packet",
+        "schemaVersion": "edge_ecosystem_adjacent_implementation_packet.v1",
+        "packetId": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+        "createdAt": "2026-05-02T10:00:00.000Z",
+        "seamId": "bytes",
+        "ecosystemSeamId": "bytes",
+        "targetRepo": "mesh-ecology-bytes",
+        "targetSurface": "byte_interop",
+        "packetStatus": "ready_for_handoff_review",
+        "packetCompleteness": "contract_backed",
+        "sourceContractRef": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+        "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+        "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+        "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+        "sourceWorkPacketRefs": [
+          "edge-ecosystem-work-packet:edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+        ],
+        "sourceNextActionRefs": [
+          "edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+        ],
+        "sourceEvidenceRefs": [
+          "bytes-receipt:phase-120-review"
+        ],
+        "sourceLedgerEventRefs": [
+          "edge-ecosystem-ledger-event:001:readiness_state_observed:bytes:2026-05-02T10:00:00.000Z",
+          "edge-ecosystem-ledger-event:002:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+          "edge-ecosystem-ledger-event:003:next_action_selected:bytes:2026-05-02T10:00:00.000Z",
+          "edge-ecosystem-ledger-event:004:work_packet_recorded:bytes:2026-05-02T10:00:00.000Z",
+          "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z"
+        ],
+        "sourceLedgerDeltaRefs": [
+          "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z"
+        ],
+        "contractSnapshot": {
+          "contractId": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+          "schemaVersion": "edge_ecosystem_handoff_contract.v1",
+          "seamId": "bytes",
+          "ecosystemSeamId": "bytes",
+          "targetRepo": "mesh-ecology-bytes",
+          "targetSurface": "byte_interop",
+          "contractStatus": "ready_for_handoff_review",
+          "readinessState": "ready_for_operator_review",
+          "expectedRequestArtifactKind": "edge_byte_interop_request_artifact",
+          "expectedRequestRequiredFields": [
+            "requestId",
+            "operation",
+            "reference"
+          ],
+          "expectedReceiptArtifactKind": "byte_interop_receipt",
+          "expectedReceiptRequiredFields": [
+            "receiptId",
+            "operation",
+            "status"
+          ],
+          "allowedReceiptStatuses": [
+            "ready",
+            "complete",
+            "failed",
+            "imported",
+            "malformed",
+            "unsupported"
+          ],
+          "correlationFields": [
+            "requestId",
+            "receiptId",
+            "operation",
+            "reference"
+          ],
+          "edgeAuthorityBoundary": "Edge may draft byte interop request artifacts and import byte receipts as evidence only; Edge does not publish, store, pin, fetch, verify, or prove bytes.",
+          "adjacentAuthorityBoundary": "Bytes owns byte publication, byte storage, byte materialization, byte status, receipts, and transport semantics.",
+          "acceptanceSemantics": {
+            "edgeDraftOnly": true,
+            "adjacentAccepted": false,
+            "acceptanceRequiresAdjacentEvidence": true,
+            "readinessEffect": "operator_guidance_only",
+            "truthEffect": "none"
+          },
+          "handoffContractIsReviewOnly": true,
+          "adjacentRepoOwnsAuthority": true,
+          "doesNotSatisfyAdjacentAcceptance": true
+        },
+        "readinessSnapshot": {
+          "seamId": "bytes",
+          "ecosystemSeamId": "bytes",
+          "readinessState": "ready_for_operator_review",
+          "blockerReasons": [],
+          "readySignals": [
+            "byte_interop_receipt_imported",
+            "byte_readiness_evidence_available",
+            "platform_lifecycle_receipt_imported"
+          ],
+          "sourceArtifactRefs": [
+            "bytes-receipt:phase-120-review"
+          ],
+          "readinessIsOperatorGuidanceOnly": true,
+          "adjacentTruthClaimed": false,
+          "infersAdjacentTruth": false
+        },
+        "historySummary": {
+          "schemaVersion": "edge_ecosystem_ledger_history_view.v1",
+          "ledgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+          "eventCount": 5,
+          "deltaCount": 1,
+          "filteredEventCount": 5,
+          "filteredDeltaCount": 1,
+          "latestEventRef": "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z",
+          "latestDeltaRef": "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+          "historyIsReviewOnly": true,
+          "replaySupported": false,
+          "adjacentTruthClaimed": false
+        },
+        "expectedRequestArtifactKind": "edge_byte_interop_request_artifact",
+        "expectedRequestRequiredFields": [
+          "requestId",
+          "operation",
+          "reference"
+        ],
+        "expectedReceiptArtifactKind": "byte_interop_receipt",
+        "expectedReceiptRequiredFields": [
+          "receiptId",
+          "operation",
+          "status"
+        ],
+        "allowedReceiptStatuses": [
+          "ready",
+          "complete",
+          "failed",
+          "imported",
+          "malformed",
+          "unsupported"
+        ],
+        "correlationFields": [
+          "requestId",
+          "receiptId",
+          "operation",
+          "reference"
+        ],
+        "edgeAuthorityBoundary": "Edge may draft byte interop request artifacts and import byte receipts as evidence only; Edge does not publish, store, pin, fetch, verify, or prove bytes.",
+        "adjacentAuthorityBoundary": "Bytes owns byte publication, byte storage, byte materialization, byte status, receipts, and transport semantics.",
+        "acceptanceSemantics": {
+          "edgeDraftOnly": true,
+          "adjacentAccepted": false,
+          "acceptanceRequiresAdjacentEvidence": true,
+          "readinessEffect": "operator_guidance_only",
+          "truthEffect": "none"
+        },
+        "packetIsEdgeDraftOnly": true,
+        "packetIsReviewOnly": true,
+        "adjacentAccepted": false,
+        "adjacentAcceptanceClaimed": false,
+        "adjacentRepoOwnsAuthority": true,
+        "evidenceRefsAreEvidenceOnly": true,
+        "ledgerHistoryRefsAreReviewOnly": true,
+        "workPacketRefsAreEdgeLocalContextOnly": true,
+        "nextActionRefsAreExplanatoryOnly": true,
+        "unsupportedActions": [
+          "discover_repos",
+          "discover_tools",
+          "discover_evidence",
+          "call_adjacent_repo",
+          "call_tool",
+          "execute",
+          "schedule_work",
+          "activate_platform",
+          "publish_to_mesh",
+          "admit_writer",
+          "grant_authority",
+          "infer_reachability",
+          "infer_mesh_participation",
+          "infer_adjacent_truth"
+        ],
+        "localOnly": true,
+        "explicitArtifactOnly": true,
+        "derivedOnly": true,
+        "discoversRepos": false,
+        "discoversTools": false,
+        "discoversEvidence": false,
+        "callsAdjacentRepo": false,
+        "callsTool": false,
+        "executesAction": false,
+        "schedulesWork": false,
+        "activatesPlatform": false,
+        "publishesToMesh": false,
+        "admitsWriter": false,
+        "grantsAuthority": false,
+        "infersReachability": false,
+        "infersMeshParticipation": false,
+        "infersAdjacentTruth": false,
+        "adjacentRepoAuthority": false,
+        "hiddenStateMutation": false
+      }
+    ],
+    "seamIds": [
+      "bytes"
+    ],
+    "targetRepos": [
+      "mesh-ecology-bytes"
+    ],
+    "packetCount": 1,
+    "draftOnly": true,
+    "reviewOnly": true,
+    "packetSetIsEdgeDraftOnly": true,
+    "adjacentAccepted": false,
+    "adjacentAcceptanceClaimed": false,
+    "adjacentReposOwnAuthority": true,
+    "storesHiddenState": false,
+    "writesToDisk": false,
+    "unsupportedActions": [
+      "discover_repos",
+      "discover_tools",
+      "discover_evidence",
+      "call_adjacent_repo",
+      "call_tool",
+      "execute",
+      "schedule_work",
+      "activate_platform",
+      "publish_to_mesh",
+      "admit_writer",
+      "grant_authority",
+      "infer_reachability",
+      "infer_mesh_participation",
+      "infer_adjacent_truth"
+    ],
+    "localOnly": true,
+    "explicitArtifactOnly": true,
+    "derivedOnly": true,
+    "discoversRepos": false,
+    "discoversTools": false,
+    "discoversEvidence": false,
+    "callsAdjacentRepo": false,
+    "callsTool": false,
+    "executesAction": false,
+    "schedulesWork": false,
+    "activatesPlatform": false,
+    "publishesToMesh": false,
+    "admitsWriter": false,
+    "grantsAuthority": false,
+    "infersReachability": false,
+    "infersMeshParticipation": false,
+    "infersAdjacentTruth": false,
+    "adjacentRepoAuthority": false,
+    "hiddenStateMutation": false
+  },
+  "packet": {
+    "artifactKind": "edge_ecosystem_adjacent_implementation_packet",
+    "schemaVersion": "edge_ecosystem_adjacent_implementation_packet.v1",
+    "packetId": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+    "createdAt": "2026-05-02T10:00:00.000Z",
+    "seamId": "bytes",
+    "ecosystemSeamId": "bytes",
+    "targetRepo": "mesh-ecology-bytes",
+    "targetSurface": "byte_interop",
+    "packetStatus": "ready_for_handoff_review",
+    "packetCompleteness": "contract_backed",
+    "sourceContractRef": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+    "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+    "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+    "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+    "sourceWorkPacketRefs": [
+      "edge-ecosystem-work-packet:edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceNextActionRefs": [
+      "edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceEvidenceRefs": [
+      "bytes-receipt:phase-120-review"
+    ],
+    "sourceLedgerEventRefs": [
+      "edge-ecosystem-ledger-event:001:readiness_state_observed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:002:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:003:next_action_selected:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:004:work_packet_recorded:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceLedgerDeltaRefs": [
+      "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "contractSnapshot": {
+      "contractId": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+      "schemaVersion": "edge_ecosystem_handoff_contract.v1",
+      "seamId": "bytes",
+      "ecosystemSeamId": "bytes",
+      "targetRepo": "mesh-ecology-bytes",
+      "targetSurface": "byte_interop",
+      "contractStatus": "ready_for_handoff_review",
+      "readinessState": "ready_for_operator_review",
+      "expectedRequestArtifactKind": "edge_byte_interop_request_artifact",
+      "expectedRequestRequiredFields": [
+        "requestId",
+        "operation",
+        "reference"
+      ],
+      "expectedReceiptArtifactKind": "byte_interop_receipt",
+      "expectedReceiptRequiredFields": [
+        "receiptId",
+        "operation",
+        "status"
+      ],
+      "allowedReceiptStatuses": [
+        "ready",
+        "complete",
+        "failed",
+        "imported",
+        "malformed",
+        "unsupported"
+      ],
+      "correlationFields": [
+        "requestId",
+        "receiptId",
+        "operation",
+        "reference"
+      ],
+      "edgeAuthorityBoundary": "Edge may draft byte interop request artifacts and import byte receipts as evidence only; Edge does not publish, store, pin, fetch, verify, or prove bytes.",
+      "adjacentAuthorityBoundary": "Bytes owns byte publication, byte storage, byte materialization, byte status, receipts, and transport semantics.",
+      "acceptanceSemantics": {
+        "edgeDraftOnly": true,
+        "adjacentAccepted": false,
+        "acceptanceRequiresAdjacentEvidence": true,
+        "readinessEffect": "operator_guidance_only",
+        "truthEffect": "none"
+      },
+      "handoffContractIsReviewOnly": true,
+      "adjacentRepoOwnsAuthority": true,
+      "doesNotSatisfyAdjacentAcceptance": true
+    },
+    "readinessSnapshot": {
+      "seamId": "bytes",
+      "ecosystemSeamId": "bytes",
+      "readinessState": "ready_for_operator_review",
+      "blockerReasons": [],
+      "readySignals": [
+        "byte_interop_receipt_imported",
+        "byte_readiness_evidence_available",
+        "platform_lifecycle_receipt_imported"
+      ],
+      "sourceArtifactRefs": [
+        "bytes-receipt:phase-120-review"
+      ],
+      "readinessIsOperatorGuidanceOnly": true,
+      "adjacentTruthClaimed": false,
+      "infersAdjacentTruth": false
+    },
+    "historySummary": {
+      "schemaVersion": "edge_ecosystem_ledger_history_view.v1",
+      "ledgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+      "eventCount": 5,
+      "deltaCount": 1,
+      "filteredEventCount": 5,
+      "filteredDeltaCount": 1,
+      "latestEventRef": "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z",
+      "latestDeltaRef": "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+      "historyIsReviewOnly": true,
+      "replaySupported": false,
+      "adjacentTruthClaimed": false
+    },
+    "expectedRequestArtifactKind": "edge_byte_interop_request_artifact",
+    "expectedRequestRequiredFields": [
+      "requestId",
+      "operation",
+      "reference"
+    ],
+    "expectedReceiptArtifactKind": "byte_interop_receipt",
+    "expectedReceiptRequiredFields": [
+      "receiptId",
+      "operation",
+      "status"
+    ],
+    "allowedReceiptStatuses": [
+      "ready",
+      "complete",
+      "failed",
+      "imported",
+      "malformed",
+      "unsupported"
+    ],
+    "correlationFields": [
+      "requestId",
+      "receiptId",
+      "operation",
+      "reference"
+    ],
+    "edgeAuthorityBoundary": "Edge may draft byte interop request artifacts and import byte receipts as evidence only; Edge does not publish, store, pin, fetch, verify, or prove bytes.",
+    "adjacentAuthorityBoundary": "Bytes owns byte publication, byte storage, byte materialization, byte status, receipts, and transport semantics.",
+    "acceptanceSemantics": {
+      "edgeDraftOnly": true,
+      "adjacentAccepted": false,
+      "acceptanceRequiresAdjacentEvidence": true,
+      "readinessEffect": "operator_guidance_only",
+      "truthEffect": "none"
+    },
+    "packetIsEdgeDraftOnly": true,
+    "packetIsReviewOnly": true,
+    "adjacentAccepted": false,
+    "adjacentAcceptanceClaimed": false,
+    "adjacentRepoOwnsAuthority": true,
+    "evidenceRefsAreEvidenceOnly": true,
+    "ledgerHistoryRefsAreReviewOnly": true,
+    "workPacketRefsAreEdgeLocalContextOnly": true,
+    "nextActionRefsAreExplanatoryOnly": true,
+    "unsupportedActions": [
+      "discover_repos",
+      "discover_tools",
+      "discover_evidence",
+      "call_adjacent_repo",
+      "call_tool",
+      "execute",
+      "schedule_work",
+      "activate_platform",
+      "publish_to_mesh",
+      "admit_writer",
+      "grant_authority",
+      "infer_reachability",
+      "infer_mesh_participation",
+      "infer_adjacent_truth"
+    ],
+    "localOnly": true,
+    "explicitArtifactOnly": true,
+    "derivedOnly": true,
+    "discoversRepos": false,
+    "discoversTools": false,
+    "discoversEvidence": false,
+    "callsAdjacentRepo": false,
+    "callsTool": false,
+    "executesAction": false,
+    "schedulesWork": false,
+    "activatesPlatform": false,
+    "publishesToMesh": false,
+    "admitsWriter": false,
+    "grantsAuthority": false,
+    "infersReachability": false,
+    "infersMeshParticipation": false,
+    "infersAdjacentTruth": false,
+    "adjacentRepoAuthority": false,
+    "hiddenStateMutation": false
+  },
+  "reviewChecklist": [
+    {
+      "checklistId": "target_repo_is_bytes",
+      "label": "Target repo is mesh-ecology-bytes.",
+      "required": true
+    },
+    {
+      "checklistId": "seam_is_bytes",
+      "label": "Seam is bytes.",
+      "required": true
+    },
+    {
+      "checklistId": "target_surface_is_byte_interop",
+      "label": "Target surface is byte_interop.",
+      "required": true
+    },
+    {
+      "checklistId": "packet_is_edge_draft_only",
+      "label": "Packet is Edge-draft only.",
+      "required": true
+    },
+    {
+      "checklistId": "packet_is_review_only",
+      "label": "Packet is review-only.",
+      "required": true
+    },
+    {
+      "checklistId": "packet_is_adjacent_unaccepted",
+      "label": "Packet is adjacent-unaccepted.",
+      "required": true
+    },
+    {
+      "checklistId": "required_packet_fields_present",
+      "label": "Required packet fields are present.",
+      "required": true
+    },
+    {
+      "checklistId": "contract_metadata_complete",
+      "label": "Contract metadata is complete and mirrors Edge-draft Bytes expectations.",
+      "required": true
+    },
+    {
+      "checklistId": "request_and_receipt_fields_preserved",
+      "label": "Request and receipt required fields are preserved.",
+      "required": true
+    },
+    {
+      "checklistId": "source_refs_available",
+      "label": "Source refs are present for contract, contract set, ledger, readiness, evidence, work packet, next action, ledger events, and ledger deltas where available.",
+      "required": true
+    },
+    {
+      "checklistId": "byte_correlation_refs_available",
+      "label": "Byte correlation refs are present where available.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_byte_publication",
+      "label": "Wording does not imply byte publication.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_byte_storage",
+      "label": "Wording does not imply byte storage.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_byte_pinning_replication_or_fetch",
+      "label": "Wording does not imply byte pinning, replication, or fetch.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_content_availability",
+      "label": "Wording does not imply content availability.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_content_address_truth",
+      "label": "Wording does not imply content-address truth.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_materialization_proof",
+      "label": "Wording does not imply materialization proof.",
+      "required": true
+    },
+    {
+      "checklistId": "wording_does_not_imply_production_or_mesh_truth",
+      "label": "Wording does not imply production proof or mesh truth.",
+      "required": true
+    },
+    {
+      "checklistId": "malformed_packets_remain_review_only",
+      "label": "Malformed or incomplete packets should be rejected or marked review-only by Bytes.",
+      "required": true
+    },
+    {
+      "checklistId": "no_edge_mutation_callback_live_fetch_runner_scheduler_or_mesh_publish",
+      "label": "No Edge mutation, callback, live fetch, runner, scheduler, or mesh publish is required.",
+      "required": true
+    }
+  ],
+  "bytesWordingGuardrails": {
+    "guardrailSetId": "bytes_fixture_review_wording_guardrails",
+    "useWording": [
+      "bytes review packet",
+      "byte materialization request review",
+      "expected bytes-owned review evidence",
+      "byte correlation ref",
+      "content-address correlation ref",
+      "ready for operator review",
+      "evidence-only byte context"
+    ],
+    "avoidWording": [
+      "publish bytes",
+      "write bytes",
+      "pin bytes",
+      "store bytes",
+      "replicate bytes",
+      "fetch bytes",
+      "verify content",
+      "content is available",
+      "content is canonical",
+      "byte proof",
+      "materialized",
+      "production proof",
+      "mesh proof"
+    ],
+    "readinessMeansOperatorReviewOnly": true,
+    "packetPresenceDoesNotPublishBytes": true,
+    "packetPresenceDoesNotStoreBytes": true,
+    "packetPresenceDoesNotProveByteAvailability": true,
+    "packetPresenceDoesNotProveContentTruth": true,
+    "packetPresenceDoesNotProveMaterialization": true,
+    "reviewOnly": true,
+    "callsAdjacentRepo": false,
+    "executesAction": false,
+    "schedulesWork": false,
+    "publishesToMesh": false
+  },
+  "expectedBytesEvidenceResponseShape": {
+    "artifactKind": "bytes_edge_packet_review_evidence",
+    "schemaVersion": "bytes_edge_packet_review_evidence.v1",
+    "expectationIsEdgeSideOnly": true,
+    "notAcceptedAdjacentSchema": true,
+    "bytesOwnsArtifactKind": true,
+    "bytesOwnsSchemaVersion": true,
+    "evidenceId": "bytes-review-evidence:phase-120",
+    "createdAt": "2026-05-02T10:00:00.000Z",
+    "packetRef": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+    "sourceContractRef": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+    "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+    "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+    "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+    "sourceEvidenceRefs": [
+      "bytes-receipt:phase-120-review"
+    ],
+    "sourceWorkPacketRefs": [
+      "edge-ecosystem-work-packet:edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceNextActionRefs": [
+      "edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceLedgerEventRefs": [
+      "edge-ecosystem-ledger-event:001:readiness_state_observed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:002:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:003:next_action_selected:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:004:work_packet_recorded:bytes:2026-05-02T10:00:00.000Z",
+      "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "sourceLedgerDeltaRefs": [
+      "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z"
+    ],
+    "reviewStatus": "review_ready",
+    "allowedReviewStatuses": [
+      "review_ready",
+      "review_blocked",
+      "packet_malformed",
+      "packet_incomplete",
+      "unsupported_target",
+      "contract_metadata_incomplete",
+      "byte_publication_claim_implied",
+      "byte_storage_claim_implied",
+      "byte_availability_claim_implied",
+      "content_truth_claim_implied",
+      "materialization_proof_implied"
+    ],
+    "evidenceLabel": {
+      "evidenceKind": "bytes_fixture_review",
+      "outcome": "review_ready",
+      "scenarioId": "phase-120-bytes-adjacent-packet"
+    },
+    "receiptLabel": {
+      "labelKind": "bytes_interop_request_review",
+      "outcome": "review_ready",
+      "requestArtifactKindReviewed": "edge_byte_interop_request_artifact",
+      "receiptArtifactKindReviewed": "byte_interop_receipt"
+    },
+    "reasonCodes": [
+      "bytes_packet_fixture_review_ready",
+      "byte_materialization_request_review_only",
+      "no_byte_publication_or_storage_claimed"
+    ],
+    "requestArtifactKindReviewed": "edge_byte_interop_request_artifact",
+    "receiptArtifactKindReviewed": "byte_interop_receipt",
+    "byteRequestRef": "byte-request:phase-120-review",
+    "byteReceiptRef": null,
+    "materializationRef": "byte-materialization-review:phase-120",
+    "publicationRef": null,
+    "contentRef": "content-review:phase-120",
+    "contentAddressRef": "content-address-review:phase-120",
+    "storageRef": null,
+    "availabilityRef": null,
+    "correlationRefs": {
+      "packetRef": "edge-ecosystem-adjacent-packet:001:bytes:2026-05-02T10:00:00.000Z",
+      "sourceContractRef": "edge-ecosystem-handoff-contract:001:bytes:2026-05-02T10:00:00.000Z",
+      "sourceContractSetRef": "edge-ecosystem-handoff-contracts:2026-05-02T10:00:00.000Z",
+      "sourceLedgerRef": "edge-ecosystem-state-ledger:2026-05-02T10:00:00.000Z",
+      "sourceReadinessRollupRef": "edge-ecosystem-readiness:2026-05-02T10:00:00.000Z",
+      "sourceEvidenceRefs": [
+        "bytes-receipt:phase-120-review"
+      ],
+      "sourceWorkPacketRefs": [
+        "edge-ecosystem-work-packet:edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+      ],
+      "sourceNextActionRefs": [
+        "edge-ecosystem-next-action:001:review_ready_seam:bytes:2026-05-02T10:00:00.000Z"
+      ],
+      "sourceLedgerEventRefs": [
+        "edge-ecosystem-ledger-event:001:readiness_state_observed:bytes:2026-05-02T10:00:00.000Z",
+        "edge-ecosystem-ledger-event:002:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z",
+        "edge-ecosystem-ledger-event:003:next_action_selected:bytes:2026-05-02T10:00:00.000Z",
+        "edge-ecosystem-ledger-event:004:work_packet_recorded:bytes:2026-05-02T10:00:00.000Z",
+        "edge-ecosystem-ledger-event:005:handoff_contract_drafted:bytes:2026-05-02T10:00:00.000Z"
+      ],
+      "sourceLedgerDeltaRefs": [
+        "edge-ecosystem-ledger-delta:001:readiness_state_changed:bytes:2026-05-02T10:00:00.000Z"
+      ],
+      "requestId": "bytes-request:phase-120-review",
+      "byteRequestRef": "byte-request:phase-120-review",
+      "byteReceiptRef": null,
+      "materializationRef": "byte-materialization-review:phase-120",
+      "publicationRef": null,
+      "contentRef": "content-review:phase-120",
+      "contentAddressRef": "content-address-review:phase-120",
+      "storageRef": null,
+      "availabilityRef": null
+    },
+    "requiredFields": [
+      "artifactKind",
+      "schemaVersion",
+      "evidenceId",
+      "createdAt",
+      "packetRef",
+      "sourceContractRef",
+      "sourceContractSetRef",
+      "sourceLedgerRef",
+      "sourceReadinessRollupRef",
+      "sourceEvidenceRefs",
+      "sourceWorkPacketRefs",
+      "sourceNextActionRefs",
+      "sourceLedgerEventRefs",
+      "sourceLedgerDeltaRefs",
+      "reviewStatus",
+      "evidenceLabel",
+      "correlationRefs",
+      "reasonCodes",
+      "requestArtifactKindReviewed",
+      "receiptArtifactKindReviewed",
+      "byteRequestRef",
+      "byteReceiptRef",
+      "materializationRef",
+      "publicationRef",
+      "contentRef",
+      "contentAddressRef",
+      "storageRef",
+      "availabilityRef"
+    ],
+    "edgePacketAcceptedAsSchema": false,
+    "edgePacketAcceptedAsCommand": false,
+    "bytePublicationClaimed": false,
+    "byteStorageClaimed": false,
+    "byteReplicationClaimed": false,
+    "bytePinningClaimed": false,
+    "byteFetchClaimed": false,
+    "byteAvailabilityClaimed": false,
+    "contentTruthClaimed": false,
+    "materializationProofClaimed": false,
+    "productionProofClaimed": false,
+    "meshTruthClaimed": false,
+    "edgeAuthorityGranted": false,
+    "reviewOnly": true,
+    "evidenceOnly": true
+  },
+  "stopGoDecision": {
+    "artifactKind": "edge_ecosystem_bytes_packet_stop_go_decision",
+    "decision": "go_for_bytes_repo_review",
+    "readyToHandToBytes": true,
+    "blockers": [],
+    "acceptanceCriteria": [
+      "Bytes reads the packet as a static fixture only.",
+      "Bytes validates packetRef, sourceContractRef, request refs, receipt refs, byte refs, and correlation refs.",
+      "Bytes owns any response artifact kind, schemaVersion, statuses, byte refs, receipt labels, storage semantics, publication semantics, materialization semantics, and content-address semantics.",
+      "Bytes response claims no byte publication, storage, pinning, replication, fetch, availability, content truth, materialization proof, production proof, mesh truth, or Edge authority.",
+      "Bytes response does not accept the Edge packet as a command or schema.",
+      "Edge can later plan evidence-only import of the response without calling Bytes."
+    ],
+    "reviewOnly": true,
+    "fixtureOnly": true,
+    "edgeDraftOnly": true,
+    "bytesAccepted": false,
+    "bytesSchemaAccepted": false,
+    "adjacentAccepted": false,
+    "adjacentAcceptanceClaimed": false,
+    "bytePublicationClaimed": false,
+    "byteStorageClaimed": false,
+    "byteAvailabilityClaimed": false,
+    "contentTruthClaimed": false,
+    "materializationProofClaimed": false,
+    "productionProofClaimed": false,
+    "meshTruthClaimed": false,
+    "callsAdjacentRepo": false,
+    "executesAction": false,
+    "schedulesWork": false,
+    "publishesToMesh": false,
+    "infersAdjacentTruth": false,
+    "infersMeshParticipation": false
+  },
+  "packetIsEdgeDraftOnly": true,
+  "packetIsReviewOnly": true,
+  "fixtureOnly": true,
+  "edgeLocalOnly": true,
+  "adjacentAccepted": false,
+  "adjacentAcceptanceClaimed": false,
+  "adjacentRepoOwnsAuthority": true,
+  "bytesAccepted": false,
+  "bytesSchemaAccepted": false,
+  "bytePublicationClaimed": false,
+  "byteStorageClaimed": false,
+  "byteAvailabilityClaimed": false,
+  "contentTruthClaimed": false,
+  "materializationProofClaimed": false,
+  "productionProofClaimed": false,
+  "meshTruthClaimed": false,
+  "noExecutionAuthorized": true,
+  "executionImplied": false,
+  "noSchedulerRunnerLiveDiscoveryOrMeshPublication": true,
+  "fixtureIsNotAdjacentTodo": true,
+  "fixtureIsNotAcceptedSchema": true,
+  "fixtureIsNotExecutionInstruction": true,
+  "readinessMeansOperatorReviewOnly": true,
+  "unsupportedActions": [
+    "discover_repos",
+    "discover_tools",
+    "discover_evidence",
+    "call_adjacent_repo",
+    "call_tool",
+    "execute",
+    "schedule_work",
+    "activate_platform",
+    "publish_to_mesh",
+    "admit_writer",
+    "grant_authority",
+    "infer_reachability",
+    "infer_mesh_participation",
+    "infer_adjacent_truth"
+  ],
+  "localOnly": true,
+  "explicitArtifactOnly": true,
+  "derivedOnly": true,
+  "discoversRepos": false,
+  "discoversTools": false,
+  "discoversEvidence": false,
+  "callsAdjacentRepo": false,
+  "callsTool": false,
+  "executesAction": false,
+  "schedulesWork": false,
+  "activatesPlatform": false,
+  "publishesToMesh": false,
+  "admitsWriter": false,
+  "grantsAuthority": false,
+  "infersReachability": false,
+  "infersMeshParticipation": false,
+  "infersAdjacentTruth": false,
+  "adjacentRepoAuthority": false,
+  "hiddenStateMutation": false
+}

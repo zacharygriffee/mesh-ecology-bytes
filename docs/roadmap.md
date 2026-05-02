@@ -174,3 +174,33 @@ Possible later work:
 Guardrail:
 
 - these are extensions, not redefinitions of the v1 immutable byte contract
+
+## Phase 121: Edge Bytes Review Fixture Consumption
+
+Phase 121 is review-only and fixture-scoped.
+
+Add:
+
+- copied static Edge Phase 120 fixture under `test/fixtures/edge/`
+- bytes-owned adjacent review evidence schema and constants
+- review statuses for pass, follow-up, incomplete fixture, and rejected fixture
+- validation of only the static review envelope
+- inert preservation of source packet, checklist, guardrail, response-shape, and stop/go refs
+- classification-only metadata for later Edge evidence import
+
+Guardrails:
+
+- do not modify Edge
+- do not fetch the fixture from Edge at runtime
+- do not call Edge
+- do not treat the Edge packet as a bytes schema or command
+- do not publish, store, pin, replicate, fetch, or materialize bytes
+- do not add a runner, scheduler, live discovery, or mesh publication path
+- do not infer adjacent acceptance from packet presence
+
+Current implementation note:
+
+- `createAdjacentReviewEvidenceFromJson()` and `createAdjacentReviewEvidenceFromFixture()` produce bytes-owned review evidence
+- `validateAdjacentReviewEvidence()` validates the evidence contract and safe flags
+- `assertNoForbiddenEvidenceWording()` guards emitted evidence wording
+- `docs/reviews/phase-121-bytes-edge-review-evidence.json` records the review evidence for the copied fixture

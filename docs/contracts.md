@@ -326,6 +326,36 @@ The current operational hardening implementation is intentionally minimal:
 - explicit byte-layer error codes are exposed for common operational failures
 - file materialization wraps destination write failures as byte-layer materialization errors
 
+## Phase 121 Review Evidence Contract
+
+Phase 121 defines a review-only evidence contract for a copied Edge Phase 120 fixture.
+
+Constants:
+
+- `BYTES_ADJACENT_REVIEW_EVIDENCE_SCHEMA`: `mesh-ecology-bytes/adjacent-review-evidence@1`
+- `BYTES_ADJACENT_REVIEW_EVIDENCE_KIND`: `bytes_owned_adjacent_review_evidence`
+- `BYTES_ADJACENT_REVIEW_EVIDENCE_PHASE`: `121`
+- `EDGE_PHASE_120_BYTES_FIXTURE_INPUT_KIND`: `edge_phase_120_bytes_adjacent_review_packet_fixture`
+
+Review statuses:
+
+- `review_only_pass`
+- `review_only_needs_followup`
+- `review_only_incomplete_fixture`
+- `review_only_rejected_fixture`
+
+Contract posture:
+
+- the Edge packet is external static input only
+- bytes owns the evidence schema, artifact kind, statuses, checks, guardrails, and safe flags
+- Edge import classification is classification-only metadata
+- malformed JSON or non-object top level is rejected
+- missing required review sections produce incomplete fixture evidence
+- runtime-looking fields or unsafe claim flags produce follow-up evidence
+- fixture presence alone does not create adjacent acceptance
+
+The evidence must explicitly set safe flags showing that no byte publication, storage, pinning, replication, fetch, availability, content truth, materialization proof, production proof, mesh truth, Edge authority, schema acceptance, or command acceptance is claimed.
+
 ## Future Reference Families
 
 Future keyed, path-based, or mutable backing stores may exist later.
