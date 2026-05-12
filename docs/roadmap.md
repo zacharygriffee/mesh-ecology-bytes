@@ -126,6 +126,7 @@ Current implementation note:
 
 - consumer seam contracts are now documented explicitly
 - minimal helpers validate platform-facing materialization envelopes and pack-facing byte bindings
+- adjacent-tool interop helpers expose byte capability metadata and validate byte publication, materialization, and status request/receipt artifacts
 - seam helpers reject unsupported policy, deployment, or artifact-specific fields
 
 ## Phase 8: Operational Hardening

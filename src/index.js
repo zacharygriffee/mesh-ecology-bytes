@@ -47,8 +47,16 @@ export {
   validateAdjacentReviewEvidence
 } from './review/index.js'
 export {
+  BYTE_INTEROP_OPERATIONS,
+  BYTE_INTEROP_RECEIPT_STATUSES,
+  createByteInteropProfile,
+  createByteInteropReceipt,
+  createByteInteropRequest,
   createPackByteBinding,
   createPlatformMaterializationSeam,
+  validateByteInteropProfile,
+  validateByteInteropReceipt,
+  validateByteInteropRequest,
   validatePackByteBinding,
   validatePlatformMaterializationSeam
 } from './integration/index.js'

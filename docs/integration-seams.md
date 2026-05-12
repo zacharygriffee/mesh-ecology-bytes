@@ -60,6 +60,74 @@ It must not contain:
 - package policy
 - release workflow data
 
+## Adjacent Tool Interop Profile
+
+Edge and other adjacent tools may use the bytes-owned interop profile as an explicit artifact seam.
+
+The profile may describe only byte-layer capabilities:
+
+- `bytePublication`
+- `byteMaterialization`
+- `referenceFamilies`
+- `descriptorValidation`
+- `materializationPosture`
+- `retentionPosture`
+
+The profile must not describe:
+
+- artifact meaning
+- deployment state
+- platform placement
+- authority or policy
+- mesh concern semantics
+
+## Adjacent Tool Requests
+
+The validated adjacent-tool request may contain one operation:
+
+- `publish_immutable_object`
+- `materialize_byte_reference`
+- `report_byte_status`
+
+Publication requests contain:
+
+- `descriptor`
+- `bytes`
+
+Materialization requests contain:
+
+- `reference`
+- `request`
+- `destination` only when the consumer supplies a local destination for `cache` or `mirror`
+
+Status requests contain:
+
+- `reference`
+- `includeDescriptor`
+
+## Adjacent Tool Receipts
+
+The validated adjacent-tool receipt may contain:
+
+- `operation`
+- `status`
+- `reference`
+- `descriptor`
+- `lifecycle`
+- `retention`
+- `plan`
+- `destination`
+- `bytesWritten`
+- `error`
+
+Receipt statuses are:
+
+- `complete`
+- `ready`
+- `failed`
+
+Receipts remain byte-layer reports. They do not imply deployment, activation, platform ownership, release state, or artifact taxonomy.
+
 ## Phase 121 Adjacent Review Fixture
 
 Bytes may consume the Edge Phase 120 Bytes adjacent review packet as a copied static fixture at:

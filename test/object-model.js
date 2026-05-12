@@ -21,6 +21,7 @@ export async function runObjectModelTests() {
   await testPublishAndReadImmutableObject()
   await testInvalidDescriptorRejectedDuringPublish()
   await testMissingDescriptorRejectedDuringRead()
+  await testWaitModeDoesNotPreemptDescriptorReplication()
   await testInvalidDescriptorRejectedDuringRead()
 }
 
@@ -148,6 +149,37 @@ async function testMissingDescriptorRejectedDuringRead() {
         reference
       }),
       (error) => isMeshBytesError(error, 'ERR_DESCRIPTOR_MISSING')
+    )
+  } finally {
+    await rm(storage, { recursive: true, force: true })
+  }
+}
+
+async function testWaitModeDoesNotPreemptDescriptorReplication() {
+  const storage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-wait-descriptor-'))
+
+  try {
+    const core = new Hypercore(storage, {
+      valueEncoding: 'binary'
+    })
+
+    await core.ready()
+
+    const reference = createByteReference({
+      family: 'hypercore_immutable',
+      key: core.key.toString('hex')
+    })
+
+    await core.close()
+
+    await assert.rejects(
+      () => readImmutableObject({
+        storage,
+        reference,
+        wait: true,
+        timeoutMs: 50
+      }),
+      (error) => isMeshBytesError(error, 'ERR_OPERATION_TIMEOUT')
     )
   } finally {
     await rm(storage, { recursive: true, force: true })

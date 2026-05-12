@@ -284,12 +284,53 @@ Field posture:
 - the byte layer does not define artifact taxonomy, package lifecycle, or release semantics
 - pack-level meaning must not be embedded into the byte-layer seam contract
 
+### Adjacent Tool Interop Seam
+
+The byte layer may expose an adjacent-tool interop profile for Edge and other consumers.
+
+The profile may contain descriptor-only byte capability metadata:
+
+- byte publication capability
+- byte materialization capability
+- supported reference families
+- descriptor validation support
+- materialization lifecycle states
+- retention posture terms
+
+The byte layer may validate request artifacts for:
+
+- publishing one immutable byte object
+- materializing one byte reference locally
+- reporting byte/reference status
+
+The byte layer may validate receipt artifacts containing only byte-layer fields:
+
+- `operation`
+- `status`
+- `reference`
+- `descriptor`
+- `lifecycle`
+- `retention`
+- `plan`
+- `destination`
+- `bytesWritten`
+- `error`
+
+Rules:
+
+- adjacent tools may observe, inspect, prepare, or request bounded byte publication/materialization
+- adjacent tools do not own byte transport, reference meaning, lifecycle, or retention vocabulary
+- byte availability must not be interpreted as deployment state, activation state, authority, platform placement, or mesh concern semantics
+
 ## Phase 7 Support Surface
 
 The current seam implementation is intentionally minimal:
 
 - `createPlatformMaterializationSeam()` validates and normalizes the platform-facing byte result envelope
 - `createPackByteBinding()` validates and normalizes the pack-facing byte binding envelope
+- `createByteInteropProfile()` exposes descriptor-only byte capability metadata for adjacent tools
+- `createByteInteropRequest()` validates adjacent-tool byte publication, materialization, and status request artifacts
+- `createByteInteropReceipt()` validates adjacent-tool byte result artifacts
 - seam validators reject unsupported fields rather than teaching the byte layer platform or pack semantics
 
 ## Operational Hardening Contract
