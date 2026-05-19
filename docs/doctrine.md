@@ -107,3 +107,26 @@ Future Hyperbee or Hyperdrive support is acknowledged, but deferred.
 - mutable backing stores may be introduced later
 - if added, they should likely become distinct reference families
 - they must not change the meaning of the base immutable `ByteReference`
+
+## External Pointer Posture
+
+Bytes is the likely owner for byte/resource pointer contracts used by Edge,
+Platform, Mesh, or apps when large or device-local payloads should not be
+embedded directly in an Autobase lane.
+
+The intended split is:
+
+- continuity lanes preserve compact pointer records, refs, hashes, and posture
+- Bytes-owned contracts describe where byte/resource content can be fetched or
+  mirrored from
+- Hyperblobs, Hyperdrive, Hypercore, or Bytes references carry the bytes
+- consumers decide artifact meaning, acceptance, policy, placement, and runtime
+
+This repo may define `bytes_external_resource_pointer.v0` as a draft contract,
+but it does not make any pointer authoritative. Pointer visibility, blob
+presence, content availability, and view indexing do not imply truth,
+acceptance, continuity, readiness, deployment, or execution.
+
+Host-local JSON, local paths, localhost URLs, and copied fixture payloads remain
+ingress/debug scaffolds unless represented by a resolvable resource pointer and
+interpreted by the consuming layer.

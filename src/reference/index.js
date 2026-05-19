@@ -9,6 +9,18 @@ import {
 export const BYTE_REFERENCE_SCHEMA = 'mesh-ecology-bytes/byte-reference@1'
 export const SUPPORTED_REFERENCE_FAMILIES = new Set(['hypercore_immutable'])
 
+export {
+  EXTERNAL_POINTER_AVAILABILITY,
+  EXTERNAL_POINTER_KINDS,
+  EXTERNAL_POINTER_REPLICATION_POSTURES,
+  EXTERNAL_RESOURCE_KINDS,
+  EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
+  EXTERNAL_RESOURCE_POINTER_SCHEMA,
+  createExternalResourcePointer,
+  normalizeExternalResourcePointer,
+  validateExternalResourcePointer
+} from './externalPointer.js'
+
 export function createByteReference(input = {}) {
   const reference = stripUndefined({
     family: input.family || 'hypercore_immutable',

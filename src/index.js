@@ -27,9 +27,18 @@ export {
 } from './materialization/index.js'
 export {
   BYTE_REFERENCE_SCHEMA,
+  EXTERNAL_POINTER_AVAILABILITY,
+  EXTERNAL_POINTER_KINDS,
+  EXTERNAL_POINTER_REPLICATION_POSTURES,
+  EXTERNAL_RESOURCE_KINDS,
+  EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
+  EXTERNAL_RESOURCE_POINTER_SCHEMA,
   SUPPORTED_REFERENCE_FAMILIES,
   createByteReference,
+  createExternalResourcePointer,
   normalizeByteReference,
+  normalizeExternalResourcePointer,
+  validateExternalResourcePointer,
   validateByteReference
 } from './reference/index.js'
 export {

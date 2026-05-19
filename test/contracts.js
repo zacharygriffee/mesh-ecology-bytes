@@ -7,10 +7,12 @@ import {
   assessRetentionPosture,
   createByteDescriptor,
   createByteReference,
+  createExternalResourcePointer,
   createMaterializationHints,
   createMaterializationRequest,
   validateByteDescriptor,
   validateByteReference,
+  validateExternalResourcePointer,
   validateMaterializationHints,
   validateMaterializationRequest,
   validateLifecycleSnapshot,
@@ -21,6 +23,7 @@ import {
 export function runContractTests() {
   testDescriptorValidation()
   testReferenceValidation()
+  testExternalResourcePointerValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
   testRetentionTerms()
@@ -94,6 +97,87 @@ function testReferenceValidation() {
     key: 'e'.repeat(64),
     version: 1
   }))
+}
+
+function testExternalResourcePointerValidation() {
+  const pointer = createExternalResourcePointer({
+    resourceRef: 'bytes-resource:sidecar-suggestion:example',
+    resourceKind: 'artifact',
+    pointerKind: 'hyperblob',
+    pointer: {
+      blobKey: 'a'.repeat(64),
+      id: 'hyperblob-id-1'
+    },
+    contentHash: 'b'.repeat(64),
+    byteLength: 2048,
+    mediaType: 'application/json',
+    originDeviceRef: 'local-device:operator-workstation',
+    availability: 'replicable_pointer',
+    replicationPosture: 'replicable_external_pointer',
+    sourceRefs: ['edge-operator-sidecar-repair-suggestion:example'],
+    nonClaims: {
+      pointerIsTruth: false,
+      blobPresenceIsAcceptance: false,
+      contentAvailabilityIsContinuity: false,
+      pathIsCanonical: false,
+      resourceRefIsAuthority: false
+    }
+  })
+
+  assert.equal(pointer.artifactKind, 'bytes_external_resource_pointer')
+  assert.equal(pointer.schemaVersion, 'bytes_external_resource_pointer.v0')
+  assert.equal(pointer.pointer.blobKey, 'a'.repeat(64))
+  assert.equal(pointer.contentHash.value, 'b'.repeat(64))
+  assert.deepEqual(pointer.sourceRefs, ['edge-operator-sidecar-repair-suggestion:example'])
+
+  const drivePointer = createExternalResourcePointer({
+    resourceRef: 'bytes-resource:repo-file:example',
+    resourceKind: 'file',
+    pointerKind: 'hyperdrive',
+    pointer: {
+      driveKey: 'c'.repeat(64),
+      path: 'repo/docs/example.json'
+    },
+    contentHash: 'd'.repeat(64),
+    byteLength: 64,
+    mediaType: 'application/json',
+    originDeviceRef: 'local-device:operator-laptop',
+    availability: 'mirrored',
+    replicationPosture: 'mirror_candidate',
+    nonClaims: pointer.nonClaims
+  })
+
+  assert.equal(drivePointer.pointer.path, 'repo/docs/example.json')
+
+  assert.throws(() => validateExternalResourcePointer({
+    ...pointer,
+    pointer: {
+      blobKey: 'a'.repeat(64),
+      id: 'hyperblob-id-1',
+      localPath: '/tmp/blob.json'
+    }
+  }), /host-local paths/)
+
+  assert.throws(() => createExternalResourcePointer({
+    ...drivePointer,
+    pointer: {
+      driveKey: 'c'.repeat(64),
+      path: '/home/operator/repo/file.json'
+    }
+  }), /drive-relative path/)
+
+  assert.throws(() => createExternalResourcePointer({
+    ...pointer,
+    nonClaims: {
+      ...pointer.nonClaims,
+      pointerIsTruth: true
+    }
+  }), /pointerIsTruth/)
+
+  assert.throws(() => createExternalResourcePointer({
+    ...pointer,
+    availability: 'accepted_continuity'
+  }), /availability/)
 }
 
 function testHintsAndRequestSeparation() {

@@ -82,6 +82,71 @@ Field posture:
 - `integrityHint` is optional advisory integrity metadata
 - neither field changes object identity
 
+## ExternalResourcePointer v0
+
+`bytes_external_resource_pointer.v0` is a draft/review contract for pointing to
+resource bytes stored outside a higher-level continuity lane. It follows the
+Autobase external-pointer posture: a lane or view may preserve a compact
+pointer while the bytes remain in a byte/resource substrate.
+
+Contract posture:
+
+- Bytes owns the byte/resource pointer shape.
+- Consumers own artifact meaning, policy, workflow state, and acceptance.
+- Autobase or Hyperbee views may index the pointer, but the pointer is not the
+  blob and not acceptance.
+- Host-local JSON paths may be ingress/debug information elsewhere, but they
+  are not canonical resource identity in this contract.
+
+### Required Contract Fields
+
+- `artifactKind: "bytes_external_resource_pointer"`
+- `schemaVersion: "bytes_external_resource_pointer.v0"`
+- `resourceRef`
+- `resourceKind`
+- `pointerKind`
+- `storageBackend`
+- `pointer`
+- `contentHash`
+- `byteLength`
+- `mediaType`
+- `originDeviceRef`
+- `availability`
+- `replicationPosture`
+- `nonClaims`
+
+### Pointer Families
+
+Draft v0 supports:
+
+- `hyperblob`
+- `hyperdrive`
+- `hypercore`
+- `bytes_ref`
+
+For Hyperdrive, `pointer.path` is drive-relative only. Absolute host-local
+paths and traversal paths are rejected.
+
+### Required Non-Claims
+
+The pointer must state:
+
+- `pointerIsTruth: false`
+- `blobPresenceIsAcceptance: false`
+- `contentAvailabilityIsContinuity: false`
+- `pathIsCanonical: false`
+- `resourceRefIsAuthority: false`
+
+### Explicit Exclusions
+
+`ExternalResourcePointer` must not contain:
+
+- host-local paths as canonical seams
+- authority or workflow execution claims
+- acceptance or readiness claims
+- production lane promotion claims
+- artifact-specific meaning owned by Edge, Platform, Mesh, or apps
+
 ## MaterializationHints
 
 `MaterializationHints` are producer-side hints and travel with the descriptor.
