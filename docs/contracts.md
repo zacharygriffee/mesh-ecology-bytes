@@ -147,6 +147,64 @@ The pointer must state:
 - production lane promotion claims
 - artifact-specific meaning owned by Edge, Platform, Mesh, or apps
 
+## ExternalResourceResolutionReceipt v0
+
+`bytes_external_resource_resolution_receipt.v0` is a draft/review contract for
+recording that a Bytes-owned resolver inspected a
+`bytes_external_resource_pointer.v0` and produced a bounded resolution result.
+
+It is meant to help Edge and other consumers move away from operator-facing
+JSON/path lookup without making Bytes own the consumer's workflow acceptance.
+
+Contract posture:
+
+- Bytes owns pointer resolution evidence.
+- Consumers own artifact interpretation, import policy, and acceptance.
+- The receipt may say the pointer was `resolved`, `blocked`, `unavailable`, or
+  `hash_mismatch`.
+- The receipt does not contain payload bytes and does not import payload into a
+  consumer workflow.
+- The receipt is not accepted continuity, truth, readiness, execution, or
+  authority.
+
+### Required Contract Fields
+
+- `artifactKind: "bytes_external_resource_resolution_receipt"`
+- `schemaVersion: "bytes_external_resource_resolution_receipt.v0"`
+- `receiptRef`
+- `sourceResourceRef`
+- `sourcePointerRef`
+- `resolverRef`
+- `resolvedAt`
+- `resolutionStatus`
+- `contentHash`
+- `byteLength`
+- `mediaType`
+- `payloadImported: false`
+- `payloadInline: false`
+- `acceptedContinuity: false`
+- `nonClaims`
+
+### Required Non-Claims
+
+The receipt must state:
+
+- `resolutionIsTruth: false`
+- `payloadAvailabilityIsAcceptance: false`
+- `receiptIsContinuity: false`
+- `consumerAcceptanceClaimed: false`
+- `pathIsCanonical: false`
+
+### Explicit Exclusions
+
+`ExternalResourceResolutionReceipt` must not:
+
+- embed payload bytes
+- claim consumer acceptance
+- claim local-layer continuity
+- make host-local paths canonical
+- make payload availability equivalent to truth, readiness, or authority
+
 ## MaterializationHints
 
 `MaterializationHints` are producer-side hints and travel with the descriptor.

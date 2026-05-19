@@ -16,8 +16,14 @@ export {
   EXTERNAL_RESOURCE_KINDS,
   EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
   EXTERNAL_RESOURCE_POINTER_SCHEMA,
+  EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND,
+  EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA,
+  EXTERNAL_RESOURCE_RESOLUTION_STATUSES,
   createExternalResourcePointer,
+  createExternalResourceResolutionReceipt,
   normalizeExternalResourcePointer,
+  normalizeExternalResourceResolutionReceipt,
+  validateExternalResourceResolutionReceipt,
   validateExternalResourcePointer
 } from './externalPointer.js'
 

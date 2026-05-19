@@ -8,11 +8,13 @@ import {
   createByteDescriptor,
   createByteReference,
   createExternalResourcePointer,
+  createExternalResourceResolutionReceipt,
   createMaterializationHints,
   createMaterializationRequest,
   validateByteDescriptor,
   validateByteReference,
   validateExternalResourcePointer,
+  validateExternalResourceResolutionReceipt,
   validateMaterializationHints,
   validateMaterializationRequest,
   validateLifecycleSnapshot,
@@ -24,6 +26,7 @@ export function runContractTests() {
   testDescriptorValidation()
   testReferenceValidation()
   testExternalResourcePointerValidation()
+  testExternalResourceResolutionReceiptValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
   testRetentionTerms()
@@ -223,6 +226,63 @@ function testExternalResourcePointerValidation() {
       pathIsCanonical: true
     }
   }), /host-local paths/)
+}
+
+function testExternalResourceResolutionReceiptValidation() {
+  const receipt = createExternalResourceResolutionReceipt({
+    receiptRef: 'bytes-resource-resolution-receipt:example',
+    sourceResourceRef: 'bytes-resource:sidecar-suggestion:example',
+    sourcePointerRef: 'bytes_external_resource_pointer:example',
+    resolverRef: 'bytes-resolver:operator-device',
+    resolvedAt: '2026-05-19T00:00:00.000Z',
+    resolutionStatus: 'resolved',
+    contentHash: 'a'.repeat(64),
+    byteLength: 2048,
+    mediaType: 'application/json',
+    evidenceRefs: ['hyperblob-read:example'],
+    sourceRefs: ['edge-operator-sidecar-repair-resource-ref-import:session:1'],
+    nonClaims: {
+      resolutionIsTruth: false,
+      payloadAvailabilityIsAcceptance: false,
+      receiptIsContinuity: false,
+      consumerAcceptanceClaimed: false,
+      pathIsCanonical: false
+    }
+  })
+
+  assert.equal(receipt.artifactKind, 'bytes_external_resource_resolution_receipt')
+  assert.equal(receipt.schemaVersion, 'bytes_external_resource_resolution_receipt.v0')
+  assert.equal(receipt.resolutionStatus, 'resolved')
+  assert.equal(receipt.contentHash.value, 'a'.repeat(64))
+  assert.equal(receipt.payloadImported, false)
+  assert.equal(receipt.payloadInline, false)
+  assert.equal(receipt.acceptedContinuity, false)
+  assert.deepEqual(receipt.evidenceRefs, ['hyperblob-read:example'])
+
+  validateExternalResourceResolutionReceipt(receipt)
+
+  assert.throws(() => createExternalResourceResolutionReceipt({
+    ...receipt,
+    resolutionStatus: 'accepted_continuity'
+  }), /resolutionStatus/)
+
+  assert.throws(() => createExternalResourceResolutionReceipt({
+    ...receipt,
+    payloadInline: true
+  }), /payloadInline must be false/)
+
+  assert.throws(() => createExternalResourceResolutionReceipt({
+    ...receipt,
+    acceptedContinuity: true
+  }), /acceptedContinuity must be false/)
+
+  assert.throws(() => createExternalResourceResolutionReceipt({
+    ...receipt,
+    nonClaims: {
+      ...receipt.nonClaims,
+      resolutionIsTruth: true
+    }
+  }), /resolutionIsTruth/)
 }
 
 function testHintsAndRequestSeparation() {

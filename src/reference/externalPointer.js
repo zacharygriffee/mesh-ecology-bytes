@@ -1,5 +1,6 @@
 import {
   assertAllowedKeys,
+  assertBoolean,
   assertEnum,
   assertHex,
   assertInteger,
@@ -11,6 +12,8 @@ import {
 
 export const EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND = 'bytes_external_resource_pointer'
 export const EXTERNAL_RESOURCE_POINTER_SCHEMA = 'bytes_external_resource_pointer.v0'
+export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND = 'bytes_external_resource_resolution_receipt'
+export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA = 'bytes_external_resource_resolution_receipt.v0'
 
 export const EXTERNAL_RESOURCE_KINDS = new Set([
   'artifact',
@@ -45,6 +48,13 @@ export const EXTERNAL_POINTER_REPLICATION_POSTURES = new Set([
   'replicated'
 ])
 
+export const EXTERNAL_RESOURCE_RESOLUTION_STATUSES = new Set([
+  'blocked',
+  'hash_mismatch',
+  'resolved',
+  'unavailable'
+])
+
 const POINTER_FIELDS = new Set([
   'artifactKind',
   'schemaVersion',
@@ -71,6 +81,34 @@ const NON_CLAIM_FIELDS = [
   'resourceRefIsAuthority'
 ]
 
+const RESOLUTION_RECEIPT_FIELDS = new Set([
+  'artifactKind',
+  'schemaVersion',
+  'receiptRef',
+  'sourceResourceRef',
+  'sourcePointerRef',
+  'resolverRef',
+  'resolvedAt',
+  'resolutionStatus',
+  'contentHash',
+  'byteLength',
+  'mediaType',
+  'evidenceRefs',
+  'sourceRefs',
+  'payloadImported',
+  'payloadInline',
+  'acceptedContinuity',
+  'nonClaims'
+])
+
+const RESOLUTION_NON_CLAIM_FIELDS = [
+  'resolutionIsTruth',
+  'payloadAvailabilityIsAcceptance',
+  'receiptIsContinuity',
+  'consumerAcceptanceClaimed',
+  'pathIsCanonical'
+]
+
 export function createExternalResourcePointer(input = {}) {
   return normalizeExternalResourcePointer({
     artifactKind: input.artifactKind ?? EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
@@ -93,6 +131,33 @@ export function createExternalResourcePointer(input = {}) {
 
 export function validateExternalResourcePointer(input) {
   normalizeExternalResourcePointer(input)
+  return input
+}
+
+export function createExternalResourceResolutionReceipt(input = {}) {
+  return normalizeExternalResourceResolutionReceipt({
+    artifactKind: input.artifactKind ?? EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND,
+    schemaVersion: input.schemaVersion ?? EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA,
+    receiptRef: input.receiptRef,
+    sourceResourceRef: input.sourceResourceRef,
+    sourcePointerRef: input.sourcePointerRef,
+    resolverRef: input.resolverRef,
+    resolvedAt: input.resolvedAt,
+    resolutionStatus: input.resolutionStatus,
+    contentHash: input.contentHash,
+    byteLength: input.byteLength,
+    mediaType: input.mediaType,
+    evidenceRefs: input.evidenceRefs,
+    sourceRefs: input.sourceRefs,
+    payloadImported: input.payloadImported ?? false,
+    payloadInline: input.payloadInline ?? false,
+    acceptedContinuity: input.acceptedContinuity ?? false,
+    nonClaims: input.nonClaims
+  })
+}
+
+export function validateExternalResourceResolutionReceipt(input) {
+  normalizeExternalResourceResolutionReceipt(input)
   return input
 }
 
@@ -232,4 +297,85 @@ function normalizeNonClaims(nonClaims) {
   }
 
   return Object.fromEntries(NON_CLAIM_FIELDS.map((field) => [field, false]))
+}
+
+export function normalizeExternalResourceResolutionReceipt(input) {
+  assertAllowedKeys(input, 'ExternalResourceResolutionReceipt', RESOLUTION_RECEIPT_FIELDS)
+
+  if (input.artifactKind !== EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND) {
+    throw new TypeError(`ExternalResourceResolutionReceipt.artifactKind must be ${EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND}`)
+  }
+
+  if (input.schemaVersion !== EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA) {
+    throw new TypeError(`ExternalResourceResolutionReceipt.schemaVersion must be ${EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA}`)
+  }
+
+  assertNonEmptyString(input.receiptRef, 'ExternalResourceResolutionReceipt.receiptRef')
+  assertNonEmptyString(input.sourceResourceRef, 'ExternalResourceResolutionReceipt.sourceResourceRef')
+  assertNonEmptyString(input.sourcePointerRef, 'ExternalResourceResolutionReceipt.sourcePointerRef')
+  assertNonEmptyString(input.resolverRef, 'ExternalResourceResolutionReceipt.resolverRef')
+  assertNonEmptyString(input.resolvedAt, 'ExternalResourceResolutionReceipt.resolvedAt')
+  assertEnum(input.resolutionStatus, 'ExternalResourceResolutionReceipt.resolutionStatus', EXTERNAL_RESOURCE_RESOLUTION_STATUSES)
+  assertInteger(input.byteLength, 'ExternalResourceResolutionReceipt.byteLength', { min: 0 })
+  assertNonEmptyString(input.mediaType, 'ExternalResourceResolutionReceipt.mediaType')
+  assertBoolean(input.payloadImported, 'ExternalResourceResolutionReceipt.payloadImported')
+  assertBoolean(input.payloadInline, 'ExternalResourceResolutionReceipt.payloadInline')
+  assertBoolean(input.acceptedContinuity, 'ExternalResourceResolutionReceipt.acceptedContinuity')
+
+  if (input.payloadImported !== false) {
+    throw new TypeError('ExternalResourceResolutionReceipt.payloadImported must be false')
+  }
+
+  if (input.payloadInline !== false) {
+    throw new TypeError('ExternalResourceResolutionReceipt.payloadInline must be false')
+  }
+
+  if (input.acceptedContinuity !== false) {
+    throw new TypeError('ExternalResourceResolutionReceipt.acceptedContinuity must be false')
+  }
+
+  return stripUndefined({
+    artifactKind: EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND,
+    schemaVersion: EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA,
+    receiptRef: input.receiptRef,
+    sourceResourceRef: input.sourceResourceRef,
+    sourcePointerRef: input.sourcePointerRef,
+    resolverRef: input.resolverRef,
+    resolvedAt: input.resolvedAt,
+    resolutionStatus: input.resolutionStatus,
+    contentHash: normalizeIntegrityHint(input.contentHash, 'ExternalResourceResolutionReceipt.contentHash'),
+    byteLength: input.byteLength,
+    mediaType: input.mediaType,
+    evidenceRefs: normalizeReceiptRefs(input.evidenceRefs, 'ExternalResourceResolutionReceipt.evidenceRefs'),
+    sourceRefs: normalizeReceiptRefs(input.sourceRefs, 'ExternalResourceResolutionReceipt.sourceRefs'),
+    payloadImported: false,
+    payloadInline: false,
+    acceptedContinuity: false,
+    nonClaims: normalizeResolutionNonClaims(input.nonClaims)
+  })
+}
+
+function normalizeReceiptRefs(refs, label) {
+  if (refs === undefined) return []
+
+  if (!Array.isArray(refs)) {
+    throw new TypeError(`${label} must be an array`)
+  }
+
+  return refs.map((ref, index) => {
+    assertNonEmptyString(ref, `${label}[${index}]`)
+    return ref
+  })
+}
+
+function normalizeResolutionNonClaims(nonClaims) {
+  assertObject(nonClaims, 'ExternalResourceResolutionReceipt.nonClaims')
+
+  for (const field of RESOLUTION_NON_CLAIM_FIELDS) {
+    if (nonClaims[field] !== false) {
+      throw new TypeError(`ExternalResourceResolutionReceipt.nonClaims.${field} must be false`)
+    }
+  }
+
+  return Object.fromEntries(RESOLUTION_NON_CLAIM_FIELDS.map((field) => [field, false]))
 }
