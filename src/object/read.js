@@ -38,7 +38,7 @@ export async function readImmutableObject(options = {}) {
       await scope.waitFor(core.ready(), 'Immutable object open')
     }
 
-    if (core.length < 1) {
+    if (core.length < 1 && !wait) {
       throw createMeshBytesError('ERR_DESCRIPTOR_MISSING', 'Immutable object is missing descriptor block 0')
     }
 

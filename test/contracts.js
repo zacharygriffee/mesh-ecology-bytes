@@ -149,6 +149,43 @@ function testExternalResourcePointerValidation() {
 
   assert.equal(drivePointer.pointer.path, 'repo/docs/example.json')
 
+  const corePointer = createExternalResourcePointer({
+    resourceRef: 'bytes-resource:core-block:example',
+    resourceKind: 'blob',
+    pointerKind: 'hypercore',
+    pointer: {
+      hypercoreKey: 'e'.repeat(64),
+      blockRef: 'block:0'
+    },
+    contentHash: 'f'.repeat(64),
+    byteLength: 128,
+    mediaType: 'application/octet-stream',
+    originDeviceRef: 'local-device:operator-workstation',
+    availability: 'replicated',
+    replicationPosture: 'replicated',
+    nonClaims: pointer.nonClaims
+  })
+
+  assert.equal(corePointer.pointer.hypercoreKey, 'e'.repeat(64))
+
+  const bytesRefPointer = createExternalResourcePointer({
+    resourceRef: 'bytes-resource:bytes-ref:example',
+    resourceKind: 'artifact',
+    pointerKind: 'bytes_ref',
+    pointer: {
+      bytesRef: 'bytes:hypercore-immutable:example'
+    },
+    contentHash: '1'.repeat(64),
+    byteLength: 256,
+    mediaType: 'application/json',
+    originDeviceRef: 'local-device:operator-workstation',
+    availability: 'mirrored',
+    replicationPosture: 'mirror_candidate',
+    nonClaims: pointer.nonClaims
+  })
+
+  assert.equal(bytesRefPointer.pointer.bytesRef, 'bytes:hypercore-immutable:example')
+
   assert.throws(() => validateExternalResourcePointer({
     ...pointer,
     pointer: {
@@ -178,6 +215,14 @@ function testExternalResourcePointerValidation() {
     ...pointer,
     availability: 'accepted_continuity'
   }), /availability/)
+
+  assert.throws(() => createExternalResourcePointer({
+    ...bytesRefPointer,
+    pointer: {
+      bytesRef: 'bytes:hypercore-immutable:example',
+      pathIsCanonical: true
+    }
+  }), /host-local paths/)
 }
 
 function testHintsAndRequestSeparation() {
