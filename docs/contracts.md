@@ -205,6 +205,71 @@ The receipt must state:
 - make host-local paths canonical
 - make payload availability equivalent to truth, readiness, or authority
 
+## ResourceArtifactVisibilityIndex v0
+
+`bytes_resource_artifact_visibility_index.v0` is a draft/review fixture-lab
+contract for exposing already-known Bytes pointer and resolution receipt refs
+as a compact visibility/index artifact.
+
+It is intended to help Edge and other consumers select resource artifacts by
+stable refs instead of relying on one process session, copied JSON, local paths,
+or localhost-only seams.
+
+Contract posture:
+
+- Bytes owns the pointer/resolution visibility index shape.
+- The index is derived visibility, not source continuity.
+- Consumers still own artifact meaning, validation, workflow acceptance, and
+  result evidence.
+- Pointer visibility is not payload validity.
+- Resolution receipt visibility is not result validity.
+- The index does not fetch or parse payload bytes.
+
+### Required Contract Fields
+
+- `artifactKind: "bytes_resource_artifact_visibility_index"`
+- `schemaVersion: "bytes_resource_artifact_visibility_index.v0"`
+- `visibilityIndexRef`
+- `resourceRef`
+- `pointerRefs`
+- `resolutionReceiptRefs`
+- `ownerRepoRef`
+- `sourcePointerSchema`
+- `sourceResolutionReceiptSchema`
+- `availabilityPosture`
+- `replicationPosture`
+- `sourceRefs`
+- `observerRef`
+- `observedAt`
+- `deviceDependencyPosture`
+- `nonClaims`
+
+### Required Non-Claims
+
+The visibility index must state:
+
+- `visibilityIndexIsTruth: false`
+- `visibilityIndexIsAuthority: false`
+- `visibilityIndexIsAcceptedContinuity: false`
+- `visibilityIndexIsResultContinuity: false`
+- `visibilityIndexIsOperatorApproval: false`
+- `visibilityIndexIsExecution: false`
+- `visibilityIndexIsProductionReadiness: false`
+- `visibilityIndexIsMeshSettlement: false`
+- `pointerVisibilityIsPayloadValidity: false`
+- `resolutionVisibilityIsResultValidity: false`
+
+### Explicit Exclusions
+
+`ResourceArtifactVisibilityIndex` must not:
+
+- embed payload bytes
+- claim consumer acceptance
+- claim result continuity
+- act as a production storage backend
+- grant Bytes authority over consumer workflows
+- make host-local paths canonical
+
 ## MaterializationHints
 
 `MaterializationHints` are producer-side hints and travel with the descriptor.

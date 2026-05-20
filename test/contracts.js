@@ -9,12 +9,14 @@ import {
   createByteReference,
   createExternalResourcePointer,
   createExternalResourceResolutionReceipt,
+  createResourceArtifactVisibilityIndex,
   createMaterializationHints,
   createMaterializationRequest,
   validateByteDescriptor,
   validateByteReference,
   validateExternalResourcePointer,
   validateExternalResourceResolutionReceipt,
+  validateResourceArtifactVisibilityIndex,
   validateMaterializationHints,
   validateMaterializationRequest,
   validateLifecycleSnapshot,
@@ -27,6 +29,7 @@ export function runContractTests() {
   testReferenceValidation()
   testExternalResourcePointerValidation()
   testExternalResourceResolutionReceiptValidation()
+  testResourceArtifactVisibilityIndexValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
   testRetentionTerms()
@@ -283,6 +286,65 @@ function testExternalResourceResolutionReceiptValidation() {
       resolutionIsTruth: true
     }
   }), /resolutionIsTruth/)
+}
+
+function testResourceArtifactVisibilityIndexValidation() {
+  const visibilityIndex = createResourceArtifactVisibilityIndex({
+    visibilityIndexRef: 'bytes-resource-artifact-visibility-index:example',
+    resourceRef: 'bytes-resource:sidecar-suggestion:example',
+    pointerRefs: ['bytes_external_resource_pointer:example'],
+    resolutionReceiptRefs: ['bytes-resource-resolution-receipt:example'],
+    availabilityPosture: 'payload_resolvable_by_bytes',
+    replicationPosture: 'replicable_external_pointer',
+    sourceRefs: [
+      'bytes_external_resource_pointer:example',
+      'bytes-resource-resolution-receipt:example'
+    ],
+    observerRef: 'local-layer-observer:operator-device',
+    observedAt: '2026-05-19T00:00:00.000Z',
+    deviceDependencyPosture: 'replicated_pointer_ref',
+    nonClaims: {
+      visibilityIndexIsTruth: false,
+      visibilityIndexIsAuthority: false,
+      visibilityIndexIsAcceptedContinuity: false,
+      visibilityIndexIsResultContinuity: false,
+      visibilityIndexIsOperatorApproval: false,
+      visibilityIndexIsExecution: false,
+      visibilityIndexIsProductionReadiness: false,
+      visibilityIndexIsMeshSettlement: false,
+      pointerVisibilityIsPayloadValidity: false,
+      resolutionVisibilityIsResultValidity: false
+    }
+  })
+
+  assert.equal(visibilityIndex.artifactKind, 'bytes_resource_artifact_visibility_index')
+  assert.equal(visibilityIndex.schemaVersion, 'bytes_resource_artifact_visibility_index.v0')
+  assert.equal(visibilityIndex.ownerRepoRef, 'mesh-ecology-bytes')
+  assert.equal(visibilityIndex.sourcePointerSchema, 'bytes_external_resource_pointer.v0')
+  assert.equal(visibilityIndex.sourceResolutionReceiptSchema, 'bytes_external_resource_resolution_receipt.v0')
+  assert.deepEqual(visibilityIndex.pointerRefs, ['bytes_external_resource_pointer:example'])
+  assert.deepEqual(visibilityIndex.resolutionReceiptRefs, ['bytes-resource-resolution-receipt:example'])
+  assert.equal(visibilityIndex.nonClaims.visibilityIndexIsAcceptedContinuity, false)
+
+  validateResourceArtifactVisibilityIndex(visibilityIndex)
+
+  assert.throws(() => createResourceArtifactVisibilityIndex({
+    ...visibilityIndex,
+    availabilityPosture: 'accepted_continuity'
+  }), /availabilityPosture/)
+
+  assert.throws(() => createResourceArtifactVisibilityIndex({
+    ...visibilityIndex,
+    nonClaims: {
+      ...visibilityIndex.nonClaims,
+      pointerVisibilityIsPayloadValidity: true
+    }
+  }), /pointerVisibilityIsPayloadValidity/)
+
+  assert.throws(() => createResourceArtifactVisibilityIndex({
+    ...visibilityIndex,
+    deviceDependencyPosture: 'host_local_path'
+  }), /deviceDependencyPosture/)
 }
 
 function testHintsAndRequestSeparation() {

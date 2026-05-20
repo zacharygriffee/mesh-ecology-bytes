@@ -19,12 +19,19 @@ export {
   EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND,
   EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA,
   EXTERNAL_RESOURCE_RESOLUTION_STATUSES,
+  RESOURCE_ARTIFACT_AVAILABILITY_POSTURES,
+  RESOURCE_ARTIFACT_DEVICE_DEPENDENCY_POSTURES,
+  RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND,
+  RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA,
   createExternalResourcePointer,
   createExternalResourceResolutionReceipt,
+  createResourceArtifactVisibilityIndex,
   normalizeExternalResourcePointer,
   normalizeExternalResourceResolutionReceipt,
+  normalizeResourceArtifactVisibilityIndex,
   validateExternalResourceResolutionReceipt,
-  validateExternalResourcePointer
+  validateExternalResourcePointer,
+  validateResourceArtifactVisibilityIndex
 } from './externalPointer.js'
 
 export function createByteReference(input = {}) {

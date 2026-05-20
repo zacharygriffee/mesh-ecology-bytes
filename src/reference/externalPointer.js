@@ -14,6 +14,8 @@ export const EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND = 'bytes_external_resource_
 export const EXTERNAL_RESOURCE_POINTER_SCHEMA = 'bytes_external_resource_pointer.v0'
 export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND = 'bytes_external_resource_resolution_receipt'
 export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA = 'bytes_external_resource_resolution_receipt.v0'
+export const RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND = 'bytes_resource_artifact_visibility_index'
+export const RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA = 'bytes_resource_artifact_visibility_index.v0'
 
 export const EXTERNAL_RESOURCE_KINDS = new Set([
   'artifact',
@@ -53,6 +55,22 @@ export const EXTERNAL_RESOURCE_RESOLUTION_STATUSES = new Set([
   'hash_mismatch',
   'resolved',
   'unavailable'
+])
+
+export const RESOURCE_ARTIFACT_AVAILABILITY_POSTURES = new Set([
+  'payload_resolvable_by_bytes',
+  'payload_unavailable',
+  'pointer_visible',
+  'resolution_receipt_visible',
+  'visibility_unknown'
+])
+
+export const RESOURCE_ARTIFACT_DEVICE_DEPENDENCY_POSTURES = new Set([
+  'device_dependent_scaffold',
+  'local_layer_resource_ref',
+  'replicated_pointer_ref',
+  'session_visible_fixture_scaffold',
+  'unknown'
 ])
 
 const POINTER_FIELDS = new Set([
@@ -109,6 +127,38 @@ const RESOLUTION_NON_CLAIM_FIELDS = [
   'pathIsCanonical'
 ]
 
+const VISIBILITY_INDEX_FIELDS = new Set([
+  'artifactKind',
+  'schemaVersion',
+  'visibilityIndexRef',
+  'resourceRef',
+  'pointerRefs',
+  'resolutionReceiptRefs',
+  'ownerRepoRef',
+  'sourcePointerSchema',
+  'sourceResolutionReceiptSchema',
+  'availabilityPosture',
+  'replicationPosture',
+  'sourceRefs',
+  'observerRef',
+  'observedAt',
+  'deviceDependencyPosture',
+  'nonClaims'
+])
+
+const VISIBILITY_INDEX_NON_CLAIM_FIELDS = [
+  'visibilityIndexIsTruth',
+  'visibilityIndexIsAuthority',
+  'visibilityIndexIsAcceptedContinuity',
+  'visibilityIndexIsResultContinuity',
+  'visibilityIndexIsOperatorApproval',
+  'visibilityIndexIsExecution',
+  'visibilityIndexIsProductionReadiness',
+  'visibilityIndexIsMeshSettlement',
+  'pointerVisibilityIsPayloadValidity',
+  'resolutionVisibilityIsResultValidity'
+]
+
 export function createExternalResourcePointer(input = {}) {
   return normalizeExternalResourcePointer({
     artifactKind: input.artifactKind ?? EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
@@ -158,6 +208,32 @@ export function createExternalResourceResolutionReceipt(input = {}) {
 
 export function validateExternalResourceResolutionReceipt(input) {
   normalizeExternalResourceResolutionReceipt(input)
+  return input
+}
+
+export function createResourceArtifactVisibilityIndex(input = {}) {
+  return normalizeResourceArtifactVisibilityIndex({
+    artifactKind: input.artifactKind ?? RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND,
+    schemaVersion: input.schemaVersion ?? RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA,
+    visibilityIndexRef: input.visibilityIndexRef,
+    resourceRef: input.resourceRef,
+    pointerRefs: input.pointerRefs,
+    resolutionReceiptRefs: input.resolutionReceiptRefs,
+    ownerRepoRef: input.ownerRepoRef ?? 'mesh-ecology-bytes',
+    sourcePointerSchema: input.sourcePointerSchema ?? EXTERNAL_RESOURCE_POINTER_SCHEMA,
+    sourceResolutionReceiptSchema: input.sourceResolutionReceiptSchema ?? EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA,
+    availabilityPosture: input.availabilityPosture,
+    replicationPosture: input.replicationPosture,
+    sourceRefs: input.sourceRefs,
+    observerRef: input.observerRef,
+    observedAt: input.observedAt,
+    deviceDependencyPosture: input.deviceDependencyPosture,
+    nonClaims: input.nonClaims
+  })
+}
+
+export function validateResourceArtifactVisibilityIndex(input) {
+  normalizeResourceArtifactVisibilityIndex(input)
   return input
 }
 
@@ -378,4 +454,58 @@ function normalizeResolutionNonClaims(nonClaims) {
   }
 
   return Object.fromEntries(RESOLUTION_NON_CLAIM_FIELDS.map((field) => [field, false]))
+}
+
+export function normalizeResourceArtifactVisibilityIndex(input) {
+  assertAllowedKeys(input, 'ResourceArtifactVisibilityIndex', VISIBILITY_INDEX_FIELDS)
+
+  if (input.artifactKind !== RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND) {
+    throw new TypeError(`ResourceArtifactVisibilityIndex.artifactKind must be ${RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND}`)
+  }
+
+  if (input.schemaVersion !== RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA) {
+    throw new TypeError(`ResourceArtifactVisibilityIndex.schemaVersion must be ${RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA}`)
+  }
+
+  assertNonEmptyString(input.visibilityIndexRef, 'ResourceArtifactVisibilityIndex.visibilityIndexRef')
+  assertNonEmptyString(input.resourceRef, 'ResourceArtifactVisibilityIndex.resourceRef')
+  assertNonEmptyString(input.ownerRepoRef, 'ResourceArtifactVisibilityIndex.ownerRepoRef')
+  assertNonEmptyString(input.sourcePointerSchema, 'ResourceArtifactVisibilityIndex.sourcePointerSchema')
+  assertNonEmptyString(input.sourceResolutionReceiptSchema, 'ResourceArtifactVisibilityIndex.sourceResolutionReceiptSchema')
+  assertEnum(input.availabilityPosture, 'ResourceArtifactVisibilityIndex.availabilityPosture', RESOURCE_ARTIFACT_AVAILABILITY_POSTURES)
+  assertEnum(input.replicationPosture, 'ResourceArtifactVisibilityIndex.replicationPosture', EXTERNAL_POINTER_REPLICATION_POSTURES)
+  assertNonEmptyString(input.observerRef, 'ResourceArtifactVisibilityIndex.observerRef')
+  assertNonEmptyString(input.observedAt, 'ResourceArtifactVisibilityIndex.observedAt')
+  assertEnum(input.deviceDependencyPosture, 'ResourceArtifactVisibilityIndex.deviceDependencyPosture', RESOURCE_ARTIFACT_DEVICE_DEPENDENCY_POSTURES)
+
+  return stripUndefined({
+    artifactKind: RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND,
+    schemaVersion: RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA,
+    visibilityIndexRef: input.visibilityIndexRef,
+    resourceRef: input.resourceRef,
+    pointerRefs: normalizeReceiptRefs(input.pointerRefs, 'ResourceArtifactVisibilityIndex.pointerRefs'),
+    resolutionReceiptRefs: normalizeReceiptRefs(input.resolutionReceiptRefs, 'ResourceArtifactVisibilityIndex.resolutionReceiptRefs'),
+    ownerRepoRef: input.ownerRepoRef,
+    sourcePointerSchema: input.sourcePointerSchema,
+    sourceResolutionReceiptSchema: input.sourceResolutionReceiptSchema,
+    availabilityPosture: input.availabilityPosture,
+    replicationPosture: input.replicationPosture,
+    sourceRefs: normalizeReceiptRefs(input.sourceRefs, 'ResourceArtifactVisibilityIndex.sourceRefs'),
+    observerRef: input.observerRef,
+    observedAt: input.observedAt,
+    deviceDependencyPosture: input.deviceDependencyPosture,
+    nonClaims: normalizeVisibilityIndexNonClaims(input.nonClaims)
+  })
+}
+
+function normalizeVisibilityIndexNonClaims(nonClaims) {
+  assertObject(nonClaims, 'ResourceArtifactVisibilityIndex.nonClaims')
+
+  for (const field of VISIBILITY_INDEX_NON_CLAIM_FIELDS) {
+    if (nonClaims[field] !== false) {
+      throw new TypeError(`ResourceArtifactVisibilityIndex.nonClaims.${field} must be false`)
+    }
+  }
+
+  return Object.fromEntries(VISIBILITY_INDEX_NON_CLAIM_FIELDS.map((field) => [field, false]))
 }
