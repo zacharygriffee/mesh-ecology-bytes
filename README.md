@@ -4,12 +4,16 @@
 
 It does not define artifact meaning, authority, placement policy, workflow execution, deployment, or runtime semantics.
 
-## Current Package Targets
+## Package Compatibility Checkpoint
 
-Verified against the latest npm releases available on April 15, 2026:
+Verified against this dated compatibility set on April 15, 2026:
 
 - `hypercore@11.28.1`
 - `hyperswarm@4.17.0`
+
+This is a recorded compatibility checkpoint, not a rolling claim that these are
+the current latest releases. Update this section only after a deliberate package
+compatibility review.
 
 ## File Tree
 
