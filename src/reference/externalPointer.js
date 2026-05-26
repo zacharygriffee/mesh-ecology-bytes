@@ -16,6 +16,17 @@ export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_ARTIFACT_KIND = 'bytes_externa
 export const EXTERNAL_RESOURCE_RESOLUTION_RECEIPT_SCHEMA = 'bytes_external_resource_resolution_receipt.v0'
 export const RESOURCE_ARTIFACT_VISIBILITY_INDEX_ARTIFACT_KIND = 'bytes_resource_artifact_visibility_index'
 export const RESOURCE_ARTIFACT_VISIBILITY_INDEX_SCHEMA = 'bytes_resource_artifact_visibility_index.v0'
+export const SOURCE_PRESSURE_ADAPTER_CANDIDATE_ARTIFACT_KIND = 'bytes_source_pressure_adapter_candidate'
+export const SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA = 'bytes.source_pressure_adapter_candidate.local.v0'
+export const SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_ARTIFACT_KIND =
+  'bytes_source_pressure_adapter_operator_decision'
+export const SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA =
+  'bytes.source_pressure_adapter_operator_decision.local.v0'
+export const SOURCE_PRESSURE_OBSERVATION_RESULT_ARTIFACT_KIND =
+  'bytes_source_pressure_observation_result'
+export const SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA =
+  'bytes.source_pressure_observation_result.local.v0'
+export const LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA = 'layer-source-pressure-review.v0'
 
 export const EXTERNAL_RESOURCE_KINDS = new Set([
   'artifact',
@@ -72,6 +83,20 @@ export const RESOURCE_ARTIFACT_DEVICE_DEPENDENCY_POSTURES = new Set([
   'session_visible_fixture_scaffold',
   'unknown'
 ])
+
+export const SOURCE_PRESSURE_OPERATOR_DECISIONS = new Set([
+  'hold_for_operator_revision',
+  'reject_unbounded_pressure',
+  'route_to_generic_layer_seam_review'
+])
+
+export const SOURCE_PRESSURE_ROUTE = Object.freeze({
+  source: 'representative_source_pressure',
+  review: 'generic_layer_seam_review',
+  reviewSchema: LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA,
+  mediation: 'optional_edge_mediation',
+  terminal: 'stop'
+})
 
 const POINTER_FIELDS = new Set([
   'artifactKind',
@@ -159,6 +184,125 @@ const VISIBILITY_INDEX_NON_CLAIM_FIELDS = [
   'resolutionVisibilityIsResultValidity'
 ]
 
+const SOURCE_PRESSURE_CANDIDATE_FIELDS = new Set([
+  'artifactKind',
+  'schemaVersion',
+  'candidateRef',
+  'representativeSourcePressureRef',
+  'materialRefs',
+  'resourceRefs',
+  'payloadVisibilityRefs',
+  'availabilityEvidenceRefs',
+  'unavailabilityEvidenceRefs',
+  'route',
+  'createdByRef',
+  'createdAt',
+  'acceptedContinuity',
+  'layerMutation',
+  'storageWrite',
+  'edgeAuthorityCreated',
+  'repoAgentsDispatched',
+  'autoExecute',
+  'payloadAction',
+  'bytesOwnedLayerSourcePressureReviewEmitted',
+  'nonClaims'
+])
+
+const SOURCE_PRESSURE_DECISION_FIELDS = new Set([
+  'artifactKind',
+  'schemaVersion',
+  'decisionRef',
+  'candidateRef',
+  'operatorRef',
+  'decidedAt',
+  'decision',
+  'reasonRefs',
+  'route',
+  'acceptedContinuity',
+  'layerMutation',
+  'storageWrite',
+  'edgeAuthorityCreated',
+  'repoAgentsDispatched',
+  'autoExecute',
+  'payloadAction',
+  'bytesOwnedLayerSourcePressureReviewEmitted',
+  'nonClaims'
+])
+
+const SOURCE_PRESSURE_OBSERVATION_RESULT_FIELDS = new Set([
+  'artifactKind',
+  'schemaVersion',
+  'observationRef',
+  'candidateRef',
+  'decisionRef',
+  'observerRef',
+  'observedAt',
+  'boundedSourcePressureArtifactRef',
+  'route',
+  'reviewArtifactKind',
+  'reviewSchema',
+  'reviewArtifactEmittedByBytes',
+  'acceptedContinuity',
+  'layerMutation',
+  'storageWrite',
+  'edgeAuthorityCreated',
+  'repoAgentsDispatched',
+  'autoExecute',
+  'payloadAction',
+  'nonClaims'
+])
+
+const SOURCE_PRESSURE_ACTION_FALSE_FIELDS = [
+  'acceptedContinuity',
+  'layerMutation',
+  'storageWrite',
+  'edgeAuthorityCreated',
+  'repoAgentsDispatched',
+  'autoExecute',
+  'payloadAction'
+]
+
+const SOURCE_PRESSURE_CANDIDATE_NON_CLAIM_FIELDS = [
+  'adapterCandidateIsLayerTruth',
+  'bytesVisibilityIsLayerTruth',
+  'refVisibilityIsPayloadValidity',
+  'candidateIsAcceptedContinuity',
+  'candidateMutatesLayer',
+  'candidateWritesStorage',
+  'candidateCreatesEdgeAuthority',
+  'candidateDispatchesRepoAgents',
+  'candidateAutoExecutes',
+  'candidateFetchesPublishesPinsReplicatesOrMaterializesPayload',
+  'candidateEmitsLayerSourcePressureReview'
+]
+
+const SOURCE_PRESSURE_DECISION_NON_CLAIM_FIELDS = [
+  'operatorDecisionIsLayerTruth',
+  'operatorDecisionIsAcceptedContinuity',
+  'operatorDecisionIsExecution',
+  'operatorDecisionMutatesLayer',
+  'operatorDecisionWritesStorage',
+  'operatorDecisionCreatesEdgeAuthority',
+  'operatorDecisionDispatchesRepoAgents',
+  'operatorDecisionAutoExecutes',
+  'operatorDecisionFetchesPublishesPinsReplicatesOrMaterializesPayload',
+  'operatorDecisionEmitsLayerSourcePressureReview'
+]
+
+const SOURCE_PRESSURE_OBSERVATION_NON_CLAIM_FIELDS = [
+  'observationIsLayerTruth',
+  'bytesVisibilityIsLayerTruth',
+  'refVisibilityIsPayloadValidity',
+  'observationIsAcceptedContinuity',
+  'observationMutatesLayer',
+  'observationWritesStorage',
+  'observationCreatesEdgeAuthority',
+  'observationDispatchesRepoAgents',
+  'observationAutoExecutes',
+  'observationFetchesPublishesPinsReplicatesOrMaterializesPayload',
+  'observationEmitsLayerSourcePressureReviewAsBytesOwnedArtifact'
+]
+
 export function createExternalResourcePointer(input = {}) {
   return normalizeExternalResourcePointer({
     artifactKind: input.artifactKind ?? EXTERNAL_RESOURCE_POINTER_ARTIFACT_KIND,
@@ -234,6 +378,95 @@ export function createResourceArtifactVisibilityIndex(input = {}) {
 
 export function validateResourceArtifactVisibilityIndex(input) {
   normalizeResourceArtifactVisibilityIndex(input)
+  return input
+}
+
+export function createSourcePressureAdapterCandidate(input = {}) {
+  return normalizeSourcePressureAdapterCandidate({
+    artifactKind: input.artifactKind ?? SOURCE_PRESSURE_ADAPTER_CANDIDATE_ARTIFACT_KIND,
+    schemaVersion: input.schemaVersion ?? SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA,
+    candidateRef: input.candidateRef,
+    representativeSourcePressureRef: input.representativeSourcePressureRef,
+    materialRefs: input.materialRefs,
+    resourceRefs: input.resourceRefs,
+    payloadVisibilityRefs: input.payloadVisibilityRefs,
+    availabilityEvidenceRefs: input.availabilityEvidenceRefs,
+    unavailabilityEvidenceRefs: input.unavailabilityEvidenceRefs,
+    route: input.route ?? SOURCE_PRESSURE_ROUTE,
+    createdByRef: input.createdByRef,
+    createdAt: input.createdAt,
+    acceptedContinuity: input.acceptedContinuity ?? false,
+    layerMutation: input.layerMutation ?? false,
+    storageWrite: input.storageWrite ?? false,
+    edgeAuthorityCreated: input.edgeAuthorityCreated ?? false,
+    repoAgentsDispatched: input.repoAgentsDispatched ?? false,
+    autoExecute: input.autoExecute ?? false,
+    payloadAction: input.payloadAction ?? false,
+    bytesOwnedLayerSourcePressureReviewEmitted: input.bytesOwnedLayerSourcePressureReviewEmitted ?? false,
+    nonClaims: input.nonClaims
+  })
+}
+
+export function validateSourcePressureAdapterCandidate(input) {
+  normalizeSourcePressureAdapterCandidate(input)
+  return input
+}
+
+export function createSourcePressureAdapterOperatorDecision(input = {}) {
+  return normalizeSourcePressureAdapterOperatorDecision({
+    artifactKind: input.artifactKind ?? SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_ARTIFACT_KIND,
+    schemaVersion: input.schemaVersion ?? SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA,
+    decisionRef: input.decisionRef,
+    candidateRef: input.candidateRef,
+    operatorRef: input.operatorRef,
+    decidedAt: input.decidedAt,
+    decision: input.decision,
+    reasonRefs: input.reasonRefs,
+    route: input.route ?? SOURCE_PRESSURE_ROUTE,
+    acceptedContinuity: input.acceptedContinuity ?? false,
+    layerMutation: input.layerMutation ?? false,
+    storageWrite: input.storageWrite ?? false,
+    edgeAuthorityCreated: input.edgeAuthorityCreated ?? false,
+    repoAgentsDispatched: input.repoAgentsDispatched ?? false,
+    autoExecute: input.autoExecute ?? false,
+    payloadAction: input.payloadAction ?? false,
+    bytesOwnedLayerSourcePressureReviewEmitted: input.bytesOwnedLayerSourcePressureReviewEmitted ?? false,
+    nonClaims: input.nonClaims
+  })
+}
+
+export function validateSourcePressureAdapterOperatorDecision(input) {
+  normalizeSourcePressureAdapterOperatorDecision(input)
+  return input
+}
+
+export function createSourcePressureObservationResult(input = {}) {
+  return normalizeSourcePressureObservationResult({
+    artifactKind: input.artifactKind ?? SOURCE_PRESSURE_OBSERVATION_RESULT_ARTIFACT_KIND,
+    schemaVersion: input.schemaVersion ?? SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA,
+    observationRef: input.observationRef,
+    candidateRef: input.candidateRef,
+    decisionRef: input.decisionRef,
+    observerRef: input.observerRef,
+    observedAt: input.observedAt,
+    boundedSourcePressureArtifactRef: input.boundedSourcePressureArtifactRef,
+    route: input.route ?? SOURCE_PRESSURE_ROUTE,
+    reviewArtifactKind: input.reviewArtifactKind ?? 'layer_source_pressure_review',
+    reviewSchema: input.reviewSchema ?? LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA,
+    reviewArtifactEmittedByBytes: input.reviewArtifactEmittedByBytes ?? false,
+    acceptedContinuity: input.acceptedContinuity ?? false,
+    layerMutation: input.layerMutation ?? false,
+    storageWrite: input.storageWrite ?? false,
+    edgeAuthorityCreated: input.edgeAuthorityCreated ?? false,
+    repoAgentsDispatched: input.repoAgentsDispatched ?? false,
+    autoExecute: input.autoExecute ?? false,
+    payloadAction: input.payloadAction ?? false,
+    nonClaims: input.nonClaims
+  })
+}
+
+export function validateSourcePressureObservationResult(input) {
+  normalizeSourcePressureObservationResult(input)
   return input
 }
 
@@ -508,4 +741,262 @@ function normalizeVisibilityIndexNonClaims(nonClaims) {
   }
 
   return Object.fromEntries(VISIBILITY_INDEX_NON_CLAIM_FIELDS.map((field) => [field, false]))
+}
+
+export function normalizeSourcePressureAdapterCandidate(input) {
+  assertAllowedKeys(input, 'SourcePressureAdapterCandidate', SOURCE_PRESSURE_CANDIDATE_FIELDS)
+
+  if (input.artifactKind !== SOURCE_PRESSURE_ADAPTER_CANDIDATE_ARTIFACT_KIND) {
+    throw new TypeError(
+      `SourcePressureAdapterCandidate.artifactKind must be ${SOURCE_PRESSURE_ADAPTER_CANDIDATE_ARTIFACT_KIND}`
+    )
+  }
+
+  if (input.schemaVersion !== SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA) {
+    throw new TypeError(`SourcePressureAdapterCandidate.schemaVersion must be ${SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA}`)
+  }
+
+  assertNonEmptyString(input.candidateRef, 'SourcePressureAdapterCandidate.candidateRef')
+  assertNonEmptyString(
+    input.representativeSourcePressureRef,
+    'SourcePressureAdapterCandidate.representativeSourcePressureRef'
+  )
+  assertNonEmptyString(input.createdByRef, 'SourcePressureAdapterCandidate.createdByRef')
+  assertNonEmptyString(input.createdAt, 'SourcePressureAdapterCandidate.createdAt')
+  assertSourcePressureActionFalseFields(input, 'SourcePressureAdapterCandidate')
+
+  const materialRefs = normalizeSourcePressureRefs(input.materialRefs, 'SourcePressureAdapterCandidate.materialRefs')
+  const resourceRefs = normalizeSourcePressureRefs(input.resourceRefs, 'SourcePressureAdapterCandidate.resourceRefs')
+  const payloadVisibilityRefs = normalizeSourcePressureRefs(
+    input.payloadVisibilityRefs,
+    'SourcePressureAdapterCandidate.payloadVisibilityRefs'
+  )
+  const availabilityEvidenceRefs = normalizeSourcePressureRefs(
+    input.availabilityEvidenceRefs,
+    'SourcePressureAdapterCandidate.availabilityEvidenceRefs'
+  )
+  const unavailabilityEvidenceRefs = normalizeSourcePressureRefs(
+    input.unavailabilityEvidenceRefs,
+    'SourcePressureAdapterCandidate.unavailabilityEvidenceRefs'
+  )
+
+  assertSourcePressureHasRefs('SourcePressureAdapterCandidate', [
+    materialRefs,
+    resourceRefs,
+    payloadVisibilityRefs,
+    availabilityEvidenceRefs,
+    unavailabilityEvidenceRefs
+  ])
+
+  return stripUndefined({
+    artifactKind: SOURCE_PRESSURE_ADAPTER_CANDIDATE_ARTIFACT_KIND,
+    schemaVersion: SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA,
+    candidateRef: input.candidateRef,
+    representativeSourcePressureRef: input.representativeSourcePressureRef,
+    materialRefs,
+    resourceRefs,
+    payloadVisibilityRefs,
+    availabilityEvidenceRefs,
+    unavailabilityEvidenceRefs,
+    route: normalizeSourcePressureRoute(input.route, 'SourcePressureAdapterCandidate.route'),
+    createdByRef: input.createdByRef,
+    createdAt: input.createdAt,
+    acceptedContinuity: false,
+    layerMutation: false,
+    storageWrite: false,
+    edgeAuthorityCreated: false,
+    repoAgentsDispatched: false,
+    autoExecute: false,
+    payloadAction: false,
+    bytesOwnedLayerSourcePressureReviewEmitted: false,
+    nonClaims: normalizeSourcePressureNonClaims(
+      input.nonClaims,
+      SOURCE_PRESSURE_CANDIDATE_NON_CLAIM_FIELDS,
+      'SourcePressureAdapterCandidate.nonClaims'
+    )
+  })
+}
+
+export function normalizeSourcePressureAdapterOperatorDecision(input) {
+  assertAllowedKeys(input, 'SourcePressureAdapterOperatorDecision', SOURCE_PRESSURE_DECISION_FIELDS)
+
+  if (input.artifactKind !== SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_ARTIFACT_KIND) {
+    throw new TypeError(
+      `SourcePressureAdapterOperatorDecision.artifactKind must be ${SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_ARTIFACT_KIND}`
+    )
+  }
+
+  if (input.schemaVersion !== SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA) {
+    throw new TypeError(
+      `SourcePressureAdapterOperatorDecision.schemaVersion must be ${SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA}`
+    )
+  }
+
+  assertNonEmptyString(input.decisionRef, 'SourcePressureAdapterOperatorDecision.decisionRef')
+  assertNonEmptyString(input.candidateRef, 'SourcePressureAdapterOperatorDecision.candidateRef')
+  assertNonEmptyString(input.operatorRef, 'SourcePressureAdapterOperatorDecision.operatorRef')
+  assertNonEmptyString(input.decidedAt, 'SourcePressureAdapterOperatorDecision.decidedAt')
+  assertEnum(input.decision, 'SourcePressureAdapterOperatorDecision.decision', SOURCE_PRESSURE_OPERATOR_DECISIONS)
+  assertSourcePressureActionFalseFields(input, 'SourcePressureAdapterOperatorDecision')
+
+  return stripUndefined({
+    artifactKind: SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_ARTIFACT_KIND,
+    schemaVersion: SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA,
+    decisionRef: input.decisionRef,
+    candidateRef: input.candidateRef,
+    operatorRef: input.operatorRef,
+    decidedAt: input.decidedAt,
+    decision: input.decision,
+    reasonRefs: normalizeSourcePressureRefs(input.reasonRefs, 'SourcePressureAdapterOperatorDecision.reasonRefs'),
+    route: normalizeSourcePressureRoute(input.route, 'SourcePressureAdapterOperatorDecision.route'),
+    acceptedContinuity: false,
+    layerMutation: false,
+    storageWrite: false,
+    edgeAuthorityCreated: false,
+    repoAgentsDispatched: false,
+    autoExecute: false,
+    payloadAction: false,
+    bytesOwnedLayerSourcePressureReviewEmitted: false,
+    nonClaims: normalizeSourcePressureNonClaims(
+      input.nonClaims,
+      SOURCE_PRESSURE_DECISION_NON_CLAIM_FIELDS,
+      'SourcePressureAdapterOperatorDecision.nonClaims'
+    )
+  })
+}
+
+export function normalizeSourcePressureObservationResult(input) {
+  assertAllowedKeys(input, 'SourcePressureObservationResult', SOURCE_PRESSURE_OBSERVATION_RESULT_FIELDS)
+
+  if (input.artifactKind !== SOURCE_PRESSURE_OBSERVATION_RESULT_ARTIFACT_KIND) {
+    throw new TypeError(
+      `SourcePressureObservationResult.artifactKind must be ${SOURCE_PRESSURE_OBSERVATION_RESULT_ARTIFACT_KIND}`
+    )
+  }
+
+  if (input.schemaVersion !== SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA) {
+    throw new TypeError(`SourcePressureObservationResult.schemaVersion must be ${SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA}`)
+  }
+
+  assertNonEmptyString(input.observationRef, 'SourcePressureObservationResult.observationRef')
+  assertNonEmptyString(input.candidateRef, 'SourcePressureObservationResult.candidateRef')
+  assertNonEmptyString(input.decisionRef, 'SourcePressureObservationResult.decisionRef')
+  assertNonEmptyString(input.observerRef, 'SourcePressureObservationResult.observerRef')
+  assertNonEmptyString(input.observedAt, 'SourcePressureObservationResult.observedAt')
+  assertNonEmptyString(
+    input.boundedSourcePressureArtifactRef,
+    'SourcePressureObservationResult.boundedSourcePressureArtifactRef'
+  )
+  assertNonEmptyString(input.reviewArtifactKind, 'SourcePressureObservationResult.reviewArtifactKind')
+  assertNonEmptyString(input.reviewSchema, 'SourcePressureObservationResult.reviewSchema')
+  assertBoolean(input.reviewArtifactEmittedByBytes, 'SourcePressureObservationResult.reviewArtifactEmittedByBytes')
+  assertSourcePressureActionFalseFields(input, 'SourcePressureObservationResult')
+
+  if (input.reviewArtifactKind !== 'layer_source_pressure_review') {
+    throw new TypeError('SourcePressureObservationResult.reviewArtifactKind must be layer_source_pressure_review')
+  }
+
+  if (input.reviewSchema !== LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA) {
+    throw new TypeError(`SourcePressureObservationResult.reviewSchema must be ${LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA}`)
+  }
+
+  if (input.reviewArtifactEmittedByBytes !== false) {
+    throw new TypeError('SourcePressureObservationResult.reviewArtifactEmittedByBytes must be false')
+  }
+
+  return stripUndefined({
+    artifactKind: SOURCE_PRESSURE_OBSERVATION_RESULT_ARTIFACT_KIND,
+    schemaVersion: SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA,
+    observationRef: input.observationRef,
+    candidateRef: input.candidateRef,
+    decisionRef: input.decisionRef,
+    observerRef: input.observerRef,
+    observedAt: input.observedAt,
+    boundedSourcePressureArtifactRef: input.boundedSourcePressureArtifactRef,
+    route: normalizeSourcePressureRoute(input.route, 'SourcePressureObservationResult.route'),
+    reviewArtifactKind: 'layer_source_pressure_review',
+    reviewSchema: LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA,
+    reviewArtifactEmittedByBytes: false,
+    acceptedContinuity: false,
+    layerMutation: false,
+    storageWrite: false,
+    edgeAuthorityCreated: false,
+    repoAgentsDispatched: false,
+    autoExecute: false,
+    payloadAction: false,
+    nonClaims: normalizeSourcePressureNonClaims(
+      input.nonClaims,
+      SOURCE_PRESSURE_OBSERVATION_NON_CLAIM_FIELDS,
+      'SourcePressureObservationResult.nonClaims'
+    )
+  })
+}
+
+function normalizeSourcePressureRefs(refs, label) {
+  if (refs === undefined) return []
+
+  if (!Array.isArray(refs)) {
+    throw new TypeError(`${label} must be an array`)
+  }
+
+  return refs.map((ref, index) => {
+    assertNonEmptyString(ref, `${label}[${index}]`)
+    return ref
+  })
+}
+
+function assertSourcePressureHasRefs(label, refGroups) {
+  const count = refGroups.reduce((total, refs) => total + refs.length, 0)
+
+  if (count === 0) {
+    throw new TypeError(`${label} must include at least one bounded source-pressure ref`)
+  }
+}
+
+function normalizeSourcePressureRoute(route, label) {
+  assertAllowedKeys(route, label, new Set(['source', 'review', 'reviewSchema', 'mediation', 'terminal']))
+
+  if (route.source !== SOURCE_PRESSURE_ROUTE.source) {
+    throw new TypeError(`${label}.source must be ${SOURCE_PRESSURE_ROUTE.source}`)
+  }
+
+  if (route.review !== SOURCE_PRESSURE_ROUTE.review) {
+    throw new TypeError(`${label}.review must be ${SOURCE_PRESSURE_ROUTE.review}`)
+  }
+
+  if (route.reviewSchema !== SOURCE_PRESSURE_ROUTE.reviewSchema) {
+    throw new TypeError(`${label}.reviewSchema must be ${SOURCE_PRESSURE_ROUTE.reviewSchema}`)
+  }
+
+  if (route.mediation !== SOURCE_PRESSURE_ROUTE.mediation) {
+    throw new TypeError(`${label}.mediation must be ${SOURCE_PRESSURE_ROUTE.mediation}`)
+  }
+
+  if (route.terminal !== SOURCE_PRESSURE_ROUTE.terminal) {
+    throw new TypeError(`${label}.terminal must be ${SOURCE_PRESSURE_ROUTE.terminal}`)
+  }
+
+  return { ...SOURCE_PRESSURE_ROUTE }
+}
+
+function assertSourcePressureActionFalseFields(input, label) {
+  for (const field of SOURCE_PRESSURE_ACTION_FALSE_FIELDS) {
+    assertBoolean(input[field], `${label}.${field}`)
+
+    if (input[field] !== false) {
+      throw new TypeError(`${label}.${field} must be false`)
+    }
+  }
+}
+
+function normalizeSourcePressureNonClaims(nonClaims, fields, label) {
+  assertObject(nonClaims, label)
+
+  for (const field of fields) {
+    if (nonClaims[field] !== false) {
+      throw new TypeError(`${label}.${field} must be false`)
+    }
+  }
+
+  return Object.fromEntries(fields.map((field) => [field, false]))
 }

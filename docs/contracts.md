@@ -270,6 +270,40 @@ The visibility index must state:
 - grant Bytes authority over consumer workflows
 - make host-local paths canonical
 
+## Bytes Source-Pressure Adapter Prep v0
+
+The local source-pressure adapter prep contracts define a bounded Bytes-shaped
+candidate, an operator decision, and an observation result for routing source
+pressure without making Bytes a Layer or Edge authority.
+
+Schemas:
+
+- `bytes.source_pressure_adapter_candidate.local.v0`
+- `bytes.source_pressure_adapter_operator_decision.local.v0`
+- `bytes.source_pressure_observation_result.local.v0`
+
+Contract posture:
+
+- Bytes owns only the bounded source-pressure adapter shape.
+- The only pressure fields are material refs, resource refs, payload visibility
+  refs, availability evidence refs, and unavailability evidence refs.
+- The preserved route is representative source pressure to generic
+  `layer_source_pressure_review.v0`, then optional Edge mediation, then stop.
+- The observation result names the generic Layer review schema but does not
+  emit `layer_source_pressure_review` as a Bytes-owned artifact.
+- Bytes visibility is not Layer truth, and ref visibility is not payload
+  validity.
+
+Explicit exclusions:
+
+- no accepted continuity
+- no Layer mutation
+- no storage writes
+- no Edge authority
+- no repo-agent dispatch
+- no auto-execution
+- no payload fetch, publish, pin, replicate, or materialization
+
 ## MaterializationHints
 
 `MaterializationHints` are producer-side hints and travel with the descriptor.

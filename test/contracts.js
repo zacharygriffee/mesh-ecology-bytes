@@ -2,8 +2,12 @@ import assert from 'node:assert/strict'
 import { pathToFileURL } from 'node:url'
 
 import {
+  LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA,
   READINESS_STATES,
   RETENTION_TERMS,
+  SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA,
+  SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA,
+  SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA,
   assessRetentionPosture,
   createByteDescriptor,
   createByteReference,
@@ -12,6 +16,9 @@ import {
   createResourceArtifactVisibilityIndex,
   createMaterializationHints,
   createMaterializationRequest,
+  createSourcePressureAdapterCandidate,
+  createSourcePressureAdapterOperatorDecision,
+  createSourcePressureObservationResult,
   validateByteDescriptor,
   validateByteReference,
   validateExternalResourcePointer,
@@ -21,7 +28,10 @@ import {
   validateMaterializationRequest,
   validateLifecycleSnapshot,
   validateReadinessState,
-  validateRetentionTerm
+  validateRetentionTerm,
+  validateSourcePressureAdapterCandidate,
+  validateSourcePressureAdapterOperatorDecision,
+  validateSourcePressureObservationResult
 } from '../src/index.js'
 
 export function runContractTests() {
@@ -30,6 +40,7 @@ export function runContractTests() {
   testExternalResourcePointerValidation()
   testExternalResourceResolutionReceiptValidation()
   testResourceArtifactVisibilityIndexValidation()
+  testSourcePressureAdapterPrepValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
   testRetentionTerms()
@@ -345,6 +356,135 @@ function testResourceArtifactVisibilityIndexValidation() {
     ...visibilityIndex,
     deviceDependencyPosture: 'host_local_path'
   }), /deviceDependencyPosture/)
+}
+
+function testSourcePressureAdapterPrepValidation() {
+  const candidate = createSourcePressureAdapterCandidate({
+    candidateRef: 'bytes-source-pressure-adapter-candidate:local:1',
+    representativeSourcePressureRef: 'bytes-source-pressure:representative:1',
+    materialRefs: ['bytes-material-ref:artifact:1'],
+    resourceRefs: ['bytes-resource:sidecar-suggestion:example'],
+    payloadVisibilityRefs: ['bytes-resource-artifact-visibility-index:example'],
+    availabilityEvidenceRefs: ['bytes-resource-resolution-receipt:available:1'],
+    unavailabilityEvidenceRefs: ['bytes-resource-resolution-receipt:unavailable:1'],
+    createdByRef: 'bytes-operator:local',
+    createdAt: '2026-05-26T00:00:00.000Z',
+    nonClaims: {
+      adapterCandidateIsLayerTruth: false,
+      bytesVisibilityIsLayerTruth: false,
+      refVisibilityIsPayloadValidity: false,
+      candidateIsAcceptedContinuity: false,
+      candidateMutatesLayer: false,
+      candidateWritesStorage: false,
+      candidateCreatesEdgeAuthority: false,
+      candidateDispatchesRepoAgents: false,
+      candidateAutoExecutes: false,
+      candidateFetchesPublishesPinsReplicatesOrMaterializesPayload: false,
+      candidateEmitsLayerSourcePressureReview: false
+    }
+  })
+
+  assert.equal(candidate.artifactKind, 'bytes_source_pressure_adapter_candidate')
+  assert.equal(candidate.schemaVersion, SOURCE_PRESSURE_ADAPTER_CANDIDATE_SCHEMA)
+  assert.equal(candidate.route.reviewSchema, LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA)
+  assert.equal(candidate.route.terminal, 'stop')
+  assert.equal(candidate.acceptedContinuity, false)
+  assert.equal(candidate.payloadAction, false)
+  assert.equal(candidate.bytesOwnedLayerSourcePressureReviewEmitted, false)
+  assert.deepEqual(candidate.materialRefs, ['bytes-material-ref:artifact:1'])
+
+  validateSourcePressureAdapterCandidate(candidate)
+
+  const decision = createSourcePressureAdapterOperatorDecision({
+    decisionRef: 'bytes-source-pressure-adapter-operator-decision:local:1',
+    candidateRef: candidate.candidateRef,
+    operatorRef: 'bytes-operator:local',
+    decidedAt: '2026-05-26T00:01:00.000Z',
+    decision: 'route_to_generic_layer_seam_review',
+    reasonRefs: ['bytes-source-pressure-adapter-candidate:local:1'],
+    nonClaims: {
+      operatorDecisionIsLayerTruth: false,
+      operatorDecisionIsAcceptedContinuity: false,
+      operatorDecisionIsExecution: false,
+      operatorDecisionMutatesLayer: false,
+      operatorDecisionWritesStorage: false,
+      operatorDecisionCreatesEdgeAuthority: false,
+      operatorDecisionDispatchesRepoAgents: false,
+      operatorDecisionAutoExecutes: false,
+      operatorDecisionFetchesPublishesPinsReplicatesOrMaterializesPayload: false,
+      operatorDecisionEmitsLayerSourcePressureReview: false
+    }
+  })
+
+  assert.equal(decision.artifactKind, 'bytes_source_pressure_adapter_operator_decision')
+  assert.equal(decision.schemaVersion, SOURCE_PRESSURE_ADAPTER_OPERATOR_DECISION_SCHEMA)
+  assert.equal(decision.decision, 'route_to_generic_layer_seam_review')
+  assert.equal(decision.autoExecute, false)
+  assert.equal(decision.storageWrite, false)
+
+  validateSourcePressureAdapterOperatorDecision(decision)
+
+  const observation = createSourcePressureObservationResult({
+    observationRef: 'bytes-source-pressure-observation-result:local:1',
+    candidateRef: candidate.candidateRef,
+    decisionRef: decision.decisionRef,
+    observerRef: 'bytes-observer:local',
+    observedAt: '2026-05-26T00:02:00.000Z',
+    boundedSourcePressureArtifactRef: candidate.candidateRef,
+    nonClaims: {
+      observationIsLayerTruth: false,
+      bytesVisibilityIsLayerTruth: false,
+      refVisibilityIsPayloadValidity: false,
+      observationIsAcceptedContinuity: false,
+      observationMutatesLayer: false,
+      observationWritesStorage: false,
+      observationCreatesEdgeAuthority: false,
+      observationDispatchesRepoAgents: false,
+      observationAutoExecutes: false,
+      observationFetchesPublishesPinsReplicatesOrMaterializesPayload: false,
+      observationEmitsLayerSourcePressureReviewAsBytesOwnedArtifact: false
+    }
+  })
+
+  assert.equal(observation.artifactKind, 'bytes_source_pressure_observation_result')
+  assert.equal(observation.schemaVersion, SOURCE_PRESSURE_OBSERVATION_RESULT_SCHEMA)
+  assert.equal(observation.reviewArtifactKind, 'layer_source_pressure_review')
+  assert.equal(observation.reviewSchema, LAYER_SOURCE_PRESSURE_REVIEW_SCHEMA)
+  assert.equal(observation.reviewArtifactEmittedByBytes, false)
+  assert.equal(observation.nonClaims.refVisibilityIsPayloadValidity, false)
+
+  validateSourcePressureObservationResult(observation)
+
+  assert.throws(() => validateSourcePressureAdapterCandidate({
+    ...candidate,
+    payloadBytes: 'not allowed'
+  }), /unsupported field: payloadBytes/)
+
+  assert.throws(() => createSourcePressureAdapterCandidate({
+    ...candidate,
+    nonClaims: {
+      ...candidate.nonClaims,
+      refVisibilityIsPayloadValidity: true
+    }
+  }), /refVisibilityIsPayloadValidity/)
+
+  assert.throws(() => createSourcePressureAdapterOperatorDecision({
+    ...decision,
+    autoExecute: true
+  }), /autoExecute must be false/)
+
+  assert.throws(() => createSourcePressureObservationResult({
+    ...observation,
+    reviewArtifactEmittedByBytes: true
+  }), /reviewArtifactEmittedByBytes must be false/)
+
+  assert.throws(() => createSourcePressureObservationResult({
+    ...observation,
+    route: {
+      ...observation.route,
+      terminal: 'edge_review'
+    }
+  }), /terminal must be stop/)
 }
 
 function testHintsAndRequestSeparation() {
