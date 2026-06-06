@@ -11,6 +11,7 @@
     "example": "node examples/publish-fetch.js",
     "proof:conduit-corestore-readback": "node examples/conduit-corestore-readback-proof.js",
     "proof:conduit-corestore-replicated-readback": "node examples/conduit-corestore-readback-proof.js --replicated",
+    "proof:conduit-corestore-retained-readback": "node examples/conduit-corestore-readback-proof.js --retained",
     "test": "node test/index.js"
   },
   "repository": {

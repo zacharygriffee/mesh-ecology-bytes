@@ -7,7 +7,8 @@ export const CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA = 'mesh-ecology-bytes/cores
 export const CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA = 'mesh-ecology-bytes/corestore-readback-boundary-fixture@1'
 export const CONDUIT_CORESTORE_READBACK_TOPOLOGIES = new Set([
   'single_store_local_reopen',
-  'local_two_store_hyperswarm_testnet_readback'
+  'local_two_store_hyperswarm_testnet_readback',
+  'retained_store_process_readback'
 ])
 
 export function createConduitCorestoreReadbackProof(input = {}) {
@@ -38,7 +39,8 @@ export function createConduitCorestoreReadbackProof(input = {}) {
     totalBlockCount,
     expectedHash,
     readbackTopology: input.readbackTopology,
-    replicationEvidence: input.replicationEvidence
+    replicationEvidence: input.replicationEvidence,
+    retentionEvidence: input.retentionEvidence
   })
   const artifactHash = input.retainedProof?.artifactHash ?? `sha256:${hashJson({
     schema: CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
@@ -154,6 +156,7 @@ function createCorestoreReadbackFixture(input) {
     storageSubstrate: 'corestore-hypercore',
     readbackTopology: input.readbackTopology ?? 'single_store_local_reopen',
     replicationEvidence: input.replicationEvidence ?? null,
+    retentionEvidence: input.retentionEvidence ?? null,
     bytes: {
       reference: {
         schema: 'mesh-ecology-bytes/byte-reference@1',
@@ -245,6 +248,7 @@ function validateReadbackFixture(readback = {}, issues) {
     issues.push('readback_topology_required')
   }
   validateReplicationEvidence(readback.replicationEvidence, readback.readbackTopology, issues)
+  validateRetentionEvidence(readback.retentionEvidence, readback.readbackTopology, issues)
   if (!/^[0-9a-f]{64}$/i.test(readback.expectedHash ?? '')) issues.push('expected_hash_required')
   if (readback.bytes?.reference?.schema !== 'mesh-ecology-bytes/byte-reference@1') issues.push('byte_reference_schema_required')
   if (readback.bytes?.reference?.transport !== 'hypercore') issues.push('byte_reference_transport_required')
@@ -280,6 +284,32 @@ function validateReplicationEvidence(evidence, topology, issues) {
     if (evidence?.bytesFetchedByBytes !== true || evidence?.consumerReadbackAfterFetch !== true) {
       issues.push('replication_evidence_readback_required')
     }
+  }
+}
+
+function validateRetentionEvidence(evidence, topology, issues) {
+  if (topology !== 'retained_store_process_readback') {
+    if (evidence !== null && evidence !== undefined) issues.push('retention_evidence_forbidden')
+    return
+  }
+
+  if (evidence?.retainedStoreClass !== 'bytes_owned_local_runtime_store') {
+    issues.push('retention_evidence_store_class_required')
+  }
+  if (evidence?.readbackProcessBoundary !== 'separate_node_process') {
+    issues.push('retention_evidence_process_boundary_required')
+  }
+  if (evidence?.publisherClosedBeforeReadback !== true || evidence?.readbackAfterReopen !== true) {
+    issues.push('retention_evidence_reopen_required')
+  }
+  if (evidence?.seedCommitment?.scope !== 'proof_window' ||
+    evidence.seedCommitment?.maySeed !== true ||
+    evidence.seedCommitment?.retentionTerm !== 'pinned_for_proof') {
+    issues.push('retention_seed_commitment_required')
+  }
+  if (evidence?.retentionBeyondProofWindowClaimed === true ||
+    evidence?.seedCommitment?.authorityGranted === true) {
+    issues.push('retention_evidence_overclaimed')
   }
 }
 

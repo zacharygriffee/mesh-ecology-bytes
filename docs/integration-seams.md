@@ -82,6 +82,7 @@ Generate a local proof artifact with:
 ```sh
 npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
 npm run proof:conduit-corestore-replicated-readback -- --out /tmp/bytes-corestore-replicated-proof.json
+npm run proof:conduit-corestore-retained-readback -- --out /tmp/bytes-corestore-retained-proof.json
 ```
 
 Conduit may route and receipt the reference/posture over `blob.stream`,
@@ -94,6 +95,12 @@ from one local store, local Hyperswarm testnet fetch into a separate local
 store, and consumer-store readback after fetch. This is local transport evidence
 only; it is not a public swarm availability claim and not a device-boundary
 proof.
+
+The retained proof uses `readbackTopology: "retained_store_process_readback"` to
+show Bytes-owned proof-window seed posture. Bytes closes the publisher store,
+then a separate Node process reopens and reads the store. This proves retained
+store readback for the proof window only; it must not be read as indefinite
+seeding, canon authority, or acceptance.
 
 ## Phase 121 Adjacent Review Fixture
 

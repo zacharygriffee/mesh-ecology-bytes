@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict'
+import { execFile } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { mkdtemp, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { promisify } from 'node:util'
 
 import createTestnet from 'hyperdht/testnet.js'
 
@@ -17,9 +20,13 @@ import {
   validateConduitCorestoreReadbackProof
 } from '../src/index.js'
 
+const execFileAsync = promisify(execFile)
+const retainedProofCliPath = fileURLToPath(new URL('../examples/conduit-corestore-readback-proof.js', import.meta.url))
+
 export async function runConduitCorestoreReadbackTests() {
   await testCreateConduitCorestoreReadbackProof()
   await testCreateReplicatedConduitCorestoreReadbackProof()
+  await testRetainedConduitCorestoreReadbackProofCli()
   await testConduitCorestoreReadbackProofRejectsMissingExpectedHash()
   await testConduitCorestoreReadbackProofRejectsEmbeddedBytes()
   await testConduitCorestoreReadbackProofRejectsOverclaims()
@@ -82,6 +89,32 @@ async function testCreateConduitCorestoreReadbackProof() {
     assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
   } finally {
     await rm(storage, { recursive: true, force: true })
+  }
+}
+
+async function testRetainedConduitCorestoreReadbackProofCli() {
+  const root = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-conduit-retained-cli-test-'))
+  const out = path.join(root, 'retained-proof.json')
+
+  try {
+    await execFileAsync(process.execPath, [
+      retainedProofCliPath,
+      '--retained',
+      '--out',
+      out
+    ])
+    const proof = JSON.parse(await readFile(out, 'utf8'))
+
+    assert.equal(proof.schema, CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA)
+    assert.equal(proof.readback.readbackTopology, 'retained_store_process_readback')
+    assert.equal(proof.readback.retentionEvidence.retainedStoreClass, 'bytes_owned_local_runtime_store')
+    assert.equal(proof.readback.retentionEvidence.readbackProcessBoundary, 'separate_node_process')
+    assert.equal(proof.readback.retentionEvidence.seedCommitment.scope, 'proof_window')
+    assert.equal(proof.readback.retentionEvidence.seedCommitment.maySeed, true)
+    assert.equal(proof.readback.retentionEvidence.retentionBeyondProofWindowClaimed, false)
+    assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
+  } finally {
+    await rm(root, { recursive: true, force: true })
   }
 }
 
