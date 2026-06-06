@@ -1,4 +1,5 @@
 import { runContractTests } from './contracts.js'
+import { runConduitCorestoreReadbackTests } from './conduit-corestore-readback.js'
 import { runIntegrationSeamTests } from './integration-seams.js'
 import { runMaterializationRuntimeTests } from './materialization-runtime.js'
 import { runObjectModelTests } from './object-model.js'
@@ -16,6 +17,7 @@ async function main() {
   await runOperationalHardeningTests()
   await runRetentionTests()
   await runHyperswarmTransportTests()
+  await runConduitCorestoreReadbackTests()
 }
 
 main().catch((error) => {

@@ -178,6 +178,17 @@ Notes:
 
 ## Example
 
+Generate a Conduit-readable Corestore readback proof artifact:
+
+```sh
+npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
+```
+
+That artifact is owned by Bytes and can be checked by Conduit as read-only
+evidence. It carries immutable reference, expected hash, and readback posture;
+it does not grant Conduit publication, fetch, pin, storage, materialization,
+activation, or canon authority.
+
 ```js
 const { createHypercoreByteStore } = require('mesh-ecology-bytes')
 

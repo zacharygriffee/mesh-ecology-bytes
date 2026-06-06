@@ -60,6 +60,33 @@ It must not contain:
 - package policy
 - release workflow data
 
+## Conduit Corestore Readback Proof
+
+Bytes may emit `mesh-ecology-bytes/corestore-readback-proof@1` for Conduit to
+consume as read-only distribution posture evidence.
+
+The proof contains:
+
+- a Bytes-owned Corestore/Hypercore readback fixture
+- a Conduit-compatible immutable byte reference projection
+- the expected payload hash
+- readback evidence from Bytes
+- retained proof metadata
+
+The proof must not contain raw payload bytes, host placement, activation,
+deployment state, canon claims, acceptance claims, or any claim that Conduit
+published, fetched, pinned, stored, or materialized bytes.
+
+Generate a local proof artifact with:
+
+```sh
+npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
+```
+
+Conduit may route and receipt the reference/posture over `blob.stream`,
+`observe.stream`, and capability-gated `control.stream`, but Bytes remains the
+owner of byte publication and readback mechanics.
+
 ## Phase 121 Adjacent Review Fixture
 
 Bytes may consume the Edge Phase 120 Bytes adjacent review packet as a copied static fixture at:

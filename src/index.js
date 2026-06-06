@@ -87,8 +87,12 @@ export {
   validateAdjacentReviewEvidence
 } from './review/index.js'
 export {
+  CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA,
+  CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
   createPackByteBinding,
+  createConduitCorestoreReadbackProof,
   createPlatformMaterializationSeam,
+  validateConduitCorestoreReadbackProof,
   validatePackByteBinding,
   validatePlatformMaterializationSeam
 } from './integration/index.js'

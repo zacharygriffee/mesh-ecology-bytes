@@ -9,6 +9,13 @@ import {
   stripUndefined
 } from '../shared.js'
 
+export {
+  CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA,
+  CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
+  createConduitCorestoreReadbackProof,
+  validateConduitCorestoreReadbackProof
+} from './conduit-corestore-readback.js'
+
 export function createPlatformMaterializationSeam(input = {}) {
   validatePlatformMaterializationSeam(input)
 
