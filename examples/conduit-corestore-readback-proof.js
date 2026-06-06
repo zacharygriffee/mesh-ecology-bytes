@@ -163,10 +163,14 @@ if (hasArg('--read-retained-existing')) {
     }
 
     const proof = proofFromChild ?? createConduitCorestoreReadbackProof({
-      proofId: hasArg('--replicated')
+      proofId: hasArg('--availability')
+        ? 'bytes-corestore-proof:example-local-availability:v0'
+        : hasArg('--replicated')
         ? 'bytes-corestore-proof:example-local-replicated-readback:v0'
         : 'bytes-corestore-proof:example-local-readback:v0',
-      readbackId: hasArg('--replicated')
+      readbackId: hasArg('--availability')
+        ? 'bytes-corestore-readback:example-local-availability:v0'
+        : hasArg('--replicated')
         ? 'bytes-corestore-readback:example-local-replicated-readback:v0'
         : 'bytes-corestore-readback:example-local-readback:v0',
       published,

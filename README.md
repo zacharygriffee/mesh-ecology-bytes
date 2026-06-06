@@ -182,6 +182,7 @@ Generate a Conduit-readable Corestore readback proof artifact:
 
 ```sh
 npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
+npm run proof:conduit-corestore-availability-readback -- --out /tmp/bytes-corestore-availability-proof.json
 npm run proof:conduit-corestore-replicated-readback -- --out /tmp/bytes-corestore-replicated-proof.json
 npm run proof:conduit-corestore-retained-readback -- --out /tmp/bytes-corestore-retained-proof.json
 ```
@@ -190,6 +191,11 @@ That artifact is owned by Bytes and can be checked by Conduit as read-only
 evidence. It carries immutable reference, expected hash, and readback posture;
 it does not grant Conduit publication, fetch, pin, storage, materialization,
 activation, or canon authority.
+
+The availability variant adds Bytes-owned Corestore availability evidence:
+descriptor readable, payload blocks readable, expected hash present, and no raw
+bytes embedded. This is availability posture only. It is not acceptance, canon,
+public swarm availability, or a Conduit byte operation.
 
 The replicated variant proves Bytes can publish in one local store, fetch over a
 local Hyperswarm testnet into a second local store, reopen the consumer store,

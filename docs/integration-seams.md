@@ -71,6 +71,7 @@ The proof contains:
 - a Conduit-compatible immutable byte reference projection
 - the expected payload hash
 - readback evidence from Bytes
+- optional Bytes-owned Corestore availability evidence
 - retained proof metadata
 
 The proof must not contain raw payload bytes, host placement, activation,
@@ -81,6 +82,7 @@ Generate a local proof artifact with:
 
 ```sh
 npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
+npm run proof:conduit-corestore-availability-readback -- --out /tmp/bytes-corestore-availability-proof.json
 npm run proof:conduit-corestore-replicated-readback -- --out /tmp/bytes-corestore-replicated-proof.json
 npm run proof:conduit-corestore-retained-readback -- --out /tmp/bytes-corestore-retained-proof.json
 ```
@@ -88,6 +90,12 @@ npm run proof:conduit-corestore-retained-readback -- --out /tmp/bytes-corestore-
 Conduit may route and receipt the reference/posture over `blob.stream`,
 `observe.stream`, and capability-gated `control.stream`, but Bytes remains the
 owner of byte publication and readback mechanics.
+
+The availability proof emits `mesh-ecology-bytes/corestore-availability-evidence@1`
+from Bytes. It proves local Corestore descriptor/payload block readback posture
+for the fixture reference and expected hash. It does not claim family canon,
+acceptance, public network availability, device-boundary availability, or any
+Conduit publish/fetch/pin/store/materialization operation.
 
 The replicated proof uses `readbackTopology:
 "local_two_store_hyperswarm_testnet_readback"` to show Bytes-owned publication

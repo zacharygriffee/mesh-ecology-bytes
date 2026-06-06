@@ -40,7 +40,8 @@ export function createConduitCorestoreReadbackProof(input = {}) {
     expectedHash,
     readbackTopology: input.readbackTopology,
     replicationEvidence: input.replicationEvidence,
-    retentionEvidence: input.retentionEvidence
+    retentionEvidence: input.retentionEvidence,
+    availabilityEvidence: input.availabilityEvidence
   })
   const artifactHash = input.retainedProof?.artifactHash ?? `sha256:${hashJson({
     schema: CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
@@ -74,6 +75,7 @@ export function createConduitCorestoreReadbackProof(input = {}) {
       bytesProofArtifactProducedByBytes: true,
       bytesReadbackPerformedByBytes: true,
       corestoreHypercoreReadbackObservedByBytes: true,
+      bytesAvailabilityObservedByBytes: readback.availabilityEvidence?.availabilityStatus === 'available_for_bytes_readback',
       conduitReadProofArtifactOnly: true,
       conduitPublishedBytes: false,
       conduitFetchedBytes: false,
@@ -157,6 +159,7 @@ function createCorestoreReadbackFixture(input) {
     readbackTopology: input.readbackTopology ?? 'single_store_local_reopen',
     replicationEvidence: input.replicationEvidence ?? null,
     retentionEvidence: input.retentionEvidence ?? null,
+    availabilityEvidence: input.availabilityEvidence ?? createAvailabilityEvidence(input),
     bytes: {
       reference: {
         schema: 'mesh-ecology-bytes/byte-reference@1',
@@ -249,6 +252,7 @@ function validateReadbackFixture(readback = {}, issues) {
   }
   validateReplicationEvidence(readback.replicationEvidence, readback.readbackTopology, issues)
   validateRetentionEvidence(readback.retentionEvidence, readback.readbackTopology, issues)
+  validateAvailabilityEvidence(readback.availabilityEvidence, readback, issues)
   if (!/^[0-9a-f]{64}$/i.test(readback.expectedHash ?? '')) issues.push('expected_hash_required')
   if (readback.bytes?.reference?.schema !== 'mesh-ecology-bytes/byte-reference@1') issues.push('byte_reference_schema_required')
   if (readback.bytes?.reference?.transport !== 'hypercore') issues.push('byte_reference_transport_required')
@@ -260,6 +264,87 @@ function validateReadbackFixture(readback = {}, issues) {
   rejectEmbeddedBytesForValidation(readback.bytes, 'readback.bytes', issues)
   if (readback.readback?.descriptorRead !== true || readback.readback?.bytesReadable !== true) {
     issues.push('readback_evidence_required')
+  }
+}
+
+function createAvailabilityEvidence(input) {
+  return {
+    evidenceKind: 'bytes_corestore_availability_evidence',
+    schema: 'mesh-ecology-bytes/corestore-availability-evidence@1',
+    observedBy: 'mesh-ecology-bytes',
+    substrate: 'corestore-hypercore',
+    probeMode: 'bytes_owned_local_corestore_readback_probe',
+    storageClass: input.readbackTopology === 'retained_store_process_readback'
+      ? 'bytes_owned_local_runtime_store'
+      : 'bytes_owned_local_proof_store',
+    referenceKey: input.reference.key,
+    expectedHash: input.expectedHash,
+    hypercoreLength: input.totalBlockCount,
+    descriptorAvailable: true,
+    payloadBlocksAvailable: true,
+    hasExpectedBlocks: true,
+    availabilityStatus: 'available_for_bytes_readback',
+    rawBytesEmbedded: false,
+    nonClaims: {
+      availabilityIsAcceptance: false,
+      availabilityIsCanon: false,
+      publicNetworkAvailabilityClaimed: false,
+      deviceBoundaryAvailabilityClaimed: false,
+      conduitPublishedBytes: false,
+      conduitFetchedBytes: false,
+      conduitPinnedBytes: false,
+      conduitStoredBytes: false,
+      conduitMaterializedBytes: false,
+      platformActionAuthorized: false
+    }
+  }
+}
+
+function validateAvailabilityEvidence(evidence, readback, issues) {
+  if (!evidence) {
+    issues.push('availability_evidence_required')
+    return
+  }
+  if (evidence.schema !== 'mesh-ecology-bytes/corestore-availability-evidence@1') {
+    issues.push('availability_evidence_schema_required')
+  }
+  if (evidence.evidenceKind !== 'bytes_corestore_availability_evidence') {
+    issues.push('availability_evidence_kind_required')
+  }
+  if (evidence.observedBy !== 'mesh-ecology-bytes') issues.push('availability_evidence_bytes_observer_required')
+  if (evidence.substrate !== 'corestore-hypercore') issues.push('availability_evidence_substrate_required')
+  if (evidence.probeMode !== 'bytes_owned_local_corestore_readback_probe') {
+    issues.push('availability_evidence_probe_mode_required')
+  }
+  if (!['bytes_owned_local_proof_store', 'bytes_owned_local_runtime_store'].includes(evidence.storageClass)) {
+    issues.push('availability_evidence_storage_class_required')
+  }
+  if (evidence.referenceKey !== readback.bytes?.reference?.key) issues.push('availability_evidence_reference_mismatch')
+  if (evidence.expectedHash !== readback.expectedHash) issues.push('availability_evidence_expected_hash_mismatch')
+  if (evidence.hypercoreLength !== readback.bytes?.reference?.version) {
+    issues.push('availability_evidence_hypercore_length_mismatch')
+  }
+  if (evidence.descriptorAvailable !== true ||
+    evidence.payloadBlocksAvailable !== true ||
+    evidence.hasExpectedBlocks !== true ||
+    evidence.availabilityStatus !== 'available_for_bytes_readback') {
+    issues.push('availability_evidence_availability_required')
+  }
+  if (evidence.rawBytesEmbedded !== false) issues.push('availability_evidence_raw_bytes_forbidden')
+  if (evidence.nonClaims?.availabilityIsAcceptance !== false ||
+    evidence.nonClaims?.availabilityIsCanon !== false ||
+    evidence.nonClaims?.publicNetworkAvailabilityClaimed !== false ||
+    evidence.nonClaims?.platformActionAuthorized !== false) {
+    issues.push('availability_evidence_overclaimed')
+  }
+  for (const claim of [
+    'conduitPublishedBytes',
+    'conduitFetchedBytes',
+    'conduitPinnedBytes',
+    'conduitStoredBytes',
+    'conduitMaterializedBytes'
+  ]) {
+    if (evidence.nonClaims?.[claim] !== false) issues.push(`availability_evidence_conduit_non_claim_required:${claim}`)
   }
 }
 

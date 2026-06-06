@@ -26,6 +26,7 @@ const retainedProofCliPath = fileURLToPath(new URL('../examples/conduit-corestor
 export async function runConduitCorestoreReadbackTests() {
   await testCreateConduitCorestoreReadbackProof()
   await testCreateReplicatedConduitCorestoreReadbackProof()
+  await testConduitCorestoreAvailabilityProofCli()
   await testRetainedConduitCorestoreReadbackProofCli()
   await testConduitCorestoreReadbackProofRejectsMissingExpectedHash()
   await testConduitCorestoreReadbackProofRejectsEmbeddedBytes()
@@ -80,7 +81,14 @@ async function testCreateConduitCorestoreReadbackProof() {
     assert.equal(proof.readback.expectedHash, expectedHash)
     assert.equal(proof.readback.readbackTopology, 'single_store_local_reopen')
     assert.equal(proof.readback.replicationEvidence, null)
+    assert.equal(proof.readback.availabilityEvidence.schema, 'mesh-ecology-bytes/corestore-availability-evidence@1')
+    assert.equal(proof.readback.availabilityEvidence.availabilityStatus, 'available_for_bytes_readback')
+    assert.equal(proof.readback.availabilityEvidence.referenceKey, published.reference.key)
+    assert.equal(proof.readback.availabilityEvidence.expectedHash, expectedHash)
+    assert.equal(proof.readback.availabilityEvidence.hypercoreLength, published.object.totalBlockCount)
+    assert.equal(proof.readback.availabilityEvidence.nonClaims.availabilityIsAcceptance, false)
     assert.equal(proof.operationProof.bytesReadbackPerformedByBytes, true)
+    assert.equal(proof.operationProof.bytesAvailabilityObservedByBytes, true)
     assert.equal(proof.operationProof.conduitFetchedBytes, false)
     assert.equal(proof.nonClaims.payloadAvailabilityIsAcceptance, false)
     assert.equal(proof.rawBytes, undefined)
@@ -89,6 +97,33 @@ async function testCreateConduitCorestoreReadbackProof() {
     assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
   } finally {
     await rm(storage, { recursive: true, force: true })
+  }
+}
+
+async function testConduitCorestoreAvailabilityProofCli() {
+  const root = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-conduit-availability-cli-test-'))
+  const out = path.join(root, 'availability-proof.json')
+
+  try {
+    await execFileAsync(process.execPath, [
+      retainedProofCliPath,
+      '--availability',
+      '--out',
+      out
+    ])
+    const proof = JSON.parse(await readFile(out, 'utf8'))
+
+    assert.equal(proof.schema, CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA)
+    assert.equal(proof.proofId, 'bytes-corestore-proof:example-local-availability:v0')
+    assert.equal(proof.readback.availabilityEvidence.observedBy, 'mesh-ecology-bytes')
+    assert.equal(proof.readback.availabilityEvidence.substrate, 'corestore-hypercore')
+    assert.equal(proof.readback.availabilityEvidence.probeMode, 'bytes_owned_local_corestore_readback_probe')
+    assert.equal(proof.readback.availabilityEvidence.payloadBlocksAvailable, true)
+    assert.equal(proof.readback.availabilityEvidence.rawBytesEmbedded, false)
+    assert.equal(proof.operationProof.bytesAvailabilityObservedByBytes, true)
+    assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
+  } finally {
+    await rm(root, { recursive: true, force: true })
   }
 }
 
@@ -310,6 +345,7 @@ async function testConduitCorestoreReadbackProofRejectsOverclaims() {
             version: 1
           }
         },
+        availabilityEvidence: createMinimalAvailabilityEvidence(),
         readback: {
           descriptorRead: true,
           bytesReadable: true
@@ -329,6 +365,34 @@ async function testConduitCorestoreReadbackProofRejectsOverclaims() {
       }
     }),
     /conduit_non_claim_required:conduitFetchedBytes/
+  )
+
+  const validProof = createMinimalValidProof()
+  assert.throws(
+    () => validateConduitCorestoreReadbackProof({
+      ...validProof,
+      readback: {
+        ...validProof.readback,
+        availabilityEvidence: {
+          ...validProof.readback.availabilityEvidence,
+          nonClaims: {
+            ...validProof.readback.availabilityEvidence.nonClaims,
+            availabilityIsAcceptance: true
+          }
+        }
+      }
+    }),
+    /availability_evidence_overclaimed/
+  )
+  assert.throws(
+    () => validateConduitCorestoreReadbackProof({
+      ...validProof,
+      readback: {
+        ...validProof.readback,
+        availabilityEvidence: null
+      }
+    }),
+    /availability_evidence_required/
   )
 }
 
@@ -360,6 +424,7 @@ function createMinimalValidProof() {
           version: 1
         }
       },
+      availabilityEvidence: createMinimalAvailabilityEvidence(),
       readback: {
         descriptorRead: true,
         bytesReadable: true
@@ -380,6 +445,37 @@ function createMinimalValidProof() {
       conduitPinnedBytes: false,
       conduitStoredBytes: false,
       conduitMaterializedBytes: false
+    }
+  }
+}
+
+function createMinimalAvailabilityEvidence() {
+  return {
+    evidenceKind: 'bytes_corestore_availability_evidence',
+    schema: 'mesh-ecology-bytes/corestore-availability-evidence@1',
+    observedBy: 'mesh-ecology-bytes',
+    substrate: 'corestore-hypercore',
+    probeMode: 'bytes_owned_local_corestore_readback_probe',
+    storageClass: 'bytes_owned_local_proof_store',
+    referenceKey: 'a'.repeat(64),
+    expectedHash: 'a'.repeat(64),
+    hypercoreLength: 1,
+    descriptorAvailable: true,
+    payloadBlocksAvailable: true,
+    hasExpectedBlocks: true,
+    availabilityStatus: 'available_for_bytes_readback',
+    rawBytesEmbedded: false,
+    nonClaims: {
+      availabilityIsAcceptance: false,
+      availabilityIsCanon: false,
+      publicNetworkAvailabilityClaimed: false,
+      deviceBoundaryAvailabilityClaimed: false,
+      conduitPublishedBytes: false,
+      conduitFetchedBytes: false,
+      conduitPinnedBytes: false,
+      conduitStoredBytes: false,
+      conduitMaterializedBytes: false,
+      platformActionAuthorized: false
     }
   }
 }
