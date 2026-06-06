@@ -4,16 +4,22 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 
+import createTestnet from 'hyperdht/testnet.js'
+
 import {
   CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
+  createHyperswarmTransport,
   createConduitCorestoreReadbackProof,
+  fetchImmutableObject,
   publishImmutableObject,
   readImmutableObject,
+  serveImmutableObject,
   validateConduitCorestoreReadbackProof
 } from '../src/index.js'
 
 export async function runConduitCorestoreReadbackTests() {
   await testCreateConduitCorestoreReadbackProof()
+  await testCreateReplicatedConduitCorestoreReadbackProof()
   await testConduitCorestoreReadbackProofRejectsMissingExpectedHash()
   await testConduitCorestoreReadbackProofRejectsEmbeddedBytes()
   await testConduitCorestoreReadbackProofRejectsOverclaims()
@@ -65,6 +71,8 @@ async function testCreateConduitCorestoreReadbackProof() {
     assert.equal(proof.readback.bytes.reference.key, published.reference.key)
     assert.equal(proof.readback.bytes.reference.version, published.object.totalBlockCount)
     assert.equal(proof.readback.expectedHash, expectedHash)
+    assert.equal(proof.readback.readbackTopology, 'single_store_local_reopen')
+    assert.equal(proof.readback.replicationEvidence, null)
     assert.equal(proof.operationProof.bytesReadbackPerformedByBytes, true)
     assert.equal(proof.operationProof.conduitFetchedBytes, false)
     assert.equal(proof.nonClaims.payloadAvailabilityIsAcceptance, false)
@@ -74,6 +82,94 @@ async function testCreateConduitCorestoreReadbackProof() {
     assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
   } finally {
     await rm(storage, { recursive: true, force: true })
+  }
+}
+
+async function testCreateReplicatedConduitCorestoreReadbackProof() {
+  const publisherStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-conduit-proof-publisher-'))
+  const consumerStorage = await mkdtemp(path.join(tmpdir(), 'mesh-bytes-conduit-proof-consumer-'))
+  const testnet = await createTestnet(3)
+  const publisherTransport = createHyperswarmTransport({
+    swarmOptions: { dht: testnet.createNode() }
+  })
+  const consumerTransport = createHyperswarmTransport({
+    swarmOptions: { dht: testnet.createNode() }
+  })
+  const payload = Buffer.from('conduit corestore replicated readback proof test')
+  const expectedHash = createHash('sha256').update(payload).digest('hex')
+  let served = null
+
+  try {
+    const published = await publishImmutableObject({
+      storage: publisherStorage,
+      bytes: payload,
+      descriptor: {
+        contentType: 'application/octet-stream',
+        size: payload.length,
+        encoding: 'binary',
+        materializationHints: {
+          preferredMode: 'stream',
+          visibility: 'internal',
+          placementClass: 'runtime_input',
+          filenameHint: 'proof-replicated-test.bin'
+        },
+        integrityHint: {
+          algorithm: 'sha256',
+          value: expectedHash
+        },
+        role: 'runtime_blob',
+        logicalId: 'conduit-proof-replicated-test'
+      }
+    })
+
+    served = await serveImmutableObject({
+      storage: publisherStorage,
+      reference: published.reference,
+      transport: publisherTransport
+    })
+    await fetchImmutableObject({
+      storage: consumerStorage,
+      reference: published.reference,
+      transport: consumerTransport,
+      as: 'buffer'
+    })
+    const readback = await readImmutableObject({
+      storage: consumerStorage,
+      reference: published.reference,
+      as: 'buffer'
+    })
+    const proof = createConduitCorestoreReadbackProof({
+      proofId: 'bytes-corestore-proof:replicated-test:v0',
+      readbackId: 'bytes-corestore-readback:replicated-test:v0',
+      published,
+      readback,
+      readbackTopology: 'local_two_store_hyperswarm_testnet_readback',
+      replicationEvidence: {
+        substrate: 'hyperswarm-local-testnet',
+        publisherStore: 'separate_local_store',
+        consumerStore: 'separate_local_store',
+        bytesFetchedByBytes: true,
+        consumerReadbackAfterFetch: true,
+        publicSwarmClaimed: false,
+        deviceBoundaryClaimed: false
+      }
+    })
+
+    assert.equal(proof.readback.readbackTopology, 'local_two_store_hyperswarm_testnet_readback')
+    assert.equal(proof.readback.replicationEvidence.substrate, 'hyperswarm-local-testnet')
+    assert.equal(proof.readback.replicationEvidence.bytesFetchedByBytes, true)
+    assert.equal(proof.readback.expectedHash, expectedHash)
+    assert.equal(JSON.stringify(proof).includes(payload.toString()), false)
+    assert.equal(validateConduitCorestoreReadbackProof(proof), proof)
+  } finally {
+    await Promise.allSettled([
+      served?.close(),
+      publisherTransport.close(),
+      consumerTransport.close(),
+      testnet.destroy(),
+      rm(publisherStorage, { recursive: true, force: true }),
+      rm(consumerStorage, { recursive: true, force: true })
+    ])
   }
 }
 
@@ -170,6 +266,8 @@ async function testConduitCorestoreReadbackProofRejectsOverclaims() {
         schema: 'mesh-ecology-bytes/corestore-readback-boundary-fixture@1',
         owner: { product: 'mesh-ecology-bytes' },
         storageSubstrate: 'corestore-hypercore',
+        readbackTopology: 'single_store_local_reopen',
+        replicationEvidence: null,
         expectedHash: 'a'.repeat(64),
         bytes: {
           reference: {
@@ -218,6 +316,8 @@ function createMinimalValidProof() {
       schema: 'mesh-ecology-bytes/corestore-readback-boundary-fixture@1',
       owner: { product: 'mesh-ecology-bytes' },
       storageSubstrate: 'corestore-hypercore',
+      readbackTopology: 'single_store_local_reopen',
+      replicationEvidence: null,
       expectedHash: 'a'.repeat(64),
       bytes: {
         reference: {

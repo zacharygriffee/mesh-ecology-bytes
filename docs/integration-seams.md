@@ -81,11 +81,19 @@ Generate a local proof artifact with:
 
 ```sh
 npm run proof:conduit-corestore-readback -- --out /tmp/bytes-corestore-proof.json
+npm run proof:conduit-corestore-replicated-readback -- --out /tmp/bytes-corestore-replicated-proof.json
 ```
 
 Conduit may route and receipt the reference/posture over `blob.stream`,
 `observe.stream`, and capability-gated `control.stream`, but Bytes remains the
 owner of byte publication and readback mechanics.
+
+The replicated proof uses `readbackTopology:
+"local_two_store_hyperswarm_testnet_readback"` to show Bytes-owned publication
+from one local store, local Hyperswarm testnet fetch into a separate local
+store, and consumer-store readback after fetch. This is local transport evidence
+only; it is not a public swarm availability claim and not a device-boundary
+proof.
 
 ## Phase 121 Adjacent Review Fixture
 

@@ -12,6 +12,7 @@ import {
 export {
   CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA,
   CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
+  CONDUIT_CORESTORE_READBACK_TOPOLOGIES,
   createConduitCorestoreReadbackProof,
   validateConduitCorestoreReadbackProof
 } from './conduit-corestore-readback.js'

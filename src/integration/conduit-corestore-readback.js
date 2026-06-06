@@ -5,6 +5,10 @@ import { validateByteReference } from '../reference/index.js'
 
 export const CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA = 'mesh-ecology-bytes/corestore-readback-proof@1'
 export const CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA = 'mesh-ecology-bytes/corestore-readback-boundary-fixture@1'
+export const CONDUIT_CORESTORE_READBACK_TOPOLOGIES = new Set([
+  'single_store_local_reopen',
+  'local_two_store_hyperswarm_testnet_readback'
+])
 
 export function createConduitCorestoreReadbackProof(input = {}) {
   const reference = input.reference ?? input.readback?.reference ?? input.published?.reference
@@ -32,7 +36,9 @@ export function createConduitCorestoreReadbackProof(input = {}) {
     descriptor,
     lifecycle,
     totalBlockCount,
-    expectedHash
+    expectedHash,
+    readbackTopology: input.readbackTopology,
+    replicationEvidence: input.replicationEvidence
   })
   const artifactHash = input.retainedProof?.artifactHash ?? `sha256:${hashJson({
     schema: CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
@@ -146,6 +152,8 @@ function createCorestoreReadbackFixture(input) {
       boundary: 'immutable_byte_publication_and_readback'
     },
     storageSubstrate: 'corestore-hypercore',
+    readbackTopology: input.readbackTopology ?? 'single_store_local_reopen',
+    replicationEvidence: input.replicationEvidence ?? null,
     bytes: {
       reference: {
         schema: 'mesh-ecology-bytes/byte-reference@1',
@@ -233,6 +241,10 @@ function validateReadbackFixture(readback = {}, issues) {
   if (readback.schema !== CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA) issues.push('readback_schema_mismatch')
   if (readback.owner?.product !== 'mesh-ecology-bytes') issues.push('readback_owner_required')
   if (readback.storageSubstrate !== 'corestore-hypercore') issues.push('readback_storage_substrate_required')
+  if (!CONDUIT_CORESTORE_READBACK_TOPOLOGIES.has(readback.readbackTopology ?? '')) {
+    issues.push('readback_topology_required')
+  }
+  validateReplicationEvidence(readback.replicationEvidence, readback.readbackTopology, issues)
   if (!/^[0-9a-f]{64}$/i.test(readback.expectedHash ?? '')) issues.push('expected_hash_required')
   if (readback.bytes?.reference?.schema !== 'mesh-ecology-bytes/byte-reference@1') issues.push('byte_reference_schema_required')
   if (readback.bytes?.reference?.transport !== 'hypercore') issues.push('byte_reference_transport_required')
@@ -249,6 +261,26 @@ function validateReadbackFixture(readback = {}, issues) {
 
 function hashJson(value) {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex')
+}
+
+function validateReplicationEvidence(evidence, topology, issues) {
+  if (topology === 'single_store_local_reopen') {
+    if (evidence !== null && evidence !== undefined) issues.push('single_store_replication_evidence_forbidden')
+    return
+  }
+
+  if (topology === 'local_two_store_hyperswarm_testnet_readback') {
+    if (evidence?.substrate !== 'hyperswarm-local-testnet') {
+      issues.push('replication_evidence_substrate_required')
+    }
+    if (evidence?.publisherStore !== 'separate_local_store' ||
+      evidence?.consumerStore !== 'separate_local_store') {
+      issues.push('replication_evidence_separate_stores_required')
+    }
+    if (evidence?.bytesFetchedByBytes !== true || evidence?.consumerReadbackAfterFetch !== true) {
+      issues.push('replication_evidence_readback_required')
+    }
+  }
 }
 
 function rejectEmbeddedBytesForValidation(value = {}, label, issues) {

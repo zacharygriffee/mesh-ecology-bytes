@@ -89,6 +89,7 @@ export {
 export {
   CONDUIT_CORESTORE_READBACK_FIXTURE_SCHEMA,
   CONDUIT_CORESTORE_READBACK_PROOF_SCHEMA,
+  CONDUIT_CORESTORE_READBACK_TOPOLOGIES,
   createPackByteBinding,
   createConduitCorestoreReadbackProof,
   createPlatformMaterializationSeam,
