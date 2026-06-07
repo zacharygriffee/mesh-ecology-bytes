@@ -33,8 +33,10 @@ import {
   validateSourcePressureAdapterOperatorDecision,
   validateSourcePressureObservationResult
 } from '../src/index.js'
+import bytesDefaultApi from '../src/index.js'
 
 export function runContractTests() {
+  testDefaultNamespaceExport()
   testDescriptorValidation()
   testReferenceValidation()
   testExternalResourcePointerValidation()
@@ -44,6 +46,12 @@ export function runContractTests() {
   testHintsAndRequestSeparation()
   testReadinessStates()
   testRetentionTerms()
+}
+
+function testDefaultNamespaceExport() {
+  assert.equal(typeof bytesDefaultApi.createHyperswarmTransport, 'function')
+  assert.equal(typeof bytesDefaultApi.materializeImmutableObject, 'function')
+  assert.equal(typeof bytesDefaultApi.validateByteReference, 'function')
 }
 
 function testDescriptorValidation() {

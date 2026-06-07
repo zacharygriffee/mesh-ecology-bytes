@@ -1,3 +1,12 @@
+import * as descriptorApi from './descriptor/index.js'
+import * as errorsApi from './errors.js'
+import * as materializationApi from './materialization/index.js'
+import * as referenceApi from './reference/index.js'
+import * as reviewApi from './review/index.js'
+import * as integrationApi from './integration/index.js'
+import * as objectApi from './object/index.js'
+import * as transportApi from './transport/index.js'
+
 export {
   BYTE_DESCRIPTOR_SCHEMA,
   createByteDescriptor,
@@ -125,3 +134,14 @@ export {
   fetchImmutableObject,
   serveImmutableObject
 } from './transport/index.js'
+
+export default Object.freeze({
+  ...descriptorApi,
+  ...errorsApi,
+  ...materializationApi,
+  ...referenceApi,
+  ...reviewApi,
+  ...integrationApi,
+  ...objectApi,
+  ...transportApi
+})
