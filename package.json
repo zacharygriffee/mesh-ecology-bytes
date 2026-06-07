@@ -14,6 +14,7 @@
     "proof:conduit-corestore-replicated-readback": "node examples/conduit-corestore-readback-proof.js --replicated",
     "proof:conduit-corestore-retained-readback": "node examples/conduit-corestore-readback-proof.js --retained",
     "proof:participation-distributable-retained": "node examples/participation-distributable-retained-proof.js",
+    "proof:participation-distributable-public-pathway": "node examples/participation-distributable-public-pathway-proof.js",
     "test": "node test/index.js"
   },
   "repository": {

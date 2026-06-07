@@ -1,0 +1,125 @@
+{
+  "schema": "mesh-ecology-bytes/participation-distributable-public-pathway-proof@1",
+  "artifactKind": "bytes_participation_distributable_public_pathway_proof",
+  "createdAt": "2026-06-07T21:00:00.000Z",
+  "status": "public_pathway_complete",
+  "proofRung": "hyperswarm_discovered_feed_backed",
+  "sourceRefs": {
+    "sourceRepo": "mesh-ecology-packs",
+    "sourcePacksCommitHash": "3b8248ae979c141da62260b1ea15aff9271f8bb5",
+    "distributablePath": "../mesh-ecology-packs/proof-artifacts/participation-distributable-20260607T200000Z/distributable.json",
+    "distributableRef": "packs-participation-distributable:9f28ad53f664ea1f",
+    "distributableHash": "sha256:9f28ad53f664ea1fc5bea03b1e889098d537eb93e39f7dc28abfd081bad46a26",
+    "profileRef": "packs-participation-profile:64c5f2960f224dfa",
+    "bundleRef": "packs-participation-bundle:8846976298cd5ac3",
+    "verificationRef": "packs-participation-verification:acd576eb3944db13"
+  },
+  "bytesRefs": {
+    "byteReference": {
+      "family": "hypercore_immutable",
+      "key": "4325aa984e4cdb135730ecdd26c374cbf97de03adf2011da4b181c3845b9443d",
+      "descriptorHash": "ad2fc18fe4ca6e1fb0f1de28a8af6faaf01d3d258524f612fb057dbb320fb2da",
+      "integrityHint": {
+        "algorithm": "sha256",
+        "value": "b4d9c28e6e32faa6a646197d900f17d657a2705c54d62c3d0df56a0d7df03beb"
+      }
+    },
+    "expectedHash": "sha256:b4d9c28e6e32faa6a646197d900f17d657a2705c54d62c3d0df56a0d7df03beb",
+    "hypercoreKey": "4325aa984e4cdb135730ecdd26c374cbf97de03adf2011da4b181c3845b9443d",
+    "hypercoreLength": 2,
+    "descriptorHash": "ad2fc18fe4ca6e1fb0f1de28a8af6faaf01d3d258524f612fb057dbb320fb2da"
+  },
+  "storageRefs": {
+    "publisherStorageRef": "bytes-public-pathway-publisher:50c9d997390570a8",
+    "consumerStorageRef": "bytes-public-pathway-consumer:cfb4f29596f3d4a6",
+    "independentStorageRootsUsed": true
+  },
+  "pathwayRefs": {
+    "transport": "default_public_hyperdht_hyperswarm",
+    "topic": "85924d8b988b28d8540ef580a0cea8335e31f1d70b12f19d2753779a59e7d592",
+    "attempts": [
+      {
+        "step": "publish",
+        "status": "complete"
+      },
+      {
+        "step": "serve-default-public-hyperdht",
+        "status": "complete"
+      },
+      {
+        "step": "fetch-default-public-hyperdht",
+        "status": "complete"
+      },
+      {
+        "step": "consumer-readback",
+        "status": "complete"
+      }
+    ],
+    "timeoutMs": 25000
+  },
+  "targetMetadata": {
+    "os": "linux",
+    "arch": "x64",
+    "runtime": "node:20.x",
+    "libc": "glibc",
+    "nativeAddonPolicy": "target_local_build_or_target_pinned_prebuild",
+    "nativeAddonTargetMetadataRequired": true
+  },
+  "dependencyAcquisition": {
+    "preferredDefault": "swarm_retained_artifacts_platform_local_install",
+    "nodeModulesIncluded": false,
+    "nodeModulesTransferDefaultAllowed": false,
+    "nodeModulesTransferIsDecentralizedProof": false,
+    "externalNpmGithubHttpFetchDefaultAllowed": false,
+    "externalFetchIsDecentralizedProof": false,
+    "externalFetchRequiresExplicitRbcReceipt": true,
+    "platformLocalInstallBuildPreferred": true,
+    "lockfileOrIntegrityRefsRequired": true,
+    "lockfileRef": "lockfile:package-lock-or-npm-shrinkwrap:required",
+    "integrityRef": "integrity:sha256-per-artifact-required"
+  },
+  "operationProof": {
+    "bytesPublishedDistributableToPublisherCorestore": true,
+    "bytesServedOverDefaultPublicHyperDht": true,
+    "bytesFetchedIntoConsumerCorestore": true,
+    "descriptorHashVerified": true,
+    "payloadHashVerified": true,
+    "consumerReadbackAfterFetchVerified": true,
+    "independentStorageRootsUsed": true,
+    "defaultPublicHyperDhtUsed": true,
+    "localHyperDhtTestnetUsed": false,
+    "privateBootstrapUsed": false,
+    "localFilesAreSeamTransport": false,
+    "sshIsSeamTransport": false,
+    "nodeModulesTransferObserved": false,
+    "nodeModulesTransferClaimedAsDecentralizedProof": false,
+    "externalFetchObserved": false,
+    "externalFetchIsDecentralizedProof": false,
+    "conduitFetchedBytes": false,
+    "conduitStoredBytes": false,
+    "conduitMaterializedBytes": false,
+    "platformActivationAuthorized": false,
+    "deviceBoundaryProofClaimed": false,
+    "authorityClaimed": false,
+    "cleanupComplete": true,
+    "processLeftRunning": false
+  },
+  "nonClaims": {
+    "packsVerificationTruth": false,
+    "conduitReachProof": false,
+    "conduitByteCustody": false,
+    "conduitMaterialization": false,
+    "platformAuthorization": false,
+    "platformActivation": false,
+    "deviceBoundaryProof": false,
+    "rbcGovernance": false,
+    "governedSeam": false,
+    "productionDurability": false,
+    "canonicalTruth": false,
+    "authority": false
+  },
+  "issues": [],
+  "nextPosture": "conduit_consume_bytes_public_pathway_for_live_retained_distribution",
+  "proofHash": "sha256:4b0a5492e2e8b2ff41cfd19c8297b1e7ef3fcc8cae6f2ddb947d23d5bc62c873",
+  "proofRef": "bytes-participation-distributable-public-pathway:4b0a5492e2e8b2ff"
+}
