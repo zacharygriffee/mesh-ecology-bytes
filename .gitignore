@@ -1,3 +1,4 @@
 node_modules
 .codex
 runtime/
+proof-artifacts/**/pid.json
