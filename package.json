@@ -13,6 +13,7 @@
     "proof:conduit-corestore-availability-readback": "node examples/conduit-corestore-readback-proof.js --availability",
     "proof:conduit-corestore-replicated-readback": "node examples/conduit-corestore-readback-proof.js --replicated",
     "proof:conduit-corestore-retained-readback": "node examples/conduit-corestore-readback-proof.js --retained",
+    "proof:participation-distributable-retained": "node examples/participation-distributable-retained-proof.js",
     "test": "node test/index.js"
   },
   "repository": {

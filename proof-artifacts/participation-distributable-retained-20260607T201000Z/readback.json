@@ -1,0 +1,94 @@
+{
+  "schema": "mesh-ecology-bytes/participation-distributable-retained-readback@1",
+  "artifactKind": "bytes_participation_distributable_retained_readback",
+  "readAt": "2026-06-07T20:10:01.000Z",
+  "proofPath": "proof-artifacts/participation-distributable-retained-20260607T201000Z/proof.json",
+  "proofRef": "bytes-participation-distributable-retained:9c245387bf531121",
+  "proofHash": "sha256:9c245387bf531121eacfb82e2a083dd4973a1337b71b7e0d6c0a176e5770a127",
+  "recomputedProofHash": "sha256:9c245387bf531121eacfb82e2a083dd4973a1337b71b7e0d6c0a176e5770a127",
+  "proofHashMatches": true,
+  "status": "retained_readback_verified",
+  "proofRung": "local_feed",
+  "sourceRefs": {
+    "sourceRepo": "mesh-ecology-packs",
+    "sourcePacksCommitHash": "3b8248ad39f47f2f0ccf2f9bc015d9ed0148850d",
+    "distributablePath": "../mesh-ecology-packs/proof-artifacts/participation-distributable-20260607T200000Z/distributable.json",
+    "distributableRef": "packs-participation-distributable:9f28ad53f664ea1f",
+    "distributableHash": "sha256:9f28ad53f664ea1fc5bea03b1e889098d537eb93e39f7dc28abfd081bad46a26",
+    "profileRef": "packs-participation-profile:64c5f2960f224dfa",
+    "bundleRef": "packs-participation-bundle:8846976298cd5ac3",
+    "verificationRef": "packs-participation-verification:acd576eb3944db13"
+  },
+  "bytesRefs": {
+    "byteReference": {
+      "family": "hypercore_immutable",
+      "key": "747a0d016dc73d5d4e87452fb7a2e42fe53bd1f9e5ae66376d1c6129146d9a99",
+      "descriptorHash": "6510f557b5564afaef1bfcc2bfa592dc1662221d57140401a17bd687538b8205",
+      "integrityHint": {
+        "algorithm": "sha256",
+        "value": "b4d9c28e6e32faa6a646197d900f17d657a2705c54d62c3d0df56a0d7df03beb"
+      }
+    },
+    "expectedHash": "sha256:b4d9c28e6e32faa6a646197d900f17d657a2705c54d62c3d0df56a0d7df03beb",
+    "hypercoreKey": "747a0d016dc73d5d4e87452fb7a2e42fe53bd1f9e5ae66376d1c6129146d9a99",
+    "hypercoreLength": 2,
+    "descriptorHash": "6510f557b5564afaef1bfcc2bfa592dc1662221d57140401a17bd687538b8205",
+    "retainedProofId": "bytes-participation-distributable-retained:b4d9c28e6e32faa6",
+    "retainedReadbackId": "bytes-participation-distributable-readback:b4d9c28e6e32faa6"
+  },
+  "targetMetadata": {
+    "os": "linux",
+    "arch": "x64",
+    "runtime": "node:20.x",
+    "libc": "glibc",
+    "nativeAddonPolicy": "target_local_build_or_target_pinned_prebuild",
+    "nativeAddonTargetMetadataRequired": true
+  },
+  "dependencyAcquisition": {
+    "preferredDefault": "swarm_retained_artifacts_platform_local_install",
+    "nodeModulesIncluded": false,
+    "nodeModulesTransferDefaultAllowed": false,
+    "nodeModulesTransferIsDecentralizedProof": false,
+    "externalNpmGithubHttpFetchDefaultAllowed": false,
+    "externalFetchIsDecentralizedProof": false,
+    "externalFetchRequiresExplicitRbcReceipt": true,
+    "platformLocalInstallBuildPreferred": true,
+    "lockfileOrIntegrityRefsRequired": true,
+    "lockfileRef": "lockfile:package-lock-or-npm-shrinkwrap:required",
+    "integrityRef": "integrity:sha256-per-artifact-required"
+  },
+  "operationProof": {
+    "bytesPublishedDistributableToLocalCorestore": true,
+    "corestoreHypercoreReadbackObservedByBytes": true,
+    "retainedBytesAvailableForConduitReach": true,
+    "distributableHashPreserved": true,
+    "rawBytesEmbeddedInProof": false,
+    "nodeModulesIncluded": false,
+    "nodeModulesTransferIsDecentralizedProof": false,
+    "externalFetchObserved": false,
+    "externalFetchIsDecentralizedProof": false,
+    "conduitFetchedBytes": false,
+    "conduitStoredBytes": false,
+    "conduitMaterializedBytes": false,
+    "platformActivationAuthorized": false,
+    "publicSwarmProofClaimed": false,
+    "deviceBoundaryProofClaimed": false,
+    "authorityClaimed": false
+  },
+  "nonClaims": {
+    "packsVerificationTruth": false,
+    "conduitReachProof": false,
+    "conduitByteCustody": false,
+    "platformAuthorization": false,
+    "platformActivation": false,
+    "publicSwarmProof": false,
+    "deviceBoundaryProof": false,
+    "rbcGovernance": false,
+    "governedSeam": false,
+    "productionDurability": false,
+    "canonicalTruth": false,
+    "authority": false
+  },
+  "readbackHash": "sha256:ca7b4ae42c2cd12cd12276436ce523010f955ba259519ea0b5170f83a523c680",
+  "readbackRef": "bytes-participation-distributable-retained-readback:ca7b4ae42c2cd12c"
+}
