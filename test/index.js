@@ -6,6 +6,7 @@ import { runObjectModelTests } from './object-model.js'
 import { runOperationalHardeningTests } from './operational-hardening.js'
 import { runPhase121AdjacentReviewEvidenceTests } from './phase-121-adjacent-review-evidence.js'
 import { runParticipationDistributablePublicPathwayTests } from './participation-distributable-public-pathway.js'
+import { runParticipationDistributablePublicSeederTests } from './participation-distributable-public-seeder.js'
 import { runParticipationDistributableRetainedTests } from './participation-distributable-retained.js'
 import { runRetentionTests } from './retention.js'
 import { runHyperswarmTransportTests } from './transport-hyperswarm.js'
@@ -22,6 +23,7 @@ async function main() {
   await runConduitCorestoreReadbackTests()
   await runParticipationDistributableRetainedTests()
   await runParticipationDistributablePublicPathwayTests()
+  await runParticipationDistributablePublicSeederTests()
 }
 
 main().catch((error) => {
