@@ -10,6 +10,7 @@ import { runParticipationDistributablePublicSeederTests } from './participation-
 import { runParticipationDistributableRetainedTests } from './participation-distributable-retained.js'
 import { runRetentionTests } from './retention.js'
 import { runHyperswarmTransportTests } from './transport-hyperswarm.js'
+import { runInstallableParticipationBundlePublicSeederTests } from './installable-participation-bundle-public-seeder.js'
 
 async function main() {
   runContractTests()
@@ -24,6 +25,7 @@ async function main() {
   await runParticipationDistributableRetainedTests()
   await runParticipationDistributablePublicPathwayTests()
   await runParticipationDistributablePublicSeederTests()
+  await runInstallableParticipationBundlePublicSeederTests()
 }
 
 main().catch((error) => {
