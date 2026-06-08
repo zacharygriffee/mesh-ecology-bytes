@@ -1,0 +1,122 @@
+{
+  "schema": "mesh-ecology-bytes/installable-participation-bundle-public-seeder-proof@1",
+  "artifactKind": "bytes_installable_participation_bundle_public_seeder_proof",
+  "createdAt": "2026-06-08T12:50:00.000Z",
+  "status": "installable_bundle_public_seeder_live",
+  "proofRung": "hyperswarm_discovered_feed_backed",
+  "sourceRefs": {
+    "sourceRepo": "mesh-ecology-packs",
+    "sourcePacksCommitHash": "e03511ad006b826451d826c9f5f2a9ed0701bca4",
+    "packsProofPath": "../mesh-ecology-packs/proof-artifacts/installable-participation-bundle-20260608T120000Z/proof.json",
+    "packsProofRef": "packs-installable-participation-bundle:f7bb38a5cc402194",
+    "packsProofHash": "sha256:f7bb38a5cc402194299a1320e8e052833aba2ba92c4243929ec6bbc90d0c3031",
+    "packsArchiveRef": "packs-installable-participation-bundle:1ba9930381539648",
+    "packsArchiveHash": "sha256:1ba9930381539648487534eb929814738b691016b6b0b83123e1e81d589fa4ae",
+    "archivePath": "../mesh-ecology-packs/proof-artifacts/installable-participation-bundle-20260608T120000Z/installable-participation-bundle.tar",
+    "distributableRef": "packs-participation-distributable:d657f719bff12e55",
+    "profileRef": "packs-participation-profile:114362027eabea4a",
+    "bundleRef": "packs-participation-bundle:314cea31ba795c3f",
+    "verificationRef": "packs-participation-verification:a33276578301661d"
+  },
+  "bytesRefs": {
+    "byteReference": {
+      "family": "hypercore_immutable",
+      "key": "b9b02179bd2d00815bacf33ff0b88c02f6ec7170bef48fadbbc66b8f7ab3868b",
+      "descriptorHash": "8415caa2b8b078c0237ecb343c58e7c3a02d93ed3590c31aa1897a50b193a2fd",
+      "integrityHint": {
+        "algorithm": "sha256",
+        "value": "1ba9930381539648487534eb929814738b691016b6b0b83123e1e81d589fa4ae"
+      }
+    },
+    "expectedHash": "sha256:1ba9930381539648487534eb929814738b691016b6b0b83123e1e81d589fa4ae",
+    "hypercoreKey": "b9b02179bd2d00815bacf33ff0b88c02f6ec7170bef48fadbbc66b8f7ab3868b",
+    "hypercoreLength": 2,
+    "descriptorHash": "8415caa2b8b078c0237ecb343c58e7c3a02d93ed3590c31aa1897a50b193a2fd",
+    "contentType": "application/x-tar"
+  },
+  "storageRefs": {
+    "publisherStorageRef": "bytes-installable-bundle-public-seeder:ed279385371c873b",
+    "storageOwner": "mesh-ecology-bytes",
+    "storageNotMovedBetweenDevices": true,
+    "storageNotSharedAcrossProcesses": true
+  },
+  "seederRefs": {
+    "pid": 651038,
+    "transport": "default_public_hyperdht_hyperswarm",
+    "topic": "e42ea3e2f4f2120c67009ff75449f732b9e08bb4296c798093e2d180caea1f93",
+    "attempts": [
+      {
+        "step": "publish-installable-archive",
+        "status": "complete"
+      },
+      {
+        "step": "serve-default-public-hyperdht",
+        "status": "complete"
+      }
+    ]
+  },
+  "targetMetadata": {
+    "os": "linux",
+    "arch": "x64",
+    "runtime": "node:20.x",
+    "libc": "glibc",
+    "nativeAddonPolicy": "target_local_build_or_target_pinned_prebuild",
+    "nativeAddonTargetMetadataRequired": true,
+    "targetAware": true
+  },
+  "dependencyAcquisition": {
+    "preferredDefault": "swarm_retained_artifacts_platform_local_install",
+    "nodeModulesIncluded": false,
+    "nodeModulesTransferDefaultAllowed": false,
+    "nodeModulesTransferIsDecentralizedProof": false,
+    "externalNpmGithubHttpFetchDefaultAllowed": false,
+    "externalFetchIsDecentralizedProof": false,
+    "externalFetchRequiresExplicitRbcReceipt": true,
+    "platformLocalInstallBuildPreferred": true,
+    "lockfileOrIntegrityRefsRequired": true,
+    "lockfileRef": "lockfile:package-lock-or-npm-shrinkwrap:required",
+    "integrityRef": "integrity:sha256-per-artifact-required"
+  },
+  "operationProof": {
+    "bytesPublishedArchiveToPublisherCorestore": true,
+    "bytesServedOverDefaultPublicHyperDht": true,
+    "publicSeederStillRunning": true,
+    "defaultPublicHyperDhtUsed": true,
+    "localHyperDhtTestnetUsed": false,
+    "privateBootstrapUsed": false,
+    "localFilesAreSeamTransport": false,
+    "sshIsSeamTransport": false,
+    "nodeModulesTransferObserved": false,
+    "nodeModulesTransferClaimedAsDecentralizedProof": false,
+    "externalFetchObserved": false,
+    "externalFetchIsDecentralizedProof": false,
+    "packsVerificationTruthClaimed": false,
+    "conduitFetchedBytes": false,
+    "conduitStoredBytes": false,
+    "platformActivationAuthorized": false,
+    "installReadyClaimed": false,
+    "deviceBoundaryProofClaimed": false,
+    "authorityClaimed": false,
+    "cleanupComplete": false,
+    "processLeftRunning": true
+  },
+  "nonClaims": {
+    "packsVerificationTruth": false,
+    "conduitReachProof": false,
+    "conduitByteCustody": false,
+    "conduitMaterialization": false,
+    "platformAuthorization": false,
+    "platformActivation": false,
+    "platformInstallReady": false,
+    "deviceBoundaryProof": false,
+    "rbcGovernance": false,
+    "governedSeam": false,
+    "productionDurability": false,
+    "canonicalTruth": false,
+    "authority": false
+  },
+  "issues": [],
+  "nextPosture": "conduit_or_platform_materializes_installable_archive_while_bytes_public_seeder_is_live",
+  "proofHash": "sha256:1debe930d566008fc97e2486a346ad750033e12bafee20a82877c1ca7e86df5b",
+  "proofRef": "bytes-installable-bundle-public-seeder:1debe930d566008f"
+}
