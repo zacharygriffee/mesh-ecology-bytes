@@ -62,6 +62,10 @@ function dependencyAcquisition(proof = {}) {
   return proof.artifactAcquisition ?? {}
 }
 
+function componentTarget(proof = {}) {
+  return proof.componentTarget ?? null
+}
+
 function validateInputs({ packsProof, archiveBytes, storage, publicHyperdht }) {
   const issues = []
   if (packsProof?.schema !== 'mesh-ecology-packs/installable-participation-bundle-proof@1') {
@@ -99,6 +103,18 @@ function validateInputs({ packsProof, archiveBytes, storage, publicHyperdht }) {
   }
   if (acquisition.externalFetchRequiresExplicitRbcReceipt !== true) {
     issues.push('external_fetch_rbc_exception_requirement_missing')
+  }
+  const target = componentTarget(packsProof)
+  if (target?.repoName === 'mesh-ecology-layer') {
+    if (target.expectedStatus?.schema !== 'mesh-ecology-layer/component-runtime-status@1') {
+      issues.push('layer_component_status_schema_required')
+    }
+    if (target.expectedStatus?.artifactKind !== 'layer_owned_component_runtime_status') {
+      issues.push('layer_component_status_artifact_kind_required')
+    }
+    if (target.declaredPrimaryCommand !== 'run/run.sh') {
+      issues.push('layer_component_primary_command_required')
+    }
   }
   return issues
 }
@@ -198,6 +214,7 @@ export function buildInstallableBundlePublicSeederProof({
       attempts: observation.attempts ?? []
     },
     targetMetadata: packsProof?.targetMetadata ?? null,
+    componentTarget: componentTarget(packsProof),
     dependencyAcquisition: dependencyAcquisition(packsProof),
     operationProof: baseOperationProof({
       bytesPublishedArchiveToPublisherCorestore: observation.published === true,
@@ -254,6 +271,7 @@ export function buildInstallableBundlePublicSeederReadback({
     bytesRefs: proof?.bytesRefs ?? null,
     storageRefs: proof?.storageRefs ?? null,
     seederRefs: proof?.seederRefs ?? null,
+    componentTarget: proof?.componentTarget ?? null,
     operationProof: proof?.operationProof ?? null,
     nonClaims: proof?.nonClaims ?? null,
     nextPosture: proof?.nextPosture ?? null
@@ -324,6 +342,17 @@ export function validateInstallableBundlePublicSeederProof(proof = {}) {
   if (!proof.targetMetadata?.os) issues.push('target_os_required')
   if (!proof.targetMetadata?.arch) issues.push('target_arch_required')
   if (!proof.targetMetadata?.runtime) issues.push('target_runtime_required')
+  if (proof.componentTarget?.repoName === 'mesh-ecology-layer') {
+    if (proof.componentTarget.expectedStatus?.schema !== 'mesh-ecology-layer/component-runtime-status@1') {
+      issues.push('layer_component_status_schema_required')
+    }
+    if (proof.componentTarget.expectedStatus?.artifactKind !== 'layer_owned_component_runtime_status') {
+      issues.push('layer_component_status_artifact_kind_required')
+    }
+    if (proof.componentTarget.declaredPrimaryCommand !== 'run/run.sh') {
+      issues.push('layer_component_primary_command_required')
+    }
+  }
   for (const [value, issue] of [
     [proof.operationProof?.localHyperDhtTestnetUsed, 'local_testnet_overclaim'],
     [proof.operationProof?.privateBootstrapUsed, 'private_bootstrap_overclaim'],

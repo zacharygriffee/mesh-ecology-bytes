@@ -32,6 +32,20 @@ function packsProof(overrides = {}) {
       arch: 'x64',
       runtime: 'node:20.x'
     },
+    componentTarget: {
+      repoName: 'mesh-ecology-layer',
+      componentRef: 'component:mesh-ecology-layer',
+      declaredPrimaryCommand: 'run/run.sh',
+      expectedStatus: {
+        schema: 'mesh-ecology-layer/component-runtime-status@1',
+        artifactKind: 'layer_owned_component_runtime_status',
+        startedFile: 'runtime/layer-component-status.json',
+        stoppedFile: 'runtime/layer-component-stopped.json'
+      },
+      layerOwnedStatusExpected: true,
+      platformMayHostAndSurfaceStatus: true,
+      packsOwnsBundleVerificationOnly: true
+    },
     artifactAcquisition: {
       preferredDefault: 'swarm_retained_artifacts_platform_local_install',
       nodeModulesIncluded: false,
@@ -95,6 +109,9 @@ export async function runInstallableParticipationBundlePublicSeederTests() {
     assert.equal(proof.proofRung, 'hyperswarm_discovered_feed_backed')
     assert.equal(proof.sourceRefs.packsProofRef, packs.proofRef)
     assert.equal(proof.sourceRefs.packsArchiveHash, packs.archiveRefs.archiveHash)
+    assert.equal(proof.componentTarget.repoName, 'mesh-ecology-layer')
+    assert.equal(proof.componentTarget.expectedStatus.schema, 'mesh-ecology-layer/component-runtime-status@1')
+    assert.equal(readback.componentTarget.repoName, 'mesh-ecology-layer')
     assert.equal(proof.bytesRefs.contentType, 'application/x-tar')
     assert.equal(proof.operationProof.bytesServedOverDefaultPublicHyperDht, true)
     assert.equal(proof.operationProof.packsVerificationTruthClaimed, false)
@@ -144,6 +161,22 @@ export async function runInstallableParticipationBundlePublicSeederTests() {
 
     assert.equal(proof.status, 'installable_bundle_public_seeder_unresolved')
     assert.ok(validateInstallableBundlePublicSeederProof(proof).includes('local_testnet_overclaim'))
+  }
+
+  {
+    const { proof: packs, bytes } = proofWithMatchingArchive()
+    packs.componentTarget.expectedStatus.schema = 'mesh-ecology-layer/ambiguous-status@1'
+    const proof = buildInstallableBundlePublicSeederProof({
+      packsProof: packs,
+      archiveBytes: bytes,
+      storage: '/tmp/bytes-installable-public-seeder-test',
+      observation: liveObservation(),
+      publicHyperdht: true
+    })
+
+    assert.equal(proof.status, 'installable_bundle_public_seeder_blocked')
+    assert.ok(proof.issues.includes('layer_component_status_schema_required'))
+    assert.ok(validateInstallableBundlePublicSeederProof(proof).includes('layer_component_status_schema_required'))
   }
 }
 
