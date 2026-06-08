@@ -1,0 +1,123 @@
+{
+  "schema": "mesh-ecology-bytes/installable-participation-bundle-public-seeder-readback@1",
+  "artifactKind": "bytes_installable_participation_bundle_public_seeder_readback",
+  "readAt": "2026-06-08T15:30:01.000Z",
+  "proofPath": "proof-artifacts/layer-installable-bundle-public-seeder-20260608T153000Z/proof.json",
+  "proofRef": "bytes-installable-bundle-public-seeder:1e55d9c8fb21a82c",
+  "proofHash": "sha256:1e55d9c8fb21a82c96b3368192c1518878ad9a753aca16347f86efe010bc0f5f",
+  "recomputedProofHash": "sha256:1e55d9c8fb21a82c96b3368192c1518878ad9a753aca16347f86efe010bc0f5f",
+  "proofHashMatches": true,
+  "status": "installable_bundle_public_seeder_live",
+  "proofRung": "hyperswarm_discovered_feed_backed",
+  "sourceRefs": {
+    "sourceRepo": "mesh-ecology-packs",
+    "sourcePacksCommitHash": "3d7c505650e52e0f4601a74b4414709ef205ffc9",
+    "packsProofPath": "../mesh-ecology-packs/proof-artifacts/layer-installable-participation-bundle-20260608T150000Z/proof.json",
+    "packsProofRef": "packs-installable-participation-bundle:3d5fcff10259d8ef",
+    "packsProofHash": "sha256:3d5fcff10259d8ef28324d7b6ae063477fa5fe18276b6948cfd71ef2e8ea58de",
+    "packsArchiveRef": "packs-installable-participation-bundle:3cf89a354e909e6c",
+    "packsArchiveHash": "sha256:3cf89a354e909e6c62b925194c58efe7d2c8209c84877ea17bb30db53c231eca",
+    "archivePath": "../mesh-ecology-packs/proof-artifacts/layer-installable-participation-bundle-20260608T150000Z/installable-participation-bundle.tar",
+    "distributableRef": "packs-participation-distributable:8336a92111d30251",
+    "profileRef": "packs-participation-profile:2271d37081ab26bf",
+    "bundleRef": "packs-participation-bundle:64fb14e44510ca38",
+    "verificationRef": "packs-participation-verification:a9716acd33dc7581"
+  },
+  "bytesRefs": {
+    "byteReference": {
+      "family": "hypercore_immutable",
+      "key": "c44e86cac33312b0328f65cac3684e682235ebf8e6df3b96101647369f07a08e",
+      "descriptorHash": "0cadcb95dc4638c5f0f1a6cca4686486c8694d85294a1427484518969c061fc2",
+      "integrityHint": {
+        "algorithm": "sha256",
+        "value": "3cf89a354e909e6c62b925194c58efe7d2c8209c84877ea17bb30db53c231eca"
+      }
+    },
+    "expectedHash": "sha256:3cf89a354e909e6c62b925194c58efe7d2c8209c84877ea17bb30db53c231eca",
+    "hypercoreKey": "c44e86cac33312b0328f65cac3684e682235ebf8e6df3b96101647369f07a08e",
+    "hypercoreLength": 2,
+    "descriptorHash": "0cadcb95dc4638c5f0f1a6cca4686486c8694d85294a1427484518969c061fc2",
+    "contentType": "application/x-tar"
+  },
+  "storageRefs": {
+    "publisherStorageRef": "bytes-installable-bundle-public-seeder:880021ba32f4eb45",
+    "storageOwner": "mesh-ecology-bytes",
+    "storageNotMovedBetweenDevices": true,
+    "storageNotSharedAcrossProcesses": true
+  },
+  "seederRefs": {
+    "pid": 1236979,
+    "transport": "default_public_hyperdht_hyperswarm",
+    "topic": "f968ba8f9d616ac5d5bad7537ca859e3e3f49c2e74a9bc4d9e29473e6b0dd416",
+    "attempts": [
+      {
+        "step": "publish-installable-archive",
+        "status": "complete"
+      },
+      {
+        "step": "serve-default-public-hyperdht",
+        "status": "complete"
+      }
+    ]
+  },
+  "componentTarget": {
+    "repoName": "mesh-ecology-layer",
+    "componentRef": "component:mesh-ecology-layer",
+    "deploymentPack": "layer-runtime-proof",
+    "deploymentProfile": "runtime-proof",
+    "deploymentBundleKind": "client-sidecar",
+    "declaredPrimaryCommand": "run/run.sh",
+    "declaredPrimaryCommandName": "run",
+    "expectedStatus": {
+      "schema": "mesh-ecology-layer/component-runtime-status@1",
+      "artifactKind": "layer_owned_component_runtime_status",
+      "startedFile": "runtime/layer-component-status.json",
+      "stoppedFile": "runtime/layer-component-stopped.json"
+    },
+    "layerOwnedStatusExpected": true,
+    "platformMayHostAndSurfaceStatus": true,
+    "platformOwnsActivationConsequence": true,
+    "packsOwnsBundleVerificationOnly": true
+  },
+  "operationProof": {
+    "bytesPublishedArchiveToPublisherCorestore": true,
+    "bytesServedOverDefaultPublicHyperDht": true,
+    "publicSeederStillRunning": true,
+    "defaultPublicHyperDhtUsed": true,
+    "localHyperDhtTestnetUsed": false,
+    "privateBootstrapUsed": false,
+    "localFilesAreSeamTransport": false,
+    "sshIsSeamTransport": false,
+    "nodeModulesTransferObserved": false,
+    "nodeModulesTransferClaimedAsDecentralizedProof": false,
+    "externalFetchObserved": false,
+    "externalFetchIsDecentralizedProof": false,
+    "packsVerificationTruthClaimed": false,
+    "conduitFetchedBytes": false,
+    "conduitStoredBytes": false,
+    "platformActivationAuthorized": false,
+    "installReadyClaimed": false,
+    "deviceBoundaryProofClaimed": false,
+    "authorityClaimed": false,
+    "cleanupComplete": false,
+    "processLeftRunning": true
+  },
+  "nonClaims": {
+    "packsVerificationTruth": false,
+    "conduitReachProof": false,
+    "conduitByteCustody": false,
+    "conduitMaterialization": false,
+    "platformAuthorization": false,
+    "platformActivation": false,
+    "platformInstallReady": false,
+    "deviceBoundaryProof": false,
+    "rbcGovernance": false,
+    "governedSeam": false,
+    "productionDurability": false,
+    "canonicalTruth": false,
+    "authority": false
+  },
+  "nextPosture": "conduit_or_platform_materializes_installable_archive_while_bytes_public_seeder_is_live",
+  "readbackHash": "sha256:823c140ea28246778eb7c69172f4bc9289395ffbca920d5cab2cbd572beee4fd",
+  "readbackRef": "bytes-installable-bundle-public-seeder-readback:823c140ea2824677"
+}

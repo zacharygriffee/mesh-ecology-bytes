@@ -1,0 +1,26 @@
+{
+  "schema": "mesh-ecology-bytes/installable-participation-bundle-public-seeder-down@1",
+  "artifactKind": "bytes_installable_participation_bundle_public_seeder_down",
+  "stoppedAt": "2026-06-08T16:25:00.000Z",
+  "status": "installable_bundle_public_seeder_stopped",
+  "sourceProofRef": "bytes-installable-bundle-public-seeder:1e55d9c8fb21a82c",
+  "sourceProofHash": "sha256:1e55d9c8fb21a82c96b3368192c1518878ad9a753aca16347f86efe010bc0f5f",
+  "sourceByteReferenceKey": "c44e86cac33312b0328f65cac3684e682235ebf8e6df3b96101647369f07a08e",
+  "signal": "SIGTERM",
+  "cleanup": {
+    "cleanupComplete": true,
+    "processLeftRunning": false,
+    "storageMovedBetweenDevices": false,
+    "storageSharedAcrossProcesses": false
+  },
+  "nonClaims": {
+    "seamTransport": false,
+    "platformActivation": false,
+    "installReady": false,
+    "deviceBoundaryProof": false,
+    "productionDurability": false,
+    "authority": false
+  },
+  "downHash": "sha256:3d0de10f58264cdb9b38f3c28ffc40d2a8cf56215cdbeb934d0ede3443ac3b4a",
+  "downRef": "bytes-installable-bundle-public-seeder-down:3d0de10f58264cdb"
+}
