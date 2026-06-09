@@ -5,7 +5,28 @@ source availability, seeder evidence, readback, and cleanup. Bytes does not own
 Packs verification truth, Platform activation, dependency acquisition
 permission, production durability, or authority.
 
-## Current Pressure: Layer Bundle Public Seeder Complete, Conduit Reach Next
+## Current Pressure: Completed, Waiting For Spine Reassessment
+
+Bytes has completed the default-public-HyperDHT seeder proof for the
+target-aware Layer installable bundle. Conduit and Platform have consumed that
+retained material path, so Bytes should hold unless Spine routes a concrete
+retention, liveness, material-ref, or cleanup blocker.
+
+Current hold posture:
+
+```text
+completedLane: bytes_layer_installable_bundle_public_seeder
+proofRef: bytes-installable-bundle-public-seeder:1e55d9c8fb21a82c
+downRef: bytes-installable-bundle-public-seeder-down:3d0de10f58264cdb
+nextPressureRepo: mesh-ecology-spine
+nextPressure: repo_family_pressure_tree_alignment_or_explicit_bytes_retention_blocker
+```
+
+Required nonclaims remain: no Packs verification truth, Platform activation,
+dependency acquisition permission, production durability, authority,
+node_modules proof claim, or external registry fetch success claim.
+
+## Historical Evidence: Layer Bundle Public Seeder Complete
 
 Bytes retained and seeded the Packs target-aware tar-compatible installable
 bundle for `mesh-ecology-layer` over default public HyperDHT/Hyperswarm for
