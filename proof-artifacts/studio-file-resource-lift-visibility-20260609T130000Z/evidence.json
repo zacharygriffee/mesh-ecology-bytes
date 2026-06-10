@@ -1,0 +1,138 @@
+{
+  "artifactKind": "bytes_studio_file_resource_lift_visibility_evidence",
+  "schemaVersion": "bytes.studio_file_resource_lift_visibility_evidence.local.v0",
+  "evidenceRef": "bytes-studio-file-resource-lift-visibility-evidence:a02c9a4c28a3247e",
+  "observedAt": "2026-06-09T21:07:25.867Z",
+  "proofRung": "local_supplied_material",
+  "visibilityStatus": "studio_lift_source_pointer_and_payload_visibility_visible",
+  "sourceStudioCandidateRef": "studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+  "sourceStudioCandidateHash": "87e3bc983b887376905250867cf2cb3b398eef56e4fca5ac41ce9a45b32509ed",
+  "pointer": {
+    "artifactKind": "bytes_external_resource_pointer",
+    "schemaVersion": "bytes_external_resource_pointer.v0",
+    "resourceRef": "bytes-resource:studio-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+    "resourceKind": "media",
+    "pointerKind": "bytes_ref",
+    "storageBackend": "bytes_ref",
+    "pointer": {
+      "bytesRef": "studio-byte-descriptor-proposal:byte-descriptor-proposal-sha256-6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0"
+    },
+    "contentHash": {
+      "algorithm": "sha256",
+      "value": "6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0"
+    },
+    "byteLength": 70,
+    "mediaType": "image/png",
+    "originDeviceRef": "local-device:studio-operator-workstation",
+    "availability": "device_local",
+    "replicationPosture": "device_dependent_scaffold",
+    "sourceRefs": [
+      "studio-file-resource-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+      "studio-byte-descriptor-proposal:byte-descriptor-proposal-sha256-6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0",
+      "studio-resource-ref-candidate:resource-ref-candidate-26c8db4f2c9946f99f1c3eff"
+    ],
+    "nonClaims": {
+      "pointerIsTruth": false,
+      "blobPresenceIsAcceptance": false,
+      "contentAvailabilityIsContinuity": false,
+      "pathIsCanonical": false,
+      "resourceRefIsAuthority": false
+    }
+  },
+  "pointerRef": "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e",
+  "resolutionReceipt": {
+    "artifactKind": "bytes_external_resource_resolution_receipt",
+    "schemaVersion": "bytes_external_resource_resolution_receipt.v0",
+    "receiptRef": "bytes-resource-resolution-receipt:studio-lift-source-candidate:a02c9a4c28a3247e",
+    "sourceResourceRef": "bytes-resource:studio-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+    "sourcePointerRef": "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e",
+    "resolverRef": "bytes-resolver:studio-lift-preflight-local",
+    "resolvedAt": "2026-06-09T21:07:25.867Z",
+    "resolutionStatus": "resolved",
+    "contentHash": {
+      "algorithm": "sha256",
+      "value": "6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0"
+    },
+    "byteLength": 70,
+    "mediaType": "image/png",
+    "evidenceRefs": [
+      "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e"
+    ],
+    "sourceRefs": [
+      "studio-file-resource-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+      "studio-byte-descriptor-proposal:byte-descriptor-proposal-sha256-6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0",
+      "studio-resource-ref-candidate:resource-ref-candidate-26c8db4f2c9946f99f1c3eff"
+    ],
+    "payloadImported": false,
+    "payloadInline": false,
+    "acceptedContinuity": false,
+    "nonClaims": {
+      "resolutionIsTruth": false,
+      "payloadAvailabilityIsAcceptance": false,
+      "receiptIsContinuity": false,
+      "consumerAcceptanceClaimed": false,
+      "pathIsCanonical": false
+    }
+  },
+  "visibilityIndex": {
+    "artifactKind": "bytes_resource_artifact_visibility_index",
+    "schemaVersion": "bytes_resource_artifact_visibility_index.v0",
+    "visibilityIndexRef": "bytes-resource-artifact-visibility-index:studio-lift-source-candidate:a02c9a4c28a3247e",
+    "resourceRef": "bytes-resource:studio-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+    "pointerRefs": [
+      "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e"
+    ],
+    "resolutionReceiptRefs": [
+      "bytes-resource-resolution-receipt:studio-lift-source-candidate:a02c9a4c28a3247e"
+    ],
+    "ownerRepoRef": "mesh-ecology-bytes",
+    "sourcePointerSchema": "bytes_external_resource_pointer.v0",
+    "sourceResolutionReceiptSchema": "bytes_external_resource_resolution_receipt.v0",
+    "availabilityPosture": "payload_resolvable_by_bytes",
+    "replicationPosture": "device_dependent_scaffold",
+    "sourceRefs": [
+      "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e",
+      "bytes-resource-resolution-receipt:studio-lift-source-candidate:a02c9a4c28a3247e",
+      "studio-file-resource-lift-source-candidate:studio-file-resource-lift-source-candidate-699e0600903df0ae5b25de81",
+      "studio-byte-descriptor-proposal:byte-descriptor-proposal-sha256-6b7fa434f92a8b80aab02d9bf1a12e49ffcae424e4013a1c4f68b67e3d2bbcd0",
+      "studio-resource-ref-candidate:resource-ref-candidate-26c8db4f2c9946f99f1c3eff"
+    ],
+    "observerRef": "bytes-observer:studio-lift-preflight-local",
+    "observedAt": "2026-06-09T21:07:25.867Z",
+    "deviceDependencyPosture": "device_dependent_scaffold",
+    "nonClaims": {
+      "visibilityIndexIsTruth": false,
+      "visibilityIndexIsAuthority": false,
+      "visibilityIndexIsAcceptedContinuity": false,
+      "visibilityIndexIsResultContinuity": false,
+      "visibilityIndexIsOperatorApproval": false,
+      "visibilityIndexIsExecution": false,
+      "visibilityIndexIsProductionReadiness": false,
+      "visibilityIndexIsMeshSettlement": false,
+      "pointerVisibilityIsPayloadValidity": false,
+      "resolutionVisibilityIsResultValidity": false
+    }
+  },
+  "byteResourceVisibility": {
+    "pointerVisible": true,
+    "payloadResolvableByBytes": true,
+    "payloadImported": false,
+    "payloadInline": false,
+    "resourceCanon": false,
+    "layerAdmission": false,
+    "acceptedContinuity": false,
+    "materializationProof": false
+  },
+  "nonClaims": {
+    "pointerVisibilityIsPayloadValidity": false,
+    "bytesVisibilityIsLayerTruth": false,
+    "payloadResolvabilityIsAdmission": false,
+    "storageRefIsAdmission": false,
+    "externalReferenceIsCanon": false,
+    "acceptedContinuity": false,
+    "layerAdmission": false,
+    "materializationProof": false,
+    "authority": false
+  },
+  "evidenceHash": "sha256:29271b8777bb83ee786f84bf7296d27dbf59a85e09808bd71c873735c824919b"
+}

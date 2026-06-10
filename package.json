@@ -17,6 +17,7 @@
     "proof:participation-distributable-public-pathway": "node examples/participation-distributable-public-pathway-proof.js",
     "proof:participation-distributable-public-seeder": "node examples/participation-distributable-public-seeder-lifecycle.js",
     "proof:installable-participation-bundle-public-seeder": "node examples/installable-participation-bundle-public-seeder-lifecycle.js",
+    "proof:studio-file-resource-lift-visibility": "node examples/studio-file-resource-lift-visibility.js",
     "test": "node test/index.js"
   },
   "repository": {

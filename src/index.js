@@ -82,6 +82,12 @@ export {
   validateByteReference
 } from './reference/index.js'
 export {
+  STUDIO_FILE_RESOURCE_LIFT_VISIBILITY_EVIDENCE_KIND,
+  STUDIO_FILE_RESOURCE_LIFT_VISIBILITY_EVIDENCE_SCHEMA,
+  createStudioFileResourceLiftVisibilityEvidence,
+  validateStudioFileResourceLiftVisibilityEvidence
+} from './reference/index.js'
+export {
   BYTES_ADJACENT_REVIEW_CHECK_STATUSES,
   BYTES_ADJACENT_REVIEW_EVIDENCE_KIND,
   BYTES_ADJACENT_REVIEW_EVIDENCE_PHASE,

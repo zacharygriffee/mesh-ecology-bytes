@@ -16,6 +16,7 @@ import {
   createResourceArtifactVisibilityIndex,
   createMaterializationHints,
   createMaterializationRequest,
+  createStudioFileResourceLiftVisibilityEvidence,
   createSourcePressureAdapterCandidate,
   createSourcePressureAdapterOperatorDecision,
   createSourcePressureObservationResult,
@@ -26,6 +27,7 @@ import {
   validateResourceArtifactVisibilityIndex,
   validateMaterializationHints,
   validateMaterializationRequest,
+  validateStudioFileResourceLiftVisibilityEvidence,
   validateLifecycleSnapshot,
   validateReadinessState,
   validateRetentionTerm,
@@ -42,6 +44,7 @@ export function runContractTests() {
   testExternalResourcePointerValidation()
   testExternalResourceResolutionReceiptValidation()
   testResourceArtifactVisibilityIndexValidation()
+  testStudioFileResourceLiftVisibilityEvidence()
   testSourcePressureAdapterPrepValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
@@ -364,6 +367,80 @@ function testResourceArtifactVisibilityIndexValidation() {
     ...visibilityIndex,
     deviceDependencyPosture: 'host_local_path'
   }), /deviceDependencyPosture/)
+}
+
+function testStudioFileResourceLiftVisibilityEvidence() {
+  const studioCandidate = {
+    schema: 'studio_file_resource_lift_source_candidate.local.v0',
+    liftSourceCandidateId: 'studio-file-resource-lift-source-candidate:test',
+    projectId: 'studio-project:test',
+    contentId: 'sha256:'.concat('a'.repeat(64)),
+    candidateStatus: 'source_candidate_only_not_admitted',
+    sourceLocalAssetRefs: [{ kind: 'media-asset', id: 'asset-test', schema: 'media.asset.descriptor.v1', path: 'media/accepted/test.txt' }],
+    sourceAssetRecordRefs: [{ kind: 'media-asset-record', id: 'records/assets/test.local.json', schema: 'media.asset.descriptor.v1' }],
+    byteDescriptorProposalRefs: [{ kind: 'media-byte-descriptor-proposal', id: 'byte-descriptor-proposal-test', schema: 'media.byte_descriptor_proposal.local.v1' }],
+    resourceRefCandidateRefs: [{ kind: 'media-local-layer-resource-ref-candidate', id: 'resource-ref-candidate-test', schema: 'media.local_layer_resource_ref_candidate.local.v1' }],
+    situationRefs: [{ kind: 'studio-media-situation', id: 'situation:test' }],
+    placementRefs: [{ kind: 'path-placement', id: 'placement:test', path: 'media/accepted/test.txt' }],
+    contentHash: { algorithm: 'sha256', value: 'a'.repeat(64) },
+    byteLength: 32,
+    mediaType: 'text/plain',
+    localOnly: true,
+    resourceAdmission: false,
+    acceptedContinuity: false,
+    layerAdmission: false,
+    meshTruth: false,
+    authority: false,
+    nonClaims: {
+      localPathIsCanon: false,
+      externalReferenceIsCanon: false,
+      storageRefIsAdmission: false,
+      viewIsSourceContinuity: false,
+      resourceAdmission: false,
+      meshTruth: false,
+      authority: false
+    }
+  }
+  const evidence = createStudioFileResourceLiftVisibilityEvidence({
+    studioCandidate,
+    observedAt: '2026-06-09T12:00:00.000Z'
+  })
+
+  assert.equal(evidence.artifactKind, 'bytes_studio_file_resource_lift_visibility_evidence')
+  assert.equal(evidence.pointer.schemaVersion, 'bytes_external_resource_pointer.v0')
+  assert.equal(evidence.pointer.pointerKind, 'bytes_ref')
+  assert.equal(evidence.pointer.pointer.localPath, undefined)
+  assert.equal(evidence.resolutionReceipt.acceptedContinuity, false)
+  assert.equal(evidence.visibilityIndex.nonClaims.pointerVisibilityIsPayloadValidity, false)
+  assert.equal(evidence.byteResourceVisibility.layerAdmission, false)
+
+  validateStudioFileResourceLiftVisibilityEvidence(evidence)
+
+  assert.throws(() => createStudioFileResourceLiftVisibilityEvidence({
+    studioCandidate: {
+      ...studioCandidate,
+      nonClaims: {
+        ...studioCandidate.nonClaims,
+        localPathIsCanon: true
+      }
+    }
+  }), /local_path_canon/)
+
+  assert.throws(() => validateStudioFileResourceLiftVisibilityEvidence({
+    ...evidence,
+    nonClaims: {
+      ...evidence.nonClaims,
+      bytesVisibilityIsLayerTruth: true
+    }
+  }), /bytesVisibilityIsLayerTruth/)
+
+  assert.throws(() => validateStudioFileResourceLiftVisibilityEvidence({
+    ...evidence,
+    byteResourceVisibility: {
+      ...evidence.byteResourceVisibility,
+      acceptedContinuity: true
+    }
+  }), /acceptedContinuity/)
 }
 
 function testSourcePressureAdapterPrepValidation() {

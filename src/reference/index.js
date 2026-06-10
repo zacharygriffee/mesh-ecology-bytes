@@ -51,6 +51,12 @@ export {
   validateSourcePressureAdapterOperatorDecision,
   validateSourcePressureObservationResult
 } from './externalPointer.js'
+export {
+  STUDIO_FILE_RESOURCE_LIFT_VISIBILITY_EVIDENCE_KIND,
+  STUDIO_FILE_RESOURCE_LIFT_VISIBILITY_EVIDENCE_SCHEMA,
+  createStudioFileResourceLiftVisibilityEvidence,
+  validateStudioFileResourceLiftVisibilityEvidence
+} from './studioLiftVisibility.js'
 
 export function createByteReference(input = {}) {
   const reference = stripUndefined({
