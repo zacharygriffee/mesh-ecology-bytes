@@ -88,6 +88,12 @@ export {
   validateStudioFileResourceLiftVisibilityEvidence
 } from './reference/index.js'
 export {
+  BYTES_FILE_RESOURCE_SOURCE_CONTINUITY_ACCEPTED_VISIBILITY_KIND,
+  BYTES_FILE_RESOURCE_SOURCE_CONTINUITY_ACCEPTED_VISIBILITY_SCHEMA,
+  createFileResourceSourceContinuityAcceptedVisibility,
+  validateFileResourceSourceContinuityAcceptedVisibility
+} from './reference/index.js'
+export {
   BYTES_ADJACENT_REVIEW_CHECK_STATUSES,
   BYTES_ADJACENT_REVIEW_EVIDENCE_KIND,
   BYTES_ADJACENT_REVIEW_EVIDENCE_PHASE,

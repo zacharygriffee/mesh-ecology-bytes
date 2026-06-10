@@ -57,6 +57,12 @@ export {
   createStudioFileResourceLiftVisibilityEvidence,
   validateStudioFileResourceLiftVisibilityEvidence
 } from './studioLiftVisibility.js'
+export {
+  BYTES_FILE_RESOURCE_SOURCE_CONTINUITY_ACCEPTED_VISIBILITY_KIND,
+  BYTES_FILE_RESOURCE_SOURCE_CONTINUITY_ACCEPTED_VISIBILITY_SCHEMA,
+  createFileResourceSourceContinuityAcceptedVisibility,
+  validateFileResourceSourceContinuityAcceptedVisibility
+} from './sourceContinuityAcceptedVisibility.js'
 
 export function createByteReference(input = {}) {
   const reference = stripUndefined({

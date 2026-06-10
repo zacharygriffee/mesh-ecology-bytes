@@ -13,6 +13,7 @@ import {
   createByteReference,
   createExternalResourcePointer,
   createExternalResourceResolutionReceipt,
+  createFileResourceSourceContinuityAcceptedVisibility,
   createResourceArtifactVisibilityIndex,
   createMaterializationHints,
   createMaterializationRequest,
@@ -24,6 +25,7 @@ import {
   validateByteReference,
   validateExternalResourcePointer,
   validateExternalResourceResolutionReceipt,
+  validateFileResourceSourceContinuityAcceptedVisibility,
   validateResourceArtifactVisibilityIndex,
   validateMaterializationHints,
   validateMaterializationRequest,
@@ -45,6 +47,7 @@ export function runContractTests() {
   testExternalResourceResolutionReceiptValidation()
   testResourceArtifactVisibilityIndexValidation()
   testStudioFileResourceLiftVisibilityEvidence()
+  testFileResourceSourceContinuityAcceptedVisibility()
   testSourcePressureAdapterPrepValidation()
   testHintsAndRequestSeparation()
   testReadinessStates()
@@ -441,6 +444,65 @@ function testStudioFileResourceLiftVisibilityEvidence() {
       acceptedContinuity: true
     }
   }), /acceptedContinuity/)
+}
+
+function testFileResourceSourceContinuityAcceptedVisibility() {
+  const visibility = createFileResourceSourceContinuityAcceptedVisibility({
+    priorBytesVisibility: {
+      artifactKind: 'bytes_studio_file_resource_lift_visibility_evidence',
+      schemaVersion: 'bytes.studio_file_resource_lift_visibility_evidence.local.v0',
+      evidenceRef: 'bytes-studio-file-resource-lift-visibility-evidence:test',
+      evidenceHash: 'sha256:' + 'a'.repeat(64),
+      visibilityStatus: 'studio_lift_source_pointer_and_payload_visibility_visible',
+      pointerRef: 'bytes-external-resource-pointer:test',
+      resolutionReceipt: { receiptRef: 'bytes-resource-resolution-receipt:test' },
+      visibilityIndex: { visibilityIndexRef: 'bytes-resource-artifact-visibility-index:test' },
+      byteResourceVisibility: {
+        pointerVisible: true,
+        payloadResolvableByBytes: true
+      },
+      nonClaims: {
+        storageRefIsAdmission: false
+      }
+    },
+    layerAcceptanceAppend: {
+      artifactKind: 'layer_file_resource_source_continuity_acceptance_append',
+      appendRef: 'layer-file-resource-source-continuity-acceptance-append:test',
+      appendHash: 'sha256:' + 'b'.repeat(64),
+      appendStatus: 'layer_file_resource_source_continuity_acceptance_appended',
+      acceptedSourceContinuity: {
+        sourceContinuityAccepted: true
+      }
+    },
+    causalAcceptanceObservation: {
+      artifactKind: 'causal_file_resource_source_continuity_acceptance_observation',
+      observationId: 'causal-file-resource-source-continuity-acceptance:test',
+      observationHash: 'sha256:' + 'c'.repeat(64),
+      status: 'file-resource-source-continuity-acceptance-compatible'
+    },
+    observedAt: '2026-06-10T08:30:00.000Z'
+  })
+
+  assert.equal(visibility.artifactKind, 'bytes_file_resource_source_continuity_accepted_visibility')
+  assert.equal(visibility.visibilityStatus, 'bytes_material_visible_after_layer_source_continuity_acceptance')
+  assert.equal(visibility.materialVisibility.pointerStillVisible, true)
+  assert.equal(visibility.materialVisibility.payloadResolvableByBytes, true)
+  assert.equal(visibility.materialVisibility.layerSourceContinuityAccepted, true)
+  assert.equal(visibility.materialVisibility.resourceCanon, false)
+  assert.equal(visibility.materialVisibility.layerAdmission, false)
+  assert.equal(visibility.materialVisibility.productionDurability, false)
+  assert.equal(visibility.nonClaims.bytesVisibilityIsCanon, false)
+  assert.equal(visibility.nonClaims.storageRefIsAdmission, false)
+  assert.equal(visibility.nonClaims.authority, false)
+  validateFileResourceSourceContinuityAcceptedVisibility(visibility)
+
+  assert.throws(() => validateFileResourceSourceContinuityAcceptedVisibility({
+    ...visibility,
+    nonClaims: {
+      ...visibility.nonClaims,
+      authority: true
+    }
+  }), /authority/)
 }
 
 function testSourcePressureAdapterPrepValidation() {

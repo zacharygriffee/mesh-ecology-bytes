@@ -1,0 +1,42 @@
+{
+  "artifactKind": "bytes_file_resource_source_continuity_accepted_visibility",
+  "schemaVersion": "bytes.file_resource_source_continuity_accepted_visibility.v0",
+  "visibilityRef": "bytes-file-resource-source-continuity-accepted-visibility:c07d6d277729e2ff",
+  "observedAt": "2026-06-10T08:30:00.000Z",
+  "proofRung": "local_supplied_material",
+  "visibilityStatus": "bytes_material_visible_after_layer_source_continuity_acceptance",
+  "sourceRefs": {
+    "priorBytesVisibilityRef": "bytes-studio-file-resource-lift-visibility-evidence:a02c9a4c28a3247e",
+    "priorBytesVisibilityHash": "sha256:29271b8777bb83ee786f84bf7296d27dbf59a85e09808bd71c873735c824919b",
+    "layerAcceptanceAppendRef": "layer-file-resource-source-continuity-acceptance-append:39d884ab6a4811d3",
+    "layerAcceptanceAppendHash": "sha256:5a7f1ba438e7ef3b82698c8563c3fd092463cbbb0f3bb0422b3e83e033088721",
+    "causalAcceptanceObservationRef": "causal-file-resource-source-continuity-acceptance:67d84ef7ac55a9ff",
+    "causalAcceptanceObservationHash": "sha256:e7e16479b5a12e99f6611cc6da9477cec41909c8efb4cb048adda2d0c9fa060c",
+    "pointerRef": "bytes-external-resource-pointer:studio-lift-source-candidate:a02c9a4c28a3247e",
+    "resolutionReceiptRef": "bytes-resource-resolution-receipt:studio-lift-source-candidate:a02c9a4c28a3247e",
+    "visibilityIndexRef": "bytes-resource-artifact-visibility-index:studio-lift-source-candidate:a02c9a4c28a3247e"
+  },
+  "materialVisibility": {
+    "pointerStillVisible": true,
+    "payloadResolvableByBytes": true,
+    "layerSourceContinuityAccepted": true,
+    "causalAcceptanceObserved": true,
+    "payloadImported": false,
+    "payloadInline": false,
+    "resourceCanon": false,
+    "layerAdmission": false,
+    "productionDurability": false
+  },
+  "issues": [],
+  "nonClaims": {
+    "bytesVisibilityIsCanon": false,
+    "bytesVisibilityIsAdmission": false,
+    "bytesVisibilityIsSourceContinuity": false,
+    "storageRefIsAdmission": false,
+    "externalReferenceIsCanon": false,
+    "materialAvailabilityIsDurability": false,
+    "layerAuthority": false,
+    "authority": false
+  },
+  "visibilityHash": "sha256:6c2bfa2af180cb3e1ccb4c2e2e3f814a95c47c1c2c595bc4b31bcd492391cc1d"
+}
